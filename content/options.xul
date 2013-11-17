@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE options SYSTEM "chrome://emic/locale/options.dtd">
+
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <setting pref="extensions.emic.destdirectory" type="directory" title="destdirectory" desc=""/>
+</vbox>

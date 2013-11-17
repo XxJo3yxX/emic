@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE window SYSTEM "chrome://emic/locale/overlay.dtd">
+
+<overlay id="emic-background"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="background.js"/>
+  <script type="application/x-javascript"><![CDATA[window.addEventListener("load", function() {emicBackgroundObj.init()}, false);]]></script>
+
+  <statusbar id="status-bar">
+    <deck selectedIndex="1" id="emic-deck" insertafter="statusTextBox" insertbefore="unreadMessageCount" style="width:120px" hidden="false">
+      <progressmeter id="emic-progress" mode="determined" value="50" />
+      <label id="emic-status" value="EMIC" style="width:100%;text-align:center;margin:4px" />
+    </deck>
+  </statusbar>
+</overlay>

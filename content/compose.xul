@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://emic/skin/overlay.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
+<overlay id="ExpiredMailInboxCleaner-compose-overlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="compose.js"/>
+
+  <script type="application/x-javascript"><![CDATA[window.addEventListener("load", function() {emicComposeObj.init()}, false);]]></script>
+
+  <commandset id="composeCommands">
+    <command id="emiccomposenever" oncommand="emicComposeObj.setExpirationDateNever();" />
+    <command id="emiccomposenow" oncommand="emicComposeObj.setExpirationDateNow();" />
+    <command id="emiccomposecustom" oncommand="emicComposeObj.setExpirationDateCustom();" />
+  </commandset>
+
+  <menupopup id="insertMenuPopup">
+    <menuseparator />
+    <menu label="&expiration.date;">
+      <menupopup>
+        <menuitem id="emic-compose-never" label="&never;" command="emiccomposenever" name="emiccompose" type="radio" autocheck="false" />
+        <menuitem id="emic-compose-now" label="&now;" command="emiccomposenow" name="emiccompose" type="radio" autocheck="false" />
+        <menuitem id="emic-compose-custom" label="&custom;" command="emiccomposecustom" name ="emiccompose" type="radio" autocheck="false" />
+      </menupopup>
+    </menu>
+    <menuseparator />
+  </menupopup>
+
+  <menupopup id="msgComposeContext">
+    <menuseparator />
+    <menu label="&expiration.date;">
+      <menupopup>
+        <menuitem id="emic-compose-never2" label="&never;" command="emiccomposenever" name="emiccompose" type="radio" autocheck="false" />
+        <menuitem id="emic-compose-now2" label="&now;" command="emiccomposenow" name="emiccompose" type="radio" autocheck="false" />
+        <menuitem id="emic-compose-custom2" label="&custom;" command="emiccomposecustom" name="emiccompose" type="radio" autocheck="false" />
+      </menupopup>
+    </menu>
+    <menuseparator />
+  </menupopup>
+</overlay>

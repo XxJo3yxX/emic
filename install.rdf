@@ -1,0 +1,42 @@
+<?xml version="1.0"?>  
+  
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"  
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">  
+  
+  <Description about="urn:mozilla:install-manifest">  
+    <em:id>emic@josef.frnka</em:id>
+    <em:version>0.1.1</em:version>
+	     
+    <em:targetApplication>  
+      <Description>  
+        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>  
+        <em:minVersion>3.0</em:minVersion>  
+        <em:maxVersion>24.1.0</em:maxVersion>
+      </Description>  
+    </em:targetApplication>  
+
+	<!-- Front End MetaData -->
+    <em:name>Inbox Cleaner of expired Emails</em:name>
+    <em:description>Moves expired Emails out of your Inbox!</em:description>
+    <em:creator>Josef Frnka</em:creator>
+    <em:optionsURL>chrome://emic/content/options.xul</em:optionsURL>
+    <em:optionsType>2</em:optionsType>
+    <em:iconURL>chrome://emic/content/icon.png</em:iconURL>
+    <em:icon64URL>chrome://emic/content/icon64.png</em:icon64URL>
+    <em:targetPlatform>WINNT_x86-msvc</em:targetPlatform>
+    <em:homepageURL>https://www.facebook.com/josef.frnka</em:homepageURL>
+    <em:type>2</em:type>
+
+    <em:localized>
+      <Description>
+        <em:locale>de</em:locale>
+        <em:name>Posteingangs-Reiniger von abgelaufenen E-Mails</em:name>
+        <em:description>Verschiebt Ihre abgelaufenen E-Mails aus dem Posteingang!</em:description>
+        <em:translator>Josef Frnka</em:translator>
+        <em:creator>Josef Frnka</em:creator>
+        <em:homepageURL>https://www.facebook.com/josef.frnka</em:homepageURL>
+      </Description>
+    </em:localized>
+     
+  </Description>        
+</RDF>
