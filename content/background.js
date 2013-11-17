@@ -57,7 +57,7 @@ var emicBackgroundObj = {
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     srcFolder: gLocalInboxFolder,
-    destFolder: null,
+    destFolderName: null,
 
     startup: function() {
         this.consoleService.logStringMessage("emicBackgroundObj.startup() called");
@@ -89,9 +89,10 @@ var emicBackgroundObj = {
     },
 
     moveExpiredMails: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails() called");
-        this.consoleService.logStringMessage("Src: " + this.srcFolder.prettiestName + " --> Dest: " + this.destFolder.prettiestName);
-        if(!this.srcFolder || !this.destFolder)
+        this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails() called")
+        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);;
+
+        if(!this.srcFolder)
             return null;
 
         var now = new Date();
@@ -112,7 +113,22 @@ var emicBackgroundObj = {
         }
         //move expired mails to folder:
         if(expired_mails.length > 0) {
-            this.copyService.CopyMessages(this.srcFolder, expired_mails, this.destFolder, true, copyListener, null, false);
+            var destfolder = null;
+
+            try {
+                destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+            }
+            catch(e) {
+                this.consoleService.logStringMessage("destfolder not exists, try to create it: " + e);
+                if(!destfolder) {
+                    var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
+                    gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
+                    destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+                }
+            }
+            this.consoleService.logStringMessage("try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
+            if(this.srcFolder && destfolder)
+                this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
         }
     },
 
@@ -133,14 +149,7 @@ var emicBackgroundObj = {
 
     setDestFolder: function(destfoldername) {
         this.consoleService.logStringMessage("emicBackgroundObj.setDestFolder() called");
-        this.destFolder = gLocalRootFolder.getChildNamed(destfoldername);
-
-        while(!this.destFolder) {
-            this.consoleService.logStringMessage("destFolder not exists, try to create it");
-            var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
-            gLocalRootFolder.createSubfolder(destfoldername,msgWindow);
-            this.destFolder = gLocalRootFolder.getChildNamed(destfoldername);
-        }
+        this.destFolderName = destfoldername;
     },
 
     shutdown: function() {
