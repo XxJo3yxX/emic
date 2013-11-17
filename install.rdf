@@ -20,7 +20,6 @@
     <em:description>Moves expired Emails out of your Inbox!</em:description>
     <em:creator>Josef Frnka</em:creator>
     <em:optionsURL>chrome://emic/content/options.xul</em:optionsURL>
-    <em:optionsType>2</em:optionsType>
     <em:iconURL>chrome://emic/content/icon.png</em:iconURL>
     <em:icon64URL>chrome://emic/content/icon64.png</em:icon64URL>
     <em:targetPlatform>WINNT_x86-msvc</em:targetPlatform>

@@ -7,5 +7,5 @@
 <!ENTITY never "Nie">
 <!ENTITY now "Jetzt">
 <!ENTITY custom "Benutzerdefiniert...">
-<!ENTITY destination.directory "Zielordnername:">
-<!ENTITY destination.description "Lokaler Ordnername, in welchen die abgelaufenen E-Mails verschoben werden.">
+<!ENTITY options.window.title "EMIC Einstellungen">
+<!ENTITY options.destination.directory "Zielordnername:">

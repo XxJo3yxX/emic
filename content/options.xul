@@ -1,7 +1,18 @@
 <?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://emic/locale/overlay.dtd">
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 
-<!DOCTYPE options SYSTEM "chrome://emic/locale/overlay.dtd">
+<prefwindow id="emic-prefs" title="&options.window.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" buttons="accept,cancel" defaultButton="accept">
 
-<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <setting pref="extensions.emic.destfoldername" type="string" title="&destination.directory;" desc="&destination.description;"/>
-</vbox>
+  <prefpane id="emic-pref-pane" label="&options.window.title;">
+    <preferences>
+      <preference id="destfoldername" name="extensions.emic.destfoldername" type="string"/>
+    </preferences>
+
+    <hbox align="center">
+      <label control="destfoldername" value="&options.destination.directory;"/>
+      <textbox preference="destfoldername" />
+    </hbox>
+  </prefpane>
+
+</prefwindow>
