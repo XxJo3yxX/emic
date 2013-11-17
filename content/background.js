@@ -22,10 +22,10 @@ var MailListener = {
 
 var copyListener = {
     OnStartCopy: function() {
-        alert("OnStartCopy()");
+        //alert("OnStartCopy()");
     },
     OnProgress: function(aProgress, aProgressMax) {
-        alert("OnProgress("+aProgress+", "+aProgressMax+")");
+        //alert("OnProgress("+aProgress+", "+aProgressMax+")");
     },
     SetMessageKey: function(aKey) {
         //alert("SetMessageKey("+aKey+")");
@@ -35,11 +35,11 @@ var copyListener = {
     },
     OnStopCopy: function(aStatus) {
         // Check: message successfully copied.
-        alert("OnStopCopy("+aStatus+")");
-        if(status == Cr.NS_OK)
-            alert("End OK");
-        else
-            alert("End Error");
+        //alert("OnStopCopy("+aStatus+")");
+//        if(status == Cr.NS_OK)
+//            alert("End OK");
+//        else
+//            alert("End Error");
     }
 };
     
@@ -55,8 +55,9 @@ var emicBackgroundObj = {
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     notificationService: Cc["@mozilla.org/messenger/msgnotificationservice;1"].getService(Ci.nsIMsgFolderNotificationService),
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
+    prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     srcFolder: gLocalInboxFolder,
-    destFolder: gLocalIncomingServer.rootMsgFolder.rootFolder.getChildNamed("Expired"),
+    destFolder: null,
 
     startup: function() {
         this.consoleService.logStringMessage("emicBackgroundObj.startup() called");
@@ -130,8 +131,41 @@ var emicBackgroundObj = {
         }
     },
 
+    setDestFolder: function(destfoldername) {
+        this.consoleService.logStringMessage("emicBackgroundObj.setDestFolder() called");
+        this.destFolder = gLocalRootFolder.getChildNamed(destfoldername);
+
+        while(!this.destFolder) {
+            this.consoleService.logStringMessage("destFolder not exists, try to create it");
+            var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
+            gLocalRootFolder.createSubfolder(destfoldername,msgWindow);
+            this.destFolder = gLocalRootFolder.getChildNamed(destfoldername);
+        }
+    },
+
+    shutdown: function() {
+        this.consoleService.logStringMessage("emicBackgroundObj.shutdown() called");
+        this.prefs.removeObserver("", this);
+    },
+
+    observe: function(subject, topic, data) {
+        this.consoleService.logStringMessage("emicBackgroundObj.observe() called");
+        if (topic != "nsPref:changed")
+            return;
+ 
+        switch(data) {
+        case "destfoldername":
+            this.setDestFolder(this.prefs.getCharPref("destfoldername"));
+            break;
+        }
+    },
+
     init: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
+        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
+        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
+        this.prefs.addObserver("", this, false);
+        this.setDestFolder(this.prefs.getCharPref("destfoldername"));
+
         this.notificationService.addListener(MailListener, this.notificationService.msgAdded);
         this.startup();
     }
@@ -139,3 +173,4 @@ var emicBackgroundObj = {
 
 window.setInterval(function(){emicBackgroundObj.startup();}, 60000); //update every minute
 document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundObj.selectChanged(e);}, false);
+window.addEventListener("unload", function(e) { emicBackgroundObj.shutdown(); }, false);

@@ -1,0 +1,1 @@
+pref("extensions.emic.destfoldername", "Expired");

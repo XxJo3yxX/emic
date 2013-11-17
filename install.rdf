@@ -24,7 +24,7 @@
     <em:iconURL>chrome://emic/content/icon.png</em:iconURL>
     <em:icon64URL>chrome://emic/content/icon64.png</em:icon64URL>
     <em:targetPlatform>WINNT_x86-msvc</em:targetPlatform>
-    <em:homepageURL>https://www.facebook.com/josef.frnka</em:homepageURL>
+    <em:homepageURL>https://github.com/XxJo3yxX/emic</em:homepageURL>
     <em:type>2</em:type>
 
     <em:localized>
@@ -34,7 +34,6 @@
         <em:description>Verschiebt Ihre abgelaufenen E-Mails aus dem Posteingang!</em:description>
         <em:translator>Josef Frnka</em:translator>
         <em:creator>Josef Frnka</em:creator>
-        <em:homepageURL>https://www.facebook.com/josef.frnka</em:homepageURL>
       </Description>
     </em:localized>
      

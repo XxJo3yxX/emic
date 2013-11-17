@@ -7,3 +7,5 @@
 <!ENTITY never "Never">
 <!ENTITY now "Now">
 <!ENTITY custom "Custom...">
+<!ENTITY destination.directory "Destination Foldername:">
+<!ENTITY destination.description "Local Foldername, in which expired Emails will be moved.">
