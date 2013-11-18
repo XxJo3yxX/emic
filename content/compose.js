@@ -61,15 +61,16 @@ var emicComposeObj = {
     },
 
     setExpirationDateCustom: function() {
-        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
-        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
+//        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
+//        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
         //call Dialog:
-        var params = {inn:{customdatetime:(new Date(this.expdatestr))}, out:null};
+        var params = {inn:{customdate:(new Date(this.expdatestr))}, out:null};
         window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if (params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             this.check_emiccustom();
             this.expdatestr = params.out.datetime.toString();
+//            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
         }
         else {
             // User clicked cancel. Typically, nothing is done here.
@@ -98,6 +99,7 @@ var emicComposeObj = {
     init: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.init() called");
 //        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+        this.setExpirationDateNever();
     }
 }
 

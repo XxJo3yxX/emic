@@ -22,8 +22,8 @@
         <rows>
           <row align="center">
             <radio id="emic-custom-date" label="Custom date:"/>
-            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="0" hideyear="false" value="now"/>
-            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true" value="now"/>
+            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="0" hideyear="false"/>
+            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true"/>
           </row>
           <row align="center">
             <radio id="emic-suggestion-date" label="Suggestions:"/>
