@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="emiccustomdatedialog"
+        title="Custom date Dialog"
+        onload="onLoad();"
+        ondialogaccept="return onOK();">
+
+  <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
+
+  <dialogheader title="Custom date dialog" description="Choose expiration Date"/>
+  <groupbox flex="1">
+    <caption label="Select custom date or suggestions"/>
+    <radiogroup>
+      <grid>
+        <columns>
+          <column/>
+          <column/>
+          <column flex="1"/>
+        </columns>
+        <rows>
+          <row align="center">
+            <radio id="emic-custom-date" label="Custom date:"/>
+            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="0" hideyear="false" value="now"/>
+            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true" value="now"/>
+          </row>
+          <row align="center">
+            <radio id="emic-suggestion-date" label="Suggestions:"/>
+            <menulist id="emic-suggestion-datelist" label="Date">
+              <menupopup>
+                <menuitem label="10.10.2013"/>
+                <menuitem label="11.10.2013"/>
+              </menupopup>
+            </menulist>
+            <menulist id="emic-suggestion-timelist" label="Time">
+              <menupopup>
+                <menuitem label="10:03"/>
+                <menuitem label="11:30"/>
+              </menupopup>
+            </menulist>
+          </row>
+        </rows>
+      </grid>
+    </radiogroup>
+  </groupbox>
+
+</dialog>

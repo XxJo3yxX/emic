@@ -61,10 +61,19 @@ var emicComposeObj = {
     },
 
     setExpirationDateCustom: function() {
-//        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
-        this.check_emiccustom();
-        //Todo: call Dialog
-        this.expdatestr = (new Date).toString();
+        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
+        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
+        //call Dialog:
+        var params = {inn:{customdatetime:(new Date(this.expdatestr))}, out:null};
+        window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+        if (params.out) {
+            // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
+            this.check_emiccustom();
+            this.expdatestr = params.out.datetime.toString();
+        }
+        else {
+            // User clicked cancel. Typically, nothing is done here.
+        }
     },
 
     setExpirationDateNever: function() {

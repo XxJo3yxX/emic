@@ -60,14 +60,14 @@ var emicBackgroundObj = {
     destFolderName: null,
 
     startup: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.startup() called");
+//        this.consoleService.logStringMessage("emicBackgroundObj.startup() called");
         this.setExpirationDate();
         this.moveExpiredMails();
     },
 
     setExpirationDate: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.setExpirationDate() called");
-        this.consoleService.logStringMessage("srcFolder.prettiestName: " + this.srcFolder.prettiestName);
+//        this.consoleService.logStringMessage("emicBackgroundObj.setExpirationDate() called");
+//        this.consoleService.logStringMessage("srcFolder.prettiestName: " + this.srcFolder.prettiestName);
         if(!this.srcFolder)
             return null;
 
@@ -89,8 +89,8 @@ var emicBackgroundObj = {
     },
 
     moveExpiredMails: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails() called")
-        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);;
+//        this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails() called")
+//        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);;
 
         if(!this.srcFolder)
             return null;
@@ -119,14 +119,14 @@ var emicBackgroundObj = {
                 destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
             }
             catch(e) {
-                this.consoleService.logStringMessage("destfolder not exists, try to create it: " + e);
+                this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails(): destfolder not exists, try to create it: " + e);
                 if(!destfolder) {
                     var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
                     gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
                     destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                 }
             }
-            this.consoleService.logStringMessage("try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
+            this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
             if(this.srcFolder && destfolder)
                 this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
         }
@@ -142,23 +142,23 @@ var emicBackgroundObj = {
 //        this.consoleService.logStringMessage("emicBackgroundObj.setInbox() called");
 //        this.consoleService.logStringMessage("inboxfolder.prettiestName: " + inboxfolder.prettiestName);
         if(inboxfolder.flags & Ci.nsMsgFolderFlags.Inbox) {
-            this.consoleService.logStringMessage("emicBackgroundObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
+//            this.consoleService.logStringMessage("emicBackgroundObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
             this.srcFolder = inboxfolder;
         }
     },
 
     setDestFolder: function(destfoldername) {
-        this.consoleService.logStringMessage("emicBackgroundObj.setDestFolder() called");
+//        this.consoleService.logStringMessage("emicBackgroundObj.setDestFolder() called");
         this.destFolderName = destfoldername;
     },
 
     shutdown: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.shutdown() called");
+//        this.consoleService.logStringMessage("emicBackgroundObj.shutdown() called");
         this.prefs.removeObserver("", this);
     },
 
     observe: function(subject, topic, data) {
-        this.consoleService.logStringMessage("emicBackgroundObj.observe() called");
+//        this.consoleService.logStringMessage("emicBackgroundObj.observe() called");
         if (topic != "nsPref:changed")
             return;
  
@@ -170,7 +170,7 @@ var emicBackgroundObj = {
     },
 
     init: function() {
-        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
+//        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
         this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
         this.prefs.addObserver("", this, false);
         this.setDestFolder(this.prefs.getCharPref("destfoldername"));
