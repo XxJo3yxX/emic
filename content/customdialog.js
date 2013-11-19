@@ -54,7 +54,8 @@ function onOK() {
         outdate = new Date;
 
     window.arguments[0].out = {
-        datetime: outdate
+        datetime: outdate,
+        datetimestr: outdate.toString()
     };
     return true;
 }

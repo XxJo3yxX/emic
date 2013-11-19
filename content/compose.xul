@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://emic/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
-<overlay id="ExpiredMailInboxCleaner-compose-overlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/javascript" src="compose.js"/>
 
+<overlay id="ExpiredMailInboxCleaner-compose-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/javascript" src="compose.js"/>
   <script type="application/x-javascript"><![CDATA[window.addEventListener("load", function() {emicComposeObj.init()}, false);]]></script>
 
   <commandset id="composeCommands">
@@ -36,4 +35,5 @@
     </menu>
     <menuseparator />
   </menupopup>
+  
 </overlay>

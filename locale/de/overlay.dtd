@@ -6,6 +6,14 @@
 <!ENTITY suggestions "Vorschläge">
 <!ENTITY never "Nie">
 <!ENTITY now "Jetzt">
+<!ENTITY today "Heute">
 <!ENTITY custom "Benutzerdefiniert...">
 <!ENTITY options.window.title "EMIC Einstellungen">
 <!ENTITY options.destination.directory "Zielordnername:">
+<!ENTITY customdialog.title "Benutzerdefiniertes Ablaufdatum">
+<!ENTITY customdialog.description "Wähle Ablaufdatum">
+<!ENTITY customdialog.groupbox.label "Ablaufdatum">
+<!ENTITY customdialog.radio.customdate "Benutzerdefiniertes Datum:">
+<!ENTITY customdialog.radio.suggestions "Vorschläge:">
+<!ENTITY date "Datum">
+<!ENTITY time "Zeit">

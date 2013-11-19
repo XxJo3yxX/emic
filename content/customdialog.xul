@@ -1,17 +1,18 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
+<!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="emiccustomdatedialog"
-        title="Custom date Dialog"
+        title="&customdialog.title;"
         onload="onLoad();"
         ondialogaccept="return onOK();">
 
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
-  <dialogheader title="Custom date dialog" description="Choose expiration Date"/>
+  <dialogheader title="&customdialog.title;" description="&customdialog.description;"/>
   <groupbox flex="1">
-    <caption label="Select custom date or suggestions"/>
+    <caption label="&customdialog.groupbox.label;"/>
     <radiogroup>
       <grid>
         <columns>
@@ -21,22 +22,22 @@
         </columns>
         <rows>
           <row align="center">
-            <radio id="emic-custom-date" label="Custom date:"/>
+            <radio id="emic-custom-date" label="&customdialog.radio.customdate;"/>
             <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="0" hideyear="false"/>
             <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true"/>
           </row>
           <row align="center">
-            <radio id="emic-suggestion-date" label="Suggestions:"/>
-            <menulist id="emic-suggestion-datelist" label="Date">
+            <radio id="emic-suggestion-date" label="&customdialog.radio.suggestions;"/>
+            <menulist id="emic-suggestion-datelist" label="&date;">
               <menupopup>
-                <menuitem label="10.10.2013"/>
-                <menuitem label="11.10.2013"/>
+                <menuitem id="suggestion-date-now" label="&today;"/>
+                <menuitem id="suggestion-date-never" label="&never;"/>
               </menupopup>
             </menulist>
-            <menulist id="emic-suggestion-timelist" label="Time">
+            <menulist id="emic-suggestion-timelist" label="&time;">
               <menupopup>
-                <menuitem label="10:03"/>
-                <menuitem label="11:30"/>
+                <menuitem id="suggestion-time-now" label="&now;"/>
+                <menuitem id="suggestion-time-never" label="&never;"/>
               </menupopup>
             </menulist>
           </row>

@@ -11,7 +11,8 @@ Cu.import("resource://emic/parsedate.js");
 
 var emicComposeObj = {
 
-    consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
+    consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
+    promptService: Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService),
 
     expdatestr: "",
 
@@ -69,7 +70,7 @@ var emicComposeObj = {
         if (params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             this.check_emiccustom();
-            this.expdatestr = params.out.datetime.toString();
+            this.expdatestr = params.out.datetimestr;
 //            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
         }
         else {
@@ -90,8 +91,25 @@ var emicComposeObj = {
     },
 
     send_event_listener: function(e) {
-//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
-//        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
+        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+        if(this.expdatestr.length <= 0){
+            this.consoleService.logStringMessage("expdatestr.length: " + this.expdatestr.length);
+            this.consoleService.logStringMessage("expdatestr.length: " + this.expdatestr.length);
+            if(this.promptService.confirm(window, "Kein Ablaufdatum", "Sie haben für diese E-Mail noch kein Ablaufdatum angegeben. Möchten Sie dies jetzt tun?")) {
+                var params = {inn:{customdate:null}, out:null};
+                window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+                if (params.out) {
+                    this.expdatestr = params.out.datetimestr;
+                }
+                else {
+                  this.expdatestr = "Never";
+                }
+            } else {
+              this.expdatestr = "Never";
+            }
+        }
+
         if(!gMsgCompose.compFields.otherRandomHeaders.contains("Expiration-Date: "))
             gMsgCompose.compFields.otherRandomHeaders += "Expiration-Date: " + this.expdatestr + "\r\n";
     },
@@ -99,7 +117,7 @@ var emicComposeObj = {
     init: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.init() called");
 //        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
-        this.setExpirationDateNever();
+//        this.setExpirationDateNever();
     }
 }
 
