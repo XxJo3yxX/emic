@@ -10,10 +10,16 @@
 
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
+  <commandset id="customdialogCommands">
+    <command id="customdate_changed" oncommand="customdate_changed();" />
+    <command id="datelist_changed" oncommand="datelist_changed();" />
+    <command id="timelist_changed" oncommand="timelist_changed();" />
+  </commandset>
+  
   <dialogheader title="&customdialog.title;" description="&customdialog.description;"/>
   <groupbox flex="1">
     <caption label="&customdialog.groupbox.label;"/>
-    <radiogroup>
+    <radiogroup id="emic-custom-radiogroup">
       <grid>
         <columns>
           <column/>
@@ -23,18 +29,18 @@
         <rows>
           <row align="center">
             <radio id="emic-custom-date" label="&customdialog.radio.customdate;"/>
-            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="0" hideyear="false"/>
-            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true"/>
+            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="1" hideyear="false" command="customdate_changed"/>
+            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true" command="customdate_changed"/>
           </row>
           <row align="center">
             <radio id="emic-suggestion-date" label="&customdialog.radio.suggestions;"/>
-            <menulist id="emic-suggestion-datelist" label="&date;">
+            <menulist id="emic-suggestion-datelist" label="&date;" command="datelist_changed">
               <menupopup>
                 <menuitem id="suggestion-date-now" label="&today;"/>
                 <menuitem id="suggestion-date-never" label="&never;"/>
               </menupopup>
             </menulist>
-            <menulist id="emic-suggestion-timelist" label="&time;">
+            <menulist id="emic-suggestion-timelist" label="&time;" command="timelist_changed">
               <menupopup>
                 <menuitem id="suggestion-time-now" label="&now;"/>
                 <menuitem id="suggestion-time-never" label="&never;"/>

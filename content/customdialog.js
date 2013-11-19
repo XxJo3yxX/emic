@@ -16,19 +16,32 @@ function onLoad() {
     window.sizeToContent();
     // Use the arguments passed to us by the caller
     var customdate = window.arguments[0].inn.customdate;
-//    consoleService.logStringMessage("customdate: " + customdate.toString());
-//    consoleService.logStringMessage("Object.prototype.toString.call(customdate) === '[object Date]': " + (Object.prototype.toString.call(customdate) === '[object Date]'));
-//    consoleService.logStringMessage("Object.prototype.toString.call(customdate): " + (Object.prototype.toString.call(customdate)));
-//    consoleService.logStringMessage("Object.prototype.toString(customdate): " + (Object.prototype.toString(customdate)));
-//    consoleService.logStringMessage("customdate instanceof Date: " + (customdate instanceof Date));
-//    consoleService.logStringMessage("isFinite(customdate): " + isFinite(customdate));
+    var suggestions = window.arguments[0].inn.suggestions;
+
+    var den = new SimpleDateFormat("yyyy-MM-dd");
+    var d = new SimpleDateFormat("dd.MM.yyyy");
+    var t = new SimpleDateFormat("HH:mm");
+
+    var datepicker = document.getElementById("emic-custom-datepicker");
+    var timepicker = document.getElementById("emic-custom-timepicker");
+    var datelist = document.getElementById("emic-suggestion-datelist");
+    var timelist = document.getElementById("emic-suggestion-timelist");
+
     if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
-        var d = new SimpleDateFormat("yyyy-MM-dd");
-        var t = new SimpleDateFormat("HH:mm");
-//        consoleService.logStringMessage("d.format(customdate): " + d.format(customdate));
-        document.getElementById("emic-custom-datepicker").value = d.format(customdate);
-        document.getElementById("emic-custom-timepicker").value = t.format(customdate);
-//        consoleService.logStringMessage("customdate: " + customdate.toString());
+        datepicker.value = den.format(customdate);
+        timepicker.value = t.format(customdate);
+    }
+
+//    consoleService.logStringMessage("(Object.prototype.toString.call(suggestions): " + (Object.prototype.toString.call(suggestions)));
+    if(Object.prototype.toString.call(suggestions) === '[object Array]') {
+        for (var i = 0; i < suggestions.length; ++i) {
+            var suggestion = suggestions[i];
+//            consoleService.logStringMessage("(Object.prototype.toString.call(suggestion): " + (Object.prototype.toString.call(suggestion)));
+            if((Object.prototype.toString.call(suggestion) === '[object Date]') && isFinite(suggestion)) {
+                datelist.appendItem(d.format(suggestion));
+                timelist.appendItem(t.format(suggestion));
+            }
+        }
     }
 }
 
@@ -58,4 +71,19 @@ function onOK() {
         datetimestr: outdate.toString()
     };
     return true;
+}
+
+function customdate_changed() {
+    consoleService.logStringMessage("customdate_changed() called");
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-custom-date");
+}
+
+function datelist_changed() {
+    consoleService.logStringMessage("datelist_changed() called");
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-suggestion-date");
+}
+
+function timelist_changed() {
+    consoleService.logStringMessage("timelist_changed() called");
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-suggestion-date");
 }

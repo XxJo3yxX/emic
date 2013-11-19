@@ -1,6 +1,7 @@
 <!ENTITY caption.label "Posteingangs-Reiniger von abgelaufenen E-Mails">
 <!ENTITY label.value "E-Mail läuft ab:">
 <!ENTITY expiration.date "Ablaufdatum">
+<!ENTITY add.expiration.date "Ablaufdatum einfügen">
 <!ENTITY ok "OK">
 <!ENTITY cancel "Abbrechen">
 <!ENTITY suggestions "Vorschläge">

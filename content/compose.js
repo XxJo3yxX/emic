@@ -65,7 +65,7 @@ var emicComposeObj = {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
 //        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
         //call Dialog:
-        var params = {inn:{customdate:(new Date(this.expdatestr))}, out:null};
+        var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: null}, out:null};
         window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if (params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
@@ -91,13 +91,10 @@ var emicComposeObj = {
     },
 
     send_event_listener: function(e) {
-        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
-        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
         if(this.expdatestr.length <= 0){
-            this.consoleService.logStringMessage("expdatestr.length: " + this.expdatestr.length);
-            this.consoleService.logStringMessage("expdatestr.length: " + this.expdatestr.length);
             if(this.promptService.confirm(window, "Kein Ablaufdatum", "Sie haben für diese E-Mail noch kein Ablaufdatum angegeben. Möchten Sie dies jetzt tun?")) {
-                var params = {inn:{customdate:null}, out:null};
+                var params = {inn:{customdate:null, suggestions:null}, out:null};
                 window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
                     this.expdatestr = params.out.datetimestr;

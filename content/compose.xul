@@ -26,7 +26,7 @@
 
   <menupopup id="msgComposeContext">
     <menuseparator />
-    <menu label="&expiration.date;">
+    <menu label="&add.expiration.date;">
       <menupopup>
         <menuitem id="emic-compose-never2" label="&never;" command="emiccomposenever" name="emiccompose" type="radio" autocheck="false" />
         <menuitem id="emic-compose-now2" label="&now;" command="emiccomposenow" name="emiccompose" type="radio" autocheck="false" />
