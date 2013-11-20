@@ -9,7 +9,7 @@
 
 <overlay id="ExpiredMailInboxCleaner-messagewindow-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/javascript" src="messagewindow.js"/>
+  <script type="application/javascript" src="chrome://emic/content/messagewindow.js"/>
   
   <stringbundleset id="stringbundleset">
     <stringbundle id="emic-strings-global"  src="chrome://emic/content/global.properties" />

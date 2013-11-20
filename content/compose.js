@@ -74,7 +74,7 @@ var emicComposeObj = {
         window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
-            if(params.out.datestr == "Never")
+            if(params.out.datestr == this.global_strBundle.getString("global.identifier.expirationdate.never"))
                 this.menu_select_never();
             else if(params.out.date < (new Date))
                 this.menu_select_now();
@@ -92,7 +92,7 @@ var emicComposeObj = {
     setExpirationDateNever: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateNever() called");
         this.menu_select_never();
-        this.expdatestr = "Never";
+        this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
     },
 
     setExpirationDateNow: function() {
@@ -119,10 +119,10 @@ var emicComposeObj = {
                     this.expdatestr = params.out.datestr;
                 }
                 else {
-                  this.expdatestr = "Never";
+                  this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
                 }
             } else {
-              this.expdatestr = "Never";
+              this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
             }
         }
 

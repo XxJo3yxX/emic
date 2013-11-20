@@ -64,7 +64,7 @@ var emicObj = {
 
     setExpirationDateNever: function() {
 //        this.consoleService.logStringMessage("emicObj.setExpirationDateNever() called");
-        this.setExpirationDateStr("Never");
+        this.setExpirationDateStr(this.global_strBundle.getString("global.identifier.expirationdate.never"));
     },
 
     setExpirationDateNow: function() {
@@ -93,7 +93,7 @@ var emicObj = {
 //        var msgHdr = gFolderDisplay.selectedMessage;
         var expdatestr = this.getExpirationDateStr();//msgHdr.getStringProperty("Expiration-Date");
 //        this.consoleService.logStringMessage("expdatestr: " + expdatestr);
-        if(!expdatestr || expdatestr.length <= 0 || expdatestr == "Never") {
+        if(!expdatestr || expdatestr.length <= 0 || expdatestr == this.global_strBundle.getString("global.identifier.expirationdate.never")) {
             this.menu_select_never();
         }
         else if((new Date(expdatestr)) < (new Date())) {

@@ -10,14 +10,17 @@
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="emiccustomdatedialog"
         title="&emic.customdialog.title;"
-        onload="onLoad();"
-        ondialogaccept="return onOK();">
-
+        onload="emicCustomDialogObj.onLoad();"
+        ondialogaccept="return emicCustomDialogObj.onOK();">
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="emic-strings-global"  src="chrome://emic/content/global.properties" />
+  </stringbundleset>
+
   <commandset id="customdialogCommands">
-    <command id="emic-cmd-custumdialog-select-customdate" oncommand="select_custom_date();" />
-    <command id="emic-cmd-custumdialog-select-suggestion" oncommand="select_suggestion_date();" />
+    <command id="emic-cmd-custumdialog-select-customdate" oncommand="emicCustomDialogObj.select_custom_date();" />
+    <command id="emic-cmd-custumdialog-select-suggestion" oncommand="emicCustomDialogObj.select_suggestion_date();" />
   </commandset>
   
   <dialogheader title="&emic.customdialog.title;" description="&emic.customdialog.description;"/>

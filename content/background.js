@@ -77,14 +77,24 @@ var emicBackgroundObj = {
 
         while( msgArray.hasMoreElements() ) {  
             var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);  
-            if(msgHdr.getStringProperty("Expiration-Date").length <= 0) {
+            if(msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty")).length <= 0) {
             // extract expiration-date from Mime-Hdr:
-                msgHdrGetHeaders(msgHdr, function (aHeaders) {  
-                    if(aHeaders.has("expiration-date")) {
-                        msgHdr.setStringProperty("Expiration-Date", aHeaders.get("expiration-date"));
+                msgHdrGetHeaders(msgHdr, function (aHeaders) {
+//                    emicBackgroundObj.consoleService.logStringMessage("msgHdrGetHeaders called, stringpropertyname: " + emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
+                    if(aHeaders.has(emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))) {
+                        emicBackgroundObj.consoleService.logStringMessage("aHeader.has expiration date");
+                        msgHdr.setStringProperty(
+                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"), 
+                            aHeaders.get(emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))
+                        );
                     }
-                    else
-                        msgHdr.setStringProperty("Expiration-Date", "Never");
+                    else {
+                        emicBackgroundObj.consoleService.logStringMessage("aHeader.has no expiration date");
+                        msgHdr.setStringProperty(
+                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),
+                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.never")
+                        );
+                    }
                 });
             }
         }
@@ -105,7 +115,7 @@ var emicBackgroundObj = {
             var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
             var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
 
-            if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == "Never")) {
+            if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.expirationdate.never"))) {
                 var expiration_date = new Date(expdatestr);
                 //search for expired mails:
                 if(expiration_date < now) {
