@@ -1,24 +1,28 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
+<!DOCTYPE overlay [
+  <!ENTITY % commonDTD  SYSTEM "chrome://emic/locale/common.dtd">
+  %commonDTD;
+  <!ENTITY % customdialogDTD SYSTEM "chrome://emic/locale/customdialog.dtd">
+  %customdialogDTD;
+]>
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="emiccustomdatedialog"
-        title="&customdialog.title;"
+        title="&emic.customdialog.title;"
         onload="onLoad();"
         ondialogaccept="return onOK();">
 
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
   <commandset id="customdialogCommands">
-    <command id="customdate_changed" oncommand="select_custom_date();" />
-    <command id="datelist_changed" oncommand="select_suggestion_date();" />
-    <command id="timelist_changed" oncommand="select_suggestion_date();" />
+    <command id="emic-cmd-custumdialog-select-customdate" oncommand="select_custom_date();" />
+    <command id="emic-cmd-custumdialog-select-suggestion" oncommand="select_suggestion_date();" />
   </commandset>
   
-  <dialogheader title="&customdialog.title;" description="&customdialog.description;"/>
+  <dialogheader title="&emic.customdialog.title;" description="&emic.customdialog.description;"/>
   <groupbox flex="1">
-    <caption label="&customdialog.groupbox.label;"/>
+    <caption label="&emic.customdialog.groupbox.label;"/>
     <radiogroup id="emic-custom-radiogroup">
       <grid>
         <columns>
@@ -28,27 +32,27 @@
         </columns>
         <rows>
           <row align="center">
-            <radio id="emic-radio-never" label="&never;"/>
+            <radio id="emic-radio-never" label="&emic.common.never;"/>
           </row>
           <row align="center">
-            <radio id="emic-radio-now" label="&now;"/>
+            <radio id="emic-radio-now" label="&emic.common.now;"/>
           </row>
           <row align="center">
-            <radio id="emic-radio-custom-date" label="&customdialog.radio.customdate;"/>
-            <datepicker id="emic-custom-picker-date" type="popup" firstdayofweek="1" hideyear="false" command="customdate_changed"/>
-            <timepicker id="emic-custom-picker-time" increment="1" hideseconds="true" command="customdate_changed"/>
+            <radio id="emic-radio-custom-date" label="&emic.customdialog.radio.customdate;"/>
+            <datepicker id="emic-custom-picker-date" command="emic-cmd-custumdialog-select-customdate" type="popup" firstdayofweek="1" hideyear="false"/>
+            <timepicker id="emic-custom-picker-time" command="emic-cmd-custumdialog-select-customdate" increment="1" hideseconds="true"/>
           </row>
           <row align="center">
-            <radio id="emic-radio-suggestion-date" label="&customdialog.radio.suggestions;"/>
-            <menulist id="emic-suggestion-list-date" label="&date;" command="datelist_changed">
+            <radio id="emic-radio-suggestion-date" label="&emic.customdialog.radio.suggestions;"/>
+            <menulist id="emic-suggestion-list-date" command="emic-cmd-custumdialog-select-suggestion" label="&emic.common.date;">
               <menupopup>
-                <menuitem id="suggestion-date-now" label="&today;"/>
+                <menuitem id="suggestion-date-now" label="&emic.common.today;"/>
                 <!--<menuitem id="suggestion-date-never" label="&never;"/>-->
               </menupopup>
             </menulist>
-            <menulist id="emic-suggestion-list-time" label="&time;" command="timelist_changed">
+            <menulist id="emic-suggestion-list-time" command="emic-cmd-custumdialog-select-suggestion" label="&emic.common.time;">
               <menupopup>
-                <menuitem id="suggestion-time-now" label="&now;"/>
+                <menuitem id="suggestion-time-now" label="&emic.common.now;"/>
                 <!--<menuitem id="suggestion-time-never" label="&never;"/>-->
               </menupopup>
             </menulist>

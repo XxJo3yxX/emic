@@ -1,0 +1,7 @@
+<!ENTITY caption.label      "Inbox Cleaner of expired Emails">
+<!ENTITY emic.common.date   "Date">
+<!ENTITY emic.common.time   "Time">
+<!ENTITY emic.common.never  "Never">
+<!ENTITY emic.common.today  "Today">
+<!ENTITY emic.common.now    "Now">
+<!ENTITY emic.common.custom "Custom...">

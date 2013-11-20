@@ -1,0 +1,5 @@
+<!ENTITY emic.customdialog.title              "Benutzerdefiniertes Ablaufdatum">
+<!ENTITY emic.customdialog.description        "Wähle Ablaufdatum">
+<!ENTITY emic.customdialog.groupbox.label     "Ablaufdatum">
+<!ENTITY emic.customdialog.radio.customdate   "Benutzerdefiniertes Datum:">
+<!ENTITY emic.customdialog.radio.suggestions  "Vorschläge:">

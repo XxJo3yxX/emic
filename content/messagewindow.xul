@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://emic/skin/overlay.css" type="text/css"?>
-<!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
+<!DOCTYPE overlay [
+  <!ENTITY % commonDTD  SYSTEM "chrome://emic/locale/common.dtd">
+  %commonDTD;
+  <!ENTITY % messagewindowDTD SYSTEM "chrome://emic/locale/messagewindow.dtd">
+  %messagewindowDTD;
+]>
+
 <overlay id="ExpiredMailInboxCleaner-messagewindow-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="messagewindow.js"/>
@@ -13,12 +19,12 @@
   
   <menupopup id="messageMenuPopup">
     <menuseparator />
-    <menu label="&label.value;">
+    <menu label="&emic.messagewindow.menu.label;">
       <observes element="cmd_reply" attribute="disabled" />
       <menupopup>
-        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-never"   label="&never;"   command="emic-cmd-mail-never" />
-        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-now"     label="&now;"     command="emic-cmd-mail-now" />
-        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-custom"  label="&custom;"  command="emic-cmd-mail-custom" />
+        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-never"   label="&emic.common.never;"   command="emic-cmd-mail-never" />
+        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-now"     label="&emic.common.now;"     command="emic-cmd-mail-now" />
+        <menuitem type="radio" name="emic-menu-message" autocheck="false" id="emic-menu-message-custom"  label="&emic.common.custom;"  command="emic-cmd-mail-custom" />
       </menupopup>
     </menu>
     <menuseparator />
@@ -26,12 +32,12 @@
 
   <menupopup id="mailContext">
     <menuseparator />
-    <menu label="&label.value;">
+    <menu label="&emic.messagewindow.menu.label;">
       <observes element="cmd_reply" attribute="disabled" />
       <menupopup>
-        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-never"   label="&never;"   command="emic-cmd-mail-never" />
-        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-now"     label="&now;"     command="emic-cmd-mail-now" />
-        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-custom"  label="&custom;"  command="emic-cmd-mail-custom" />
+        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-never"   label="&emic.common.never;"   command="emic-cmd-mail-never" />
+        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-now"     label="&emic.common.now;"     command="emic-cmd-mail-now" />
+        <menuitem type="radio" name="emic-menu-context" autocheck="false" id="emic-menu-context-custom"  label="&emic.common.custom;"  command="emic-cmd-mail-custom" />
       </menupopup>
     </menu>
     <menuseparator />

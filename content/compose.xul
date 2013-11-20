@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://emic/skin/overlay.css" type="text/css"?>
-<!DOCTYPE overlay SYSTEM "chrome://emic/locale/overlay.dtd">
+<!DOCTYPE overlay [
+  <!ENTITY % commonDTD  SYSTEM "chrome://emic/locale/common.dtd">
+  %commonDTD;
+  <!ENTITY % composeDTD SYSTEM "chrome://emic/locale/compose.dtd">
+  %composeDTD;
+]>
 
 <overlay id="ExpiredMailInboxCleaner-compose-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="compose.js"/>
@@ -13,11 +18,11 @@
 
   <menupopup id="insertMenuPopup">
     <menuseparator />
-    <menu label="&expiration.date;">
+    <menu label="&emic.compose.menu.insert.label;">
       <menupopup>
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-never"   label="&never;"   command="emic-cmd-compose-never" />
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-now"     label="&now;"     command="emic-cmd-compose-now" />
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-custom"  label="&custom;"  command="emic-cmd-compose-custom" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-never"   label="&emic.common.never;"   command="emic-cmd-compose-never" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-now"     label="&emic.common.now;"     command="emic-cmd-compose-now" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-custom"  label="&emic.common.custom;"  command="emic-cmd-compose-custom" />
       </menupopup>
     </menu>
     <menuseparator />
@@ -25,11 +30,11 @@
 
   <menupopup id="msgComposeContext">
     <menuseparator />
-    <menu label="&add.expiration.date;">
+    <menu label="&emic.compose.menu.context.label;">
       <menupopup>
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-never"  label="&never;"   command="emic-cmd-compose-never" />
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-now"    label="&now;"     command="emic-cmd-compose-now" />
-        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-custom" label="&custom;"  command="emic-cmd-compose-custom" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-never"  label="&emic.common.never;"   command="emic-cmd-compose-never" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-now"    label="&emic.common.now;"     command="emic-cmd-compose-now" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-custom" label="&emic.common.custom;"  command="emic-cmd-compose-custom" />
       </menupopup>
     </menu>
     <menuseparator />
