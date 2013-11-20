@@ -60,22 +60,34 @@ var emicObj = {
 
     setExpirationDateCustom: function() {
 //        this.consoleService.logStringMessage("emicObj.setExpirationDateCustom() called");
-        //Todo: call Dialog
-        this.setExpirationDate((new Date).toString());
+        //call Dialog
+        var params = {inn:{customdate:(new Date(this.getExpirationDateStr())), suggestions: null}, out:null};
+        window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+        if(params.out) {
+            // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
+            this.setExpirationDateStr(params.out.datestr);
+        }
+        else {
+            // User clicked cancel. Typically, nothing is done here.
+        }
     },
 
     setExpirationDateNever: function() {
 //        this.consoleService.logStringMessage("emicObj.setExpirationDateNever() called");
-        this.setExpirationDate("Never");
+        this.setExpirationDateStr("Never");
     },
 
     setExpirationDateNow: function() {
 //        this.consoleService.logStringMessage("emicObj.setExpirationDateNow() called");
-        this.setExpirationDate((new Date).toString());
+        this.setExpirationDateStr((new Date).toString());
     },
 
-    setExpirationDate: function(expdatestr) {
-//        this.consoleService.logStringMessage("emicObj.setExpirationDate() called");
+    getExpirationDateStr: function() {
+        return gFolderDisplay.selectedMessage.getStringProperty("Expiration-Date");
+    },
+
+    setExpirationDateStr: function(expdatestr) {
+//        this.consoleService.logStringMessage("emicObj.setExpirationDateStr() called");
         var msgArraylength = gFolderDisplay.selectedCount;
         var msgArray = gFolderDisplay.selectedMessages;
 
@@ -88,8 +100,8 @@ var emicObj = {
 
     selectChanged: function(e) {
 //        this.consoleService.logStringMessage("emicObj.selectChanged() called");
-        var msgHdr = gFolderDisplay.selectedMessage;
-        var expdatestr = msgHdr.getStringProperty("Expiration-Date");
+//        var msgHdr = gFolderDisplay.selectedMessage;
+        var expdatestr = this.getExpirationDateStr();//msgHdr.getStringProperty("Expiration-Date");
         this.consoleService.logStringMessage("expdatestr: " + expdatestr);
         if(!expdatestr || expdatestr.length <= 0 || expdatestr == "Never") {
             this.check_emicnever();

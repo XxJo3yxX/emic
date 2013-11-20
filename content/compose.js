@@ -9,6 +9,21 @@ Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
 
+var myStateListener = {
+   init: function(e){
+      gMsgCompose.RegisterStateListener(myStateListener);
+      emicComposeObj.init();
+   },
+   NotifyComposeFieldsReady: function() {
+   },
+   NotifyComposeBodyReady: function() {
+   },
+   ComposeProcessDone: function(aResult) {
+   },
+   SaveInFolderDone: function(folderURI) {
+   }
+};
+
 var emicComposeObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
@@ -67,11 +82,17 @@ var emicComposeObj = {
         //call Dialog:
         var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: null}, out:null};
         window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
-        if (params.out) {
+        if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
-            this.check_emiccustom();
-            this.expdatestr = params.out.datetimestr;
-//            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
+            if(params.out.datestr == "Never")
+                this.check_emicnever();
+            else if(params.out.date < (new Date))
+                this.check_emicnow();
+            else
+                this.check_emiccustom();
+
+            this.expdatestr = params.out.datestr;
+            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
         }
         else {
             // User clicked cancel. Typically, nothing is done here.
@@ -97,7 +118,7 @@ var emicComposeObj = {
                 var params = {inn:{customdate:null, suggestions:null}, out:null};
                 window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
-                    this.expdatestr = params.out.datetimestr;
+                    this.expdatestr = params.out.datestr;
                 }
                 else {
                   this.expdatestr = "Never";
@@ -112,10 +133,12 @@ var emicComposeObj = {
     },
 
     init: function() {
-//        this.consoleService.logStringMessage("emicComposeObj.init() called");
-//        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
-//        this.setExpirationDateNever();
+        this.consoleService.logStringMessage("emicComposeObj.init() called");
+//        this.setExpirationDateNever();    //not optimal
+        this.expdatestr = "";
+        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
     }
 }
 
 window.addEventListener( "compose-send-message", function(e){emicComposeObj.send_event_listener(e);}, true);
+window.addEventListener( "compose-window-init", myStateListener.init, true);

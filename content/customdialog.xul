@@ -11,9 +11,9 @@
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
   <commandset id="customdialogCommands">
-    <command id="customdate_changed" oncommand="customdate_changed();" />
-    <command id="datelist_changed" oncommand="datelist_changed();" />
-    <command id="timelist_changed" oncommand="timelist_changed();" />
+    <command id="customdate_changed" oncommand="select_custom_date();" />
+    <command id="datelist_changed" oncommand="select_suggestion_date();" />
+    <command id="timelist_changed" oncommand="select_suggestion_date();" />
   </commandset>
   
   <dialogheader title="&customdialog.title;" description="&customdialog.description;"/>
@@ -28,22 +28,28 @@
         </columns>
         <rows>
           <row align="center">
-            <radio id="emic-custom-date" label="&customdialog.radio.customdate;"/>
-            <datepicker id="emic-custom-datepicker" type="popup" firstdayofweek="1" hideyear="false" command="customdate_changed"/>
-            <timepicker id="emic-custom-timepicker" increment="1" hideseconds="true" command="customdate_changed"/>
+            <radio id="emic-radio-never" label="&never;"/>
           </row>
           <row align="center">
-            <radio id="emic-suggestion-date" label="&customdialog.radio.suggestions;"/>
-            <menulist id="emic-suggestion-datelist" label="&date;" command="datelist_changed">
+            <radio id="emic-radio-now" label="&now;"/>
+          </row>
+          <row align="center">
+            <radio id="emic-radio-custom-date" label="&customdialog.radio.customdate;"/>
+            <datepicker id="emic-custom-picker-date" type="popup" firstdayofweek="1" hideyear="false" command="customdate_changed"/>
+            <timepicker id="emic-custom-picker-time" increment="1" hideseconds="true" command="customdate_changed"/>
+          </row>
+          <row align="center">
+            <radio id="emic-radio-suggestion-date" label="&customdialog.radio.suggestions;"/>
+            <menulist id="emic-suggestion-list-date" label="&date;" command="datelist_changed">
               <menupopup>
                 <menuitem id="suggestion-date-now" label="&today;"/>
-                <menuitem id="suggestion-date-never" label="&never;"/>
+                <!--<menuitem id="suggestion-date-never" label="&never;"/>-->
               </menupopup>
             </menulist>
-            <menulist id="emic-suggestion-timelist" label="&time;" command="timelist_changed">
+            <menulist id="emic-suggestion-list-time" label="&time;" command="timelist_changed">
               <menupopup>
                 <menuitem id="suggestion-time-now" label="&now;"/>
-                <menuitem id="suggestion-time-never" label="&never;"/>
+                <!--<menuitem id="suggestion-time-never" label="&never;"/>-->
               </menupopup>
             </menulist>
           </row>

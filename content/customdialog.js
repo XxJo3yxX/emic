@@ -22,10 +22,10 @@ function onLoad() {
     var d = new SimpleDateFormat("dd.MM.yyyy");
     var t = new SimpleDateFormat("HH:mm");
 
-    var datepicker = document.getElementById("emic-custom-datepicker");
-    var timepicker = document.getElementById("emic-custom-timepicker");
-    var datelist = document.getElementById("emic-suggestion-datelist");
-    var timelist = document.getElementById("emic-suggestion-timelist");
+    var datepicker = document.getElementById("emic-custom-picker-date");
+    var timepicker = document.getElementById("emic-custom-picker-time");
+    var datelist = document.getElementById("emic-suggestion-list-date");
+    var timelist = document.getElementById("emic-suggestion-list-time");
 
     if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
         datepicker.value = den.format(customdate);
@@ -51,39 +51,47 @@ function onOK() {
     // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
     var outdate;
 
-    var datepicker = document.getElementById("emic-custom-datepicker");
-    var timepicker = document.getElementById("emic-custom-timepicker");
-    var datelist = document.getElementById("emic-suggestion-datelist");
-    var timelist = document.getElementById("emic-suggestion-timelist");
-    
-    var d = new SimpleDateFormat("dd.MM.yyyy");
-    var t = new SimpleDateFormat("HH:mm");
-
-    if(document.getElementById("emic-custom-date").selected)
-        outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue));
-    else if(document.getElementById("emic-suggestion-date").selected)
-        outdate = parseDate(datelist.selectedItem.label + " " + timelist.selectedItem.label);
-    else
-        outdate = new Date;
+    switch(document.getElementById("emic-custom-radiogroup").selectedItem) {
+        case document.getElementById("emic-radio-now"):
+            outdate = new Date;
+        break;
+        case document.getElementById("emic-radio-custom-date"):
+            var datepicker = document.getElementById("emic-custom-picker-date");
+            var timepicker = document.getElementById("emic-custom-picker-time");
+            var d = new SimpleDateFormat("dd.MM.yyyy");
+            var t = new SimpleDateFormat("HH:mm");
+            outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue));
+        break;
+        case document.getElementById("emic-radio-suggestion-date"):
+            var datelist = document.getElementById("emic-suggestion-list-date");
+            var timelist = document.getElementById("emic-suggestion-list-time");
+            outdate = parseDate(datelist.selectedItem.label + " " + timelist.selectedItem.label);
+        break;
+        default:
+        case document.getElementById("emic-radio-never"):
+            window.arguments[0].out = {
+                date: null,
+                datestr: "Never"
+            };
+            return true;
+        break;
+    }
 
     window.arguments[0].out = {
-        datetime: outdate,
-        datetimestr: outdate.toString()
+        date: outdate,
+        datestr: outdate.toString()
     };
     return true;
 }
 
-function customdate_changed() {
-    consoleService.logStringMessage("customdate_changed() called");
-    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-custom-date");
+function select_custom_date() {
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-custom-date");
 }
 
-function datelist_changed() {
-    consoleService.logStringMessage("datelist_changed() called");
-    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-suggestion-date");
+function select_suggestion_date() {
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-suggestion-date");
 }
 
-function timelist_changed() {
-    consoleService.logStringMessage("timelist_changed() called");
-    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-suggestion-date");
-}
+//function timelist_changed() {
+//    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-suggestion-date");
+//}
