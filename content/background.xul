@@ -5,8 +5,11 @@
 <overlay id="emic-background"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="background.js"/>
-  <script type="application/x-javascript"><![CDATA[window.addEventListener("load", function() {emicBackgroundObj.init()}, false);]]></script>
 
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="emic-global-strings" src="chrome://emic/locale/global.properties" />
+  </stringbundleset>
+  
   <statusbar id="status-bar">
     <deck selectedIndex="1" id="emic-deck" insertafter="statusTextBox" insertbefore="unreadMessageCount" style="width:120px" hidden="false">
       <progressmeter id="emic-progress" mode="determined" value="50" />

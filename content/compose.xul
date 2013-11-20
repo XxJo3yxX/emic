@@ -9,6 +9,10 @@
 
 <overlay id="ExpiredMailInboxCleaner-compose-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/javascript" src="compose.js"/>
+  
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="emic-global-strings" src="chrome://emic/locale/global.properties" />
+  </stringbundleset>
 
   <commandset id="composeCommands">
     <command id="emic-cmd-compose-never"  oncommand="emicComposeObj.setExpirationDateNever();" />

@@ -9,6 +9,8 @@ Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/stdlib/misc.js");
 Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 
+var strBundle = document.getElementById("emic_global_strings");
+
 var MailListener = {  
     msgAdded: function(aMsgHdr) {  
         if( !aMsgHdr.isRead )  {
@@ -18,7 +20,7 @@ var MailListener = {
             emicBackgroundObj.startup();
         }
     }
-}
+};
 
 var copyListener = {
     OnStartCopy: function() {
@@ -180,6 +182,7 @@ var emicBackgroundObj = {
     }
 }
 
+window.addEventListener("load", function() {emicBackgroundObj.init()}, false);
 window.setInterval(function(){emicBackgroundObj.startup();}, 60000); //update every minute
 document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundObj.selectChanged(e);}, false);
 window.addEventListener("unload", function(e) { emicBackgroundObj.shutdown(); }, false);

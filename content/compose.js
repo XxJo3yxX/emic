@@ -28,52 +28,41 @@ var emicComposeObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     promptService: Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService),
-
+    strBundle: null,
     expdatestr: "",
 
+    menu_insert_never: null,
+    menu_insert_now: null,
+    menu_insert_custom: null,
+    menu_context_never: null,
+    menu_context_now: null,
+    menu_context_custom: null,
+
     menu_select_custom: function(){
-        var never   = document.getElementById("emic-menu-compose-insert-never");
-        var now     = document.getElementById("emic-menu-compose-insert-now");
-        var custom  = document.getElementById("emic-menu-compose-insert-custom");
-        var never2  = document.getElementById("emic-menu-compose-context-never");
-        var now2    = document.getElementById("emic-menu-compose-context-now");
-        var custom2 = document.getElementById("emic-menu-compose-context-custom");
-        never   .setAttribute("checked", "false");
-        never2  .setAttribute("checked", "false");
-        now     .setAttribute("checked", "false");
-        now2    .setAttribute("checked", "false");
-        custom  .setAttribute("checked", "true");
-        custom2 .setAttribute("checked", "true");
+        this.menu_insert_never   .setAttribute("checked", "false");
+        this.menu_context_never  .setAttribute("checked", "false");
+        this.menu_insert_now     .setAttribute("checked", "false");
+        this.menu_context_now    .setAttribute("checked", "false");
+        this.menu_insert_custom  .setAttribute("checked", "true");
+        this.menu_context_custom .setAttribute("checked", "true");
     },
 
     menu_select_never: function(){
-        var never   = document.getElementById("emic-menu-compose-insert-never");
-        var now     = document.getElementById("emic-menu-compose-insert-now");
-        var custom  = document.getElementById("emic-menu-compose-insert-custom");
-        var never2  = document.getElementById("emic-menu-compose-context-never");
-        var now2    = document.getElementById("emic-menu-compose-context-now");
-        var custom2 = document.getElementById("emic-menu-compose-context-custom");
-        now     .setAttribute("checked", "false");
-        now2    .setAttribute("checked", "false");
-        custom  .setAttribute("checked", "false");
-        custom2 .setAttribute("checked", "false");
-        never   .setAttribute("checked", "true");
-        never2  .setAttribute("checked", "true");
+        this.menu_insert_now     .setAttribute("checked", "false");
+        this.menu_context_now    .setAttribute("checked", "false");
+        this.menu_insert_custom  .setAttribute("checked", "false");
+        this.menu_context_custom .setAttribute("checked", "false");
+        this.menu_insert_never   .setAttribute("checked", "true");
+        this.menu_context_never  .setAttribute("checked", "true");
     },
 
     menu_select_now: function(){
-        var never   = document.getElementById("emic-menu-compose-insert-never");
-        var now     = document.getElementById("emic-menu-compose-insert-now");
-        var custom  = document.getElementById("emic-menu-compose-insert-custom");
-        var never2  = document.getElementById("emic-menu-compose-context-never");
-        var now2    = document.getElementById("emic-menu-compose-context-now");
-        var custom2 = document.getElementById("emic-menu-compose-context-custom");
-        never   .setAttribute("checked", "false");
-        never2  .setAttribute("checked", "false");
-        custom  .setAttribute("checked", "false");
-        custom2 .setAttribute("checked", "false");
-        now     .setAttribute("checked", "true");
-        now2    .setAttribute("checked", "true");
+        this.menu_insert_never   .setAttribute("checked", "false");
+        this.menu_context_never  .setAttribute("checked", "false");
+        this.menu_insert_custom  .setAttribute("checked", "false");
+        this.menu_context_custom .setAttribute("checked", "false");
+        this.menu_insert_now     .setAttribute("checked", "true");
+        this.menu_context_now    .setAttribute("checked", "true");
     },
 
     setExpirationDateCustom: function() {
@@ -114,7 +103,15 @@ var emicComposeObj = {
     send_event_listener: function(e) {
 //        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
         if(this.expdatestr.length <= 0){
-            if(this.promptService.confirm(window, "Kein Ablaufdatum", "Sie haben für diese E-Mail noch kein Ablaufdatum angegeben. Möchten Sie dies jetzt tun?")) {
+            var result = this.promptService.confirmEx(
+                window,
+                this.strBundle.getString("compose.noexpirationdateset.confirm.title"),
+                this.strBundle.getString("compose.noexpirationdateset.confirm.text"),
+                Ci.nsIPromptService.STD_YES_NO_BUTTONS,
+                null,null,null,null,{}
+            );
+
+            if(result == 0) {
                 var params = {inn:{customdate:null, suggestions:null}, out:null};
                 window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
@@ -136,7 +133,15 @@ var emicComposeObj = {
         this.consoleService.logStringMessage("emicComposeObj.init() called");
 //        this.setExpirationDateNever();    //not optimal
         this.expdatestr = "";
-        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+//        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
+        this.strBundle = document.getElementById("emic-global-strings");
+        
+        this.menu_insert_never    = document.getElementById("emic-menu-compose-insert-never");
+        this.menu_insert_now      = document.getElementById("emic-menu-compose-insert-now");
+        this.menu_insert_custom   = document.getElementById("emic-menu-compose-insert-custom");
+        this.menu_context_never   = document.getElementById("emic-menu-compose-context-never");
+        this.menu_context_now     = document.getElementById("emic-menu-compose-context-now");
+        this.menu_context_custom  = document.getElementById("emic-menu-compose-context-custom");
     }
 }
 
