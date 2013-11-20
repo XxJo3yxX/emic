@@ -28,8 +28,15 @@ function onLoad() {
     var timelist = document.getElementById("emic-suggestion-list-time");
 
     if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
-        datepicker.value = den.format(customdate);
-        timepicker.value = t.format(customdate);
+        consoleService.logStringMessage("customdate: " + customdate.toString());
+        if(customdate < (new Date)) {
+            select_now();
+        }
+        else {
+            datepicker.value = den.format(customdate);
+            timepicker.value = t.format(customdate);
+            select_custom_date();
+        }
     }
 
 //    consoleService.logStringMessage("(Object.prototype.toString.call(suggestions): " + (Object.prototype.toString.call(suggestions)));
@@ -82,6 +89,10 @@ function onOK() {
         datestr: outdate.toString()
     };
     return true;
+}
+
+function select_now() {
+    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-now");
 }
 
 function select_custom_date() {

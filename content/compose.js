@@ -31,49 +31,49 @@ var emicComposeObj = {
 
     expdatestr: "",
 
-    check_emiccustom: function(){
-        var emicnever = document.getElementById("emic-compose-never");
-        var emicnow = document.getElementById("emic-compose-now");
-        var emiccustom = document.getElementById("emic-compose-custom");
-        var emicnever2 = document.getElementById("emic-compose-never2");
-        var emicnow2 = document.getElementById("emic-compose-now2");
-        var emiccustom2 = document.getElementById("emic-compose-custom2");
-        emicnever.setAttribute("checked", "false");
-        emicnever2.setAttribute("checked", "false");
-        emicnow.setAttribute("checked", "false");
-        emicnow2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "true");
-        emiccustom2.setAttribute("checked", "true");
+    menu_select_custom: function(){
+        var never   = document.getElementById("emic-menu-compose-insert-never");
+        var now     = document.getElementById("emic-menu-compose-insert-now");
+        var custom  = document.getElementById("emic-menu-compose-insert-custom");
+        var never2  = document.getElementById("emic-menu-compose-context-never");
+        var now2    = document.getElementById("emic-menu-compose-context-now");
+        var custom2 = document.getElementById("emic-menu-compose-context-custom");
+        never   .setAttribute("checked", "false");
+        never2  .setAttribute("checked", "false");
+        now     .setAttribute("checked", "false");
+        now2    .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "true");
+        custom2 .setAttribute("checked", "true");
     },
 
-    check_emicnever: function(){
-        var emicnever = document.getElementById("emic-compose-never");
-        var emicnow = document.getElementById("emic-compose-now");
-        var emiccustom = document.getElementById("emic-compose-custom");
-        var emicnever2 = document.getElementById("emic-compose-never2");
-        var emicnow2 = document.getElementById("emic-compose-now2");
-        var emiccustom2 = document.getElementById("emic-compose-custom2");
-        emicnow.setAttribute("checked", "false");
-        emicnow2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "false");
-        emiccustom2.setAttribute("checked", "false");
-        emicnever.setAttribute("checked", "true");
-        emicnever2.setAttribute("checked", "true");
+    menu_select_never: function(){
+        var never   = document.getElementById("emic-menu-compose-insert-never");
+        var now     = document.getElementById("emic-menu-compose-insert-now");
+        var custom  = document.getElementById("emic-menu-compose-insert-custom");
+        var never2  = document.getElementById("emic-menu-compose-context-never");
+        var now2    = document.getElementById("emic-menu-compose-context-now");
+        var custom2 = document.getElementById("emic-menu-compose-context-custom");
+        now     .setAttribute("checked", "false");
+        now2    .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "false");
+        custom2 .setAttribute("checked", "false");
+        never   .setAttribute("checked", "true");
+        never2  .setAttribute("checked", "true");
     },
 
-    check_emicnow: function(){
-        var emicnever = document.getElementById("emic-compose-never");
-        var emicnow = document.getElementById("emic-compose-now");
-        var emiccustom = document.getElementById("emic-compose-custom");
-        var emicnever2 = document.getElementById("emic-compose-never2");
-        var emicnow2 = document.getElementById("emic-compose-now2");
-        var emiccustom2 = document.getElementById("emic-compose-custom2");
-        emicnever.setAttribute("checked", "false");
-        emicnever2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "false");
-        emiccustom2.setAttribute("checked", "false");
-        emicnow.setAttribute("checked", "true");
-        emicnow2.setAttribute("checked", "true");
+    menu_select_now: function(){
+        var never   = document.getElementById("emic-menu-compose-insert-never");
+        var now     = document.getElementById("emic-menu-compose-insert-now");
+        var custom  = document.getElementById("emic-menu-compose-insert-custom");
+        var never2  = document.getElementById("emic-menu-compose-context-never");
+        var now2    = document.getElementById("emic-menu-compose-context-now");
+        var custom2 = document.getElementById("emic-menu-compose-context-custom");
+        never   .setAttribute("checked", "false");
+        never2  .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "false");
+        custom2 .setAttribute("checked", "false");
+        now     .setAttribute("checked", "true");
+        now2    .setAttribute("checked", "true");
     },
 
     setExpirationDateCustom: function() {
@@ -85,11 +85,11 @@ var emicComposeObj = {
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             if(params.out.datestr == "Never")
-                this.check_emicnever();
+                this.menu_select_never();
             else if(params.out.date < (new Date))
-                this.check_emicnow();
+                this.menu_select_now();
             else
-                this.check_emiccustom();
+                this.menu_select_custom();
 
             this.expdatestr = params.out.datestr;
             this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
@@ -101,13 +101,13 @@ var emicComposeObj = {
 
     setExpirationDateNever: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateNever() called");
-        this.check_emicnever();
+        this.menu_select_never();
         this.expdatestr = "Never";
     },
 
     setExpirationDateNow: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateNow() called");
-        this.check_emicnow();
+        this.menu_select_now();
         this.expdatestr = (new Date).toString();
     },
 

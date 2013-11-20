@@ -13,49 +13,49 @@ var emicObj = {
 
     consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
 
-    check_emiccustom: function(){
-        var emicnever = document.getElementById("emic-never");
-        var emicnow = document.getElementById("emic-now");
-        var emiccustom = document.getElementById("emic-custom");
-        var emicnever2 = document.getElementById("emic-never2");
-        var emicnow2 = document.getElementById("emic-now2");
-        var emiccustom2 = document.getElementById("emic-custom2");
-        emicnever.setAttribute("checked", "false");
-        emicnever2.setAttribute("checked", "false");
-        emicnow.setAttribute("checked", "false");
-        emicnow2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "true");
-        emiccustom2.setAttribute("checked", "true");
+    menu_select_custom: function(){
+        var never   = document.getElementById("emic-menu-message-never");
+        var now     = document.getElementById("emic-menu-message-now");
+        var custom  = document.getElementById("emic-menu-message-custom");
+        var never2  = document.getElementById("emic-menu-context-never");
+        var now2    = document.getElementById("emic-menu-context-now");
+        var custom2 = document.getElementById("emic-menu-context-custom");
+        never   .setAttribute("checked", "false");
+        never2  .setAttribute("checked", "false");
+        now     .setAttribute("checked", "false");
+        now2    .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "true");
+        custom2 .setAttribute("checked", "true");
     },
 
-    check_emicnever: function(){
-        var emicnever = document.getElementById("emic-never");
-        var emicnow = document.getElementById("emic-now");
-        var emiccustom = document.getElementById("emic-custom");
-        var emicnever2 = document.getElementById("emic-never2");
-        var emicnow2 = document.getElementById("emic-now2");
-        var emiccustom2 = document.getElementById("emic-custom2");
-        emicnow.setAttribute("checked", "false");
-        emicnow2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "false");
-        emiccustom2.setAttribute("checked", "false");
-        emicnever.setAttribute("checked", "true");
-        emicnever2.setAttribute("checked", "true");
+    menu_select_never: function(){
+        var never   = document.getElementById("emic-menu-message-never");
+        var now     = document.getElementById("emic-menu-message-now");
+        var custom  = document.getElementById("emic-menu-message-custom");
+        var never2  = document.getElementById("emic-menu-context-never");
+        var now2    = document.getElementById("emic-menu-context-now");
+        var custom2 = document.getElementById("emic-menu-context-custom");
+        now     .setAttribute("checked", "false");
+        now2    .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "false");
+        custom2 .setAttribute("checked", "false");
+        never   .setAttribute("checked", "true");
+        never2  .setAttribute("checked", "true");
     },
 
-    check_emicnow: function(){
-        var emicnever = document.getElementById("emic-never");
-        var emicnow = document.getElementById("emic-now");
-        var emiccustom = document.getElementById("emic-custom");
-        var emicnever2 = document.getElementById("emic-never2");
-        var emicnow2 = document.getElementById("emic-now2");
-        var emiccustom2 = document.getElementById("emic-custom2");
-        emicnever.setAttribute("checked", "false");
-        emicnever2.setAttribute("checked", "false");
-        emiccustom.setAttribute("checked", "false");
-        emiccustom2.setAttribute("checked", "false");
-        emicnow.setAttribute("checked", "true");
-        emicnow2.setAttribute("checked", "true");
+    menu_select_now: function(){
+        var never   = document.getElementById("emic-menu-message-never");
+        var now     = document.getElementById("emic-menu-message-now");
+        var custom  = document.getElementById("emic-menu-message-custom");
+        var never2  = document.getElementById("emic-menu-context-never");
+        var now2    = document.getElementById("emic-menu-context-now");
+        var custom2 = document.getElementById("emic-menu-context-custom");
+        never   .setAttribute("checked", "false");
+        never2  .setAttribute("checked", "false");
+        custom  .setAttribute("checked", "false");
+        custom2 .setAttribute("checked", "false");
+        now     .setAttribute("checked", "true");
+        now2    .setAttribute("checked", "true");
     },
 
     setExpirationDateCustom: function() {
@@ -104,20 +104,21 @@ var emicObj = {
         var expdatestr = this.getExpirationDateStr();//msgHdr.getStringProperty("Expiration-Date");
         this.consoleService.logStringMessage("expdatestr: " + expdatestr);
         if(!expdatestr || expdatestr.length <= 0 || expdatestr == "Never") {
-            this.check_emicnever();
+            this.menu_select_never();
         }
         else if((new Date(expdatestr)) < (new Date())) {
-            this.check_emicnow();
+            this.menu_select_now();
         }
         else {
-            this.check_emiccustom();
+            this.menu_select_custom();
         }
     },
 
     init: function() {
 //        this.consoleService.logStringMessage("emicObj.init() called");
-        this.check_emicnever();
+        this.menu_select_never();
     }
 }
 
+window.addEventListener("load", function() {emicObj.init()}, false);
 document.getElementById('threadTree').addEventListener('select', function(e){emicObj.selectChanged(e);}, false);

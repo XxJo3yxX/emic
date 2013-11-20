@@ -6,18 +6,18 @@
   <script type="application/javascript" src="compose.js"/>
 
   <commandset id="composeCommands">
-    <command id="emiccomposenever" oncommand="emicComposeObj.setExpirationDateNever();" />
-    <command id="emiccomposenow" oncommand="emicComposeObj.setExpirationDateNow();" />
-    <command id="emiccomposecustom" oncommand="emicComposeObj.setExpirationDateCustom();" />
+    <command id="emic-cmd-compose-never"  oncommand="emicComposeObj.setExpirationDateNever();" />
+    <command id="emic-cmd-compose-now"    oncommand="emicComposeObj.setExpirationDateNow();" />
+    <command id="emic-cmd-compose-custom" oncommand="emicComposeObj.setExpirationDateCustom();" />
   </commandset>
 
   <menupopup id="insertMenuPopup">
     <menuseparator />
     <menu label="&expiration.date;">
       <menupopup>
-        <menuitem id="emic-compose-never" label="&never;" command="emiccomposenever" name="emiccompose" type="radio" autocheck="false" />
-        <menuitem id="emic-compose-now" label="&now;" command="emiccomposenow" name="emiccompose" type="radio" autocheck="false" />
-        <menuitem id="emic-compose-custom" label="&custom;" command="emiccomposecustom" name ="emiccompose" type="radio" autocheck="false" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-never"   label="&never;"   command="emic-cmd-compose-never" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-now"     label="&now;"     command="emic-cmd-compose-now" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-insert-custom"  label="&custom;"  command="emic-cmd-compose-custom" />
       </menupopup>
     </menu>
     <menuseparator />
@@ -27,9 +27,9 @@
     <menuseparator />
     <menu label="&add.expiration.date;">
       <menupopup>
-        <menuitem id="emic-compose-never2" label="&never;" command="emiccomposenever" name="emiccompose" type="radio" autocheck="false" />
-        <menuitem id="emic-compose-now2" label="&now;" command="emiccomposenow" name="emiccompose" type="radio" autocheck="false" />
-        <menuitem id="emic-compose-custom2" label="&custom;" command="emiccomposecustom" name="emiccompose" type="radio" autocheck="false" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-never"  label="&never;"   command="emic-cmd-compose-never" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-now"    label="&now;"     command="emic-cmd-compose-now" />
+        <menuitem type="radio" name="emiccompose" autocheck="false" id="emic-menu-compose-context-custom" label="&custom;"  command="emic-cmd-compose-custom" />
       </menupopup>
     </menu>
     <menuseparator />
