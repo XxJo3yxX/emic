@@ -28,7 +28,8 @@ var emicComposeObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     promptService: Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService),
-    strBundle: null,
+    global_strBundle: null,
+    compose_strBundle: null,
     expdatestr: "",
 
     menu_insert_never: null,
@@ -105,8 +106,8 @@ var emicComposeObj = {
         if(this.expdatestr.length <= 0){
             var result = this.promptService.confirmEx(
                 window,
-                this.strBundle.getString("compose.noexpirationdateset.confirm.title"),
-                this.strBundle.getString("compose.noexpirationdateset.confirm.text"),
+                this.compose_strBundle.getString("compose.noexpirationdateset.confirm.title"),
+                this.compose_strBundle.getString("compose.noexpirationdateset.confirm.text"),
                 Ci.nsIPromptService.STD_YES_NO_BUTTONS,
                 null,null,null,null,{}
             );
@@ -125,16 +126,18 @@ var emicComposeObj = {
             }
         }
 
-        if(!gMsgCompose.compFields.otherRandomHeaders.contains("Expiration-Date: "))
-            gMsgCompose.compFields.otherRandomHeaders += "Expiration-Date: " + this.expdatestr + "\r\n";
+        var headeridentifier = this.global_strBundle.getString("global.expirationdateidentifier.mailheader");
+        if(!gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifier))
+            gMsgCompose.compFields.otherRandomHeaders += headeridentifier + this.expdatestr + "\r\n";
     },
 
     init: function() {
-        this.consoleService.logStringMessage("emicComposeObj.init() called");
+//        this.consoleService.logStringMessage("emicComposeObj.init() called");
 //        this.setExpirationDateNever();    //not optimal
         this.expdatestr = "";
 //        this.consoleService.logStringMessage("expdatestr: " + this.expdatestr);
-        this.strBundle = document.getElementById("emic-global-strings");
+        this.global_strBundle   = document.getElementById("emic-strings-global");
+        this.compose_strBundle  = document.getElementById("emic-strings-compose");
         
         this.menu_insert_never    = document.getElementById("emic-menu-compose-insert-never");
         this.menu_insert_now      = document.getElementById("emic-menu-compose-insert-now");

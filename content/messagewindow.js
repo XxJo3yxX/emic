@@ -12,6 +12,7 @@ Cu.import("resource://emic/parsedate.js");
 var emicObj = {
 
     consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
+    global_strBundle: null,
     
     menu_message_never: null,
     menu_message_now: null,
@@ -21,30 +22,30 @@ var emicObj = {
     menu_context_custom: null,
 
     menu_select_custom: function(){
-        this.menu_message_never   .setAttribute("checked", "false");
-        this.menu_context_never  .setAttribute("checked", "false");
-        this.menu_message_now     .setAttribute("checked", "false");
-        this.menu_context_now    .setAttribute("checked", "false");
-        this.menu_message_custom  .setAttribute("checked", "true");
-        this.menu_context_custom .setAttribute("checked", "true");
+        this.menu_message_never     .setAttribute("checked", "false");
+        this.menu_context_never     .setAttribute("checked", "false");
+        this.menu_message_now       .setAttribute("checked", "false");
+        this.menu_context_now       .setAttribute("checked", "false");
+        this.menu_message_custom    .setAttribute("checked", "true");
+        this.menu_context_custom    .setAttribute("checked", "true");
     },
 
     menu_select_never: function(){
-        this.menu_message_now     .setAttribute("checked", "false");
-        this.menu_context_now    .setAttribute("checked", "false");
-        this.menu_message_custom  .setAttribute("checked", "false");
-        this.menu_context_custom .setAttribute("checked", "false");
-        this.menu_message_never   .setAttribute("checked", "true");
-        this.menu_context_never  .setAttribute("checked", "true");
+        this.menu_message_now       .setAttribute("checked", "false");
+        this.menu_context_now       .setAttribute("checked", "false");
+        this.menu_message_custom    .setAttribute("checked", "false");
+        this.menu_context_custom    .setAttribute("checked", "false");
+        this.menu_message_never     .setAttribute("checked", "true");
+        this.menu_context_never     .setAttribute("checked", "true");
     },
 
     menu_select_now: function(){
-        this.menu_message_never   .setAttribute("checked", "false");
-        this.menu_context_never  .setAttribute("checked", "false");
-        this.menu_message_custom  .setAttribute("checked", "false");
-        this.menu_context_custom .setAttribute("checked", "false");
-        this.menu_message_now     .setAttribute("checked", "true");
-        this.menu_context_now    .setAttribute("checked", "true");
+        this.menu_message_never     .setAttribute("checked", "false");
+        this.menu_context_never     .setAttribute("checked", "false");
+        this.menu_message_custom    .setAttribute("checked", "false");
+        this.menu_context_custom    .setAttribute("checked", "false");
+        this.menu_message_now       .setAttribute("checked", "true");
+        this.menu_context_now       .setAttribute("checked", "true");
     },
 
     setExpirationDateCustom: function() {
@@ -72,7 +73,7 @@ var emicObj = {
     },
 
     getExpirationDateStr: function() {
-        return gFolderDisplay.selectedMessage.getStringProperty("Expiration-Date");
+        return gFolderDisplay.selectedMessage.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
     },
 
     setExpirationDateStr: function(expdatestr) {
@@ -81,7 +82,7 @@ var emicObj = {
         var msgArray = gFolderDisplay.selectedMessages;
 
         for (var msgHdr in fixIterator(msgArray, Ci.nsIMsgDBHdr)) {
-            msgHdr.setStringProperty("Expiration-Date",expdatestr);
+            msgHdr.setStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),expdatestr);
         }
 
         this.selectChanged(null);
@@ -91,7 +92,7 @@ var emicObj = {
 //        this.consoleService.logStringMessage("emicObj.selectChanged() called");
 //        var msgHdr = gFolderDisplay.selectedMessage;
         var expdatestr = this.getExpirationDateStr();//msgHdr.getStringProperty("Expiration-Date");
-        this.consoleService.logStringMessage("expdatestr: " + expdatestr);
+//        this.consoleService.logStringMessage("expdatestr: " + expdatestr);
         if(!expdatestr || expdatestr.length <= 0 || expdatestr == "Never") {
             this.menu_select_never();
         }
@@ -105,6 +106,7 @@ var emicObj = {
 
     init: function() {
 //        this.consoleService.logStringMessage("emicObj.init() called");
+        this.global_strBundle   = document.getElementById("emic-strings-global");
         
         this.menu_message_never     = document.getElementById("emic-menu-message-never");
         this.menu_message_now       = document.getElementById("emic-menu-message-now");

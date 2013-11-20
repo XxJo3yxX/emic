@@ -9,8 +9,6 @@ Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/stdlib/misc.js");
 Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 
-var strBundle = document.getElementById("emic_global_strings");
-
 var MailListener = {  
     msgAdded: function(aMsgHdr) {  
         if( !aMsgHdr.isRead )  {
@@ -58,6 +56,8 @@ var emicBackgroundObj = {
     notificationService: Cc["@mozilla.org/messenger/msgnotificationservice;1"].getService(Ci.nsIMsgFolderNotificationService),
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
+    global_strBundle: null,
+
     srcFolder: gLocalInboxFolder,
     destFolderName: null,
 
@@ -103,7 +103,7 @@ var emicBackgroundObj = {
 
         while( msgArray.hasMoreElements() ) {  
             var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
-            var expdatestr = msgHdr.getStringProperty("Expiration-Date");
+            var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
 
             if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == "Never")) {
                 var expiration_date = new Date(expdatestr);
@@ -173,6 +173,8 @@ var emicBackgroundObj = {
 
     init: function() {
 //        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
+        this.global_strBundle   = document.getElementById("emic-strings-global");
+
         this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
         this.prefs.addObserver("", this, false);
         this.setDestFolder(this.prefs.getCharPref("destfoldername"));

@@ -11,7 +11,8 @@
   <script type="application/javascript" src="compose.js"/>
   
   <stringbundleset id="stringbundleset">
-    <stringbundle id="emic-global-strings" src="chrome://emic/locale/global.properties" />
+    <stringbundle id="emic-strings-global"  src="chrome://emic/content/global.properties" />
+    <stringbundle id="emic-strings-compose" src="chrome://emic/locale/customdialog.properties" />
   </stringbundleset>
 
   <commandset id="composeCommands">
