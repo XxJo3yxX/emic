@@ -5,7 +5,7 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
-Cu.import("resource:///modules/errUtils.js");
+//Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
 

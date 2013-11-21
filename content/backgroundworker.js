@@ -5,8 +5,8 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
-Cu.import("resource:///modules/errUtils.js");
-Cu.import("resource://emic/stdlib/misc.js");
+//Cu.import("resource:///modules/errUtils.js");
+//Cu.import("resource://emic/stdlib/misc.js");
 Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 
 var MailListener = {  
@@ -177,12 +177,14 @@ var emicBackgroundWorkerObj = {
         this.prefs.removeObserver("", this);
     },
 
-    observe: function(subject, topic, data) {
+    observe: function(aSubject, aTopic, aData) {
+    // aSubject is the nsIPrefBranch we're observing (after appropriate QI)
+    // aData is the name of the pref that's been changed (relative to aSubject)
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.observe() called");
-        if (topic != "nsPref:changed")
+        if (aTopic != "nsPref:changed")
             return;
  
-        switch(data) {
+        switch(aData) {
         case "destfoldername":
             this.setDestFolder(this.prefs.getCharPref("destfoldername"));
             break;
@@ -193,7 +195,7 @@ var emicBackgroundWorkerObj = {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
         this.global_strBundle = document.getElementById("emic-strings-global");
 
-        this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
+        this.prefs.QueryInterface(Ci.nsIPrefBranch);
         this.prefs.addObserver("", this, false);
         this.setDestFolder(this.prefs.getCharPref("destfoldername"));
 

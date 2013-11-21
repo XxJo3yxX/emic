@@ -1,7 +1,7 @@
-emic
+EMIC
 ====
 
-Codename EMIC stands for "Expired Mail Inbox Cleaner".
+The acronym EMIC stands for "Expired Mail Inbox Cleaner".
 Its an Extension for Mozilla Thunderbird.
 
 The [Addon Homepage can be found here](https://addons.mozilla.org/de/thunderbird/addon/emic/).
