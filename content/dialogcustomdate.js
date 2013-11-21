@@ -15,7 +15,7 @@ var emicDialogCustomDateObj = {
 
     // Called once when the dialog displays
     init: function() {
-        this.consoleService.logStringMessage("emicDialogCustomDateObj.onLoad() called");
+//        this.consoleService.logStringMessage("emicDialogCustomDateObj.init() called");
         this.global_strBundle = document.getElementById("emic-strings-global");
 
         window.sizeToContent();
@@ -33,7 +33,7 @@ var emicDialogCustomDateObj = {
         var timelist = document.getElementById("emic-suggestion-list-time");
 
         if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
-            this.consoleService.logStringMessage("customdate: " + customdate.toString());
+//            this.consoleService.logStringMessage("customdate: " + customdate.toString());
             if(customdate < (new Date)) {
                 this.select_now();
             }
@@ -59,6 +59,7 @@ var emicDialogCustomDateObj = {
 
     // Called once if and only if the user clicks OK
     ondialogaccept: function() {
+//        this.consoleService.logStringMessage("emicDialogCustomDateObj.ondialogaccept() called");
         // Return the changed arguments.
         // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
         var outdate;

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/global.css" type="text/css"?>
-<!DOCTYPE overlay [
+<!DOCTYPE dialog [
   <!ENTITY % commonDTD  SYSTEM "chrome://emic/locale/common.dtd">
   %commonDTD;
   <!ENTITY % dialogcustomdateDTD SYSTEM "chrome://emic/locale/dialogcustomdate.dtd">
@@ -12,7 +12,7 @@
         title="&emic.dialog.customdate.title;"
         onload="emicDialogCustomDateObj.init();"
         ondialogaccept="return emicDialogCustomDateObj.ondialogaccept();">
-  <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
+  <script type="application/javascript" src="chrome://emic/content/dialogcustomdate.js"/>
 
   <stringbundleset id="stringbundleset">
     <stringbundle id="emic-strings-global"  src="chrome://emic/content/global.properties" />

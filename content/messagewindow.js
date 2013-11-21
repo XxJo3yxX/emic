@@ -82,6 +82,7 @@ var emicMessageWindowObj = {
         var msgArray = gFolderDisplay.selectedMessages;
 
         for (var msgHdr in fixIterator(msgArray, Ci.nsIMsgDBHdr)) {
+//            this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateStr() called for Header: " + msgHdr.subject);
             msgHdr.setStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),expdatestr);
         }
 

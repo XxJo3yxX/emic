@@ -74,35 +74,43 @@ var emicBackgroundWorkerObj = {
             return null;
 
         var msgArray = this.srcFolder.messages;
+        var stringpropertyidentifier = this.global_strBundle.getString("global.identifier.expirationdate.stringproperty");
+//        this.consoleService.logStringMessage("stringpropertyidentifier: " + stringpropertyidentifier);
 
         while( msgArray.hasMoreElements() ) {  
-            var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);  
-            if(msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty")).length <= 0) {
+            var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
+            if(msgHdr.getStringProperty(stringpropertyidentifier).length <= 0) {
             // extract expiration-date from Mime-Hdr:
                 msgHdrGetHeaders(msgHdr, function (aHeaders) {
-//                    emicBackgroundWorkerObj.consoleService.logStringMessage("msgHdrGetHeaders called, stringpropertyname: " + emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
-                    if(aHeaders.has(emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))) {
-                        emicBackgroundWorkerObj.consoleService.logStringMessage("aHeader.has expiration date");
+//                    emicBackgroundWorkerObj.consoleService.logStringMessage("   msgHdrGetHeaders called for Subject: '" + aHeaders.get("subject") + "'");
+                    var hasgetidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget");
+                    var stringpropertyidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty");
+//                    emicBackgroundWorkerObj.consoleService.logStringMessage("hasgetidentifier: " + hasgetidentifier);
+//                    emicBackgroundWorkerObj.consoleService.logStringMessage("stringpropertyidentifier: " + stringpropertyidentifier);
+
+                    if(aHeaders.has(hasgetidentifier)) {
+//                        emicBackgroundWorkerObj.consoleService.logStringMessage("   ^ has expiration date, set it to: " + aHeaders.get(hasgetidentifier));
                         msgHdr.setStringProperty(
-                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"), 
-                            aHeaders.get(emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))
+                            stringpropertyidentifier, 
+                            aHeaders.get(hasgetidentifier)
                         );
                     }
                     else {
-                        emicBackgroundWorkerObj.consoleService.logStringMessage("aHeader.has no expiration date");
+//                        emicBackgroundWorkerObj.consoleService.logStringMessage("   ^ has no expiration date; set it to never");
                         msgHdr.setStringProperty(
-                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),
+                            stringpropertyidentifier,
                             emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.never")
                         );
                     }
+
                 });
             }
         }
     },
 
     moveExpiredMails: function() {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails() called")
-//        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);;
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails() called");
+//        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);
 
         if(!this.srcFolder)
             return null;
@@ -183,7 +191,7 @@ var emicBackgroundWorkerObj = {
 
     init: function() {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
-        this.global_strBundle   = document.getElementById("emic-strings-global");
+        this.global_strBundle = document.getElementById("emic-strings-global");
 
         this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
         this.prefs.addObserver("", this, false);
