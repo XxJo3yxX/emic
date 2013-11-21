@@ -5,7 +5,7 @@ locale emic en-US locale/en-US/
 
 resource emic modules/
 
-overlay chrome://messenger/content/messenger.xul chrome://emic/content/background.xul
+overlay chrome://messenger/content/messenger.xul chrome://emic/content/backgroundworker.xul
 overlay chrome://messenger/content/messenger.xul chrome://emic/content/messagewindow.xul
 overlay chrome://messenger/content/messageWindow.xul chrome://emic/content/messagewindow.xul
 overlay chrome://messenger/content/messengercompose/messengercompose.xul chrome://emic/content/compose.xul

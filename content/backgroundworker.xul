@@ -4,7 +4,7 @@
 
 <overlay id="emic-background"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script type="application/x-javascript" src="chrome://emic/content/background.js"/>
+  <script type="application/x-javascript" src="chrome://emic/content/backgroundworker.js"/>
 
   <stringbundleset id="stringbundleset">
     <stringbundle id="emic-global-strings" src="chrome://emic/locale/global.properties" />

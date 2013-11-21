@@ -12,10 +12,10 @@ Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 var MailListener = {  
     msgAdded: function(aMsgHdr) {  
         if( !aMsgHdr.isRead )  {
-            emicBackgroundObj.setInbox(aMsgHdr.folder);
+            emicBackgroundWorkerObj.setInbox(aMsgHdr.folder);
 //            alert("Got new mail. Look at aMsgHdr's properties for more details.");
 //            alert("aMsgHdr.folder.prettiestName: " + aMsgHdr.folder.prettiestName);
-            emicBackgroundObj.startup();
+            emicBackgroundWorkerObj.startup();
         }
     }
 };
@@ -50,7 +50,7 @@ var gLocalRootFolder = gLocalIncomingServer.rootMsgFolder.rootFolder; //.QueryIn
 
 var gLocalInboxFolder = gLocalRootFolder.getFoldersWithFlags(Ci.nsMsgFolderFlags.Inbox); 
 
-var emicBackgroundObj = {
+var emicBackgroundWorkerObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     notificationService: Cc["@mozilla.org/messenger/msgnotificationservice;1"].getService(Ci.nsIMsgFolderNotificationService),
@@ -62,13 +62,13 @@ var emicBackgroundObj = {
     destFolderName: null,
 
     startup: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.startup() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.startup() called");
         this.setExpirationDate();
         this.moveExpiredMails();
     },
 
     setExpirationDate: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.setExpirationDate() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setExpirationDate() called");
 //        this.consoleService.logStringMessage("srcFolder.prettiestName: " + this.srcFolder.prettiestName);
         if(!this.srcFolder)
             return null;
@@ -80,19 +80,19 @@ var emicBackgroundObj = {
             if(msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty")).length <= 0) {
             // extract expiration-date from Mime-Hdr:
                 msgHdrGetHeaders(msgHdr, function (aHeaders) {
-//                    emicBackgroundObj.consoleService.logStringMessage("msgHdrGetHeaders called, stringpropertyname: " + emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
-                    if(aHeaders.has(emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))) {
-                        emicBackgroundObj.consoleService.logStringMessage("aHeader.has expiration date");
+//                    emicBackgroundWorkerObj.consoleService.logStringMessage("msgHdrGetHeaders called, stringpropertyname: " + emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
+                    if(aHeaders.has(emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))) {
+                        emicBackgroundWorkerObj.consoleService.logStringMessage("aHeader.has expiration date");
                         msgHdr.setStringProperty(
-                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"), 
-                            aHeaders.get(emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))
+                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"), 
+                            aHeaders.get(emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget"))
                         );
                     }
                     else {
-                        emicBackgroundObj.consoleService.logStringMessage("aHeader.has no expiration date");
+                        emicBackgroundWorkerObj.consoleService.logStringMessage("aHeader.has no expiration date");
                         msgHdr.setStringProperty(
-                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),
-                            emicBackgroundObj.global_strBundle.getString("global.identifier.expirationdate.never")
+                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty"),
+                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.never")
                         );
                     }
                 });
@@ -101,7 +101,7 @@ var emicBackgroundObj = {
     },
 
     moveExpiredMails: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails() called")
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails() called")
 //        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);;
 
         if(!this.srcFolder)
@@ -131,46 +131,46 @@ var emicBackgroundObj = {
                 destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
             }
             catch(e) {
-                this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails(): destfolder not exists, try to create it: " + e);
+                this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails(): destfolder not exists, try to create it: " + e);
                 if(!destfolder) {
                     var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
                     gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
                     destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                 }
             }
-            this.consoleService.logStringMessage("emicBackgroundObj.moveExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
+            this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
             if(this.srcFolder && destfolder)
                 this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
         }
     },
 
     selectChanged: function(e) {
-//        this.consoleService.logStringMessage("emicBackgroundObj.selectChanged() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.selectChanged() called");
         var folder = gFolderDisplay.selectedMessage.folder;
         this.setInbox(folder);
     },
 
     setInbox: function(inboxfolder) {
-//        this.consoleService.logStringMessage("emicBackgroundObj.setInbox() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox() called");
 //        this.consoleService.logStringMessage("inboxfolder.prettiestName: " + inboxfolder.prettiestName);
         if(inboxfolder.flags & Ci.nsMsgFolderFlags.Inbox) {
-//            this.consoleService.logStringMessage("emicBackgroundObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
+//            this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
             this.srcFolder = inboxfolder;
         }
     },
 
     setDestFolder: function(destfoldername) {
-//        this.consoleService.logStringMessage("emicBackgroundObj.setDestFolder() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setDestFolder() called");
         this.destFolderName = destfoldername;
     },
 
     shutdown: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.shutdown() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.shutdown() called");
         this.prefs.removeObserver("", this);
     },
 
     observe: function(subject, topic, data) {
-//        this.consoleService.logStringMessage("emicBackgroundObj.observe() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.observe() called");
         if (topic != "nsPref:changed")
             return;
  
@@ -182,7 +182,7 @@ var emicBackgroundObj = {
     },
 
     init: function() {
-//        this.consoleService.logStringMessage("emicBackgroundObj.init() called");
+//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
         this.global_strBundle   = document.getElementById("emic-strings-global");
 
         this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
@@ -194,7 +194,7 @@ var emicBackgroundObj = {
     }
 }
 
-window.addEventListener("load", function() {emicBackgroundObj.init()}, false);
-window.setInterval(function(){emicBackgroundObj.startup();}, 60000); //update every minute
-document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundObj.selectChanged(e);}, false);
-window.addEventListener("unload", function(e) { emicBackgroundObj.shutdown(); }, false);
+window.addEventListener("load", function() {emicBackgroundWorkerObj.init()}, false);
+window.setInterval(function(){emicBackgroundWorkerObj.startup();}, 60000); //update every minute
+document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundWorkerObj.selectChanged(e);}, false);
+window.addEventListener("unload", function(e) { emicBackgroundWorkerObj.shutdown(); }, false);
