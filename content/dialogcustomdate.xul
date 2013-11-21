@@ -3,29 +3,29 @@
 <!DOCTYPE overlay [
   <!ENTITY % commonDTD  SYSTEM "chrome://emic/locale/common.dtd">
   %commonDTD;
-  <!ENTITY % customdialogDTD SYSTEM "chrome://emic/locale/customdialog.dtd">
-  %customdialogDTD;
+  <!ENTITY % dialogcustomdateDTD SYSTEM "chrome://emic/locale/dialogcustomdate.dtd">
+  %dialogcustomdateDTD;
 ]>
 
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        id="emiccustomdatedialog"
-        title="&emic.customdialog.title;"
-        onload="emicCustomDialogObj.onLoad();"
-        ondialogaccept="return emicCustomDialogObj.onOK();">
+        id="emic-dialog-customdate"
+        title="&emic.dialog.customdate.title;"
+        onload="emicDialogCustomDateObj.init();"
+        ondialogaccept="return emicDialogCustomDateObj.ondialogaccept();">
   <script type="application/javascript" src="chrome://emic/content/customdialog.js"/>
 
   <stringbundleset id="stringbundleset">
     <stringbundle id="emic-strings-global"  src="chrome://emic/content/global.properties" />
   </stringbundleset>
 
-  <commandset id="customdialogCommands">
-    <command id="emic-cmd-custumdialog-select-customdate" oncommand="emicCustomDialogObj.select_custom_date();" />
-    <command id="emic-cmd-custumdialog-select-suggestion" oncommand="emicCustomDialogObj.select_suggestion_date();" />
+  <commandset id="dialog-customdate-cmds">
+    <command id="emic-cmd-dialog-customdate-select-customdate" oncommand="emicDialogCustomDateObj.select_custom_date();" />
+    <command id="emic-cmd-dialog-customdate-select-suggestion" oncommand="emicDialogCustomDateObj.select_suggestion_date();" />
   </commandset>
   
-  <dialogheader title="&emic.customdialog.title;" description="&emic.customdialog.description;"/>
+  <dialogheader title="&emic.dialog.customdate.title;" description="&emic.dialog.customdate.description;"/>
   <groupbox flex="1">
-    <caption label="&emic.customdialog.groupbox.label;"/>
+    <caption label="&emic.dialog.customdate.groupbox.label;"/>
     <radiogroup id="emic-custom-radiogroup">
       <grid>
         <columns>
@@ -41,19 +41,19 @@
             <radio id="emic-radio-now" label="&emic.common.now;"/>
           </row>
           <row align="center">
-            <radio id="emic-radio-custom-date" label="&emic.customdialog.radio.customdate;"/>
-            <datepicker id="emic-custom-picker-date" command="emic-cmd-custumdialog-select-customdate" type="popup" firstdayofweek="1" hideyear="false"/>
-            <timepicker id="emic-custom-picker-time" command="emic-cmd-custumdialog-select-customdate" increment="1" hideseconds="true"/>
+            <radio id="emic-radio-custom-date" label="&emic.dialog.customdate.radio.customdate;"/>
+            <datepicker id="emic-custom-picker-date" command="emic-cmd-dialog-customdate-select-customdate" type="popup" firstdayofweek="1" hideyear="false"/>
+            <timepicker id="emic-custom-picker-time" command="emic-cmd-dialog-customdate-select-customdate" increment="1" hideseconds="true"/>
           </row>
           <row align="center">
-            <radio id="emic-radio-suggestion-date" label="&emic.customdialog.radio.suggestions;"/>
-            <menulist id="emic-suggestion-list-date" command="emic-cmd-custumdialog-select-suggestion" label="&emic.common.date;">
+            <radio id="emic-radio-suggestion-date" label="&emic.dialog.customdate.radio.suggestions;"/>
+            <menulist id="emic-suggestion-list-date" command="emic-cmd-dialog-customdate-select-suggestion" label="&emic.common.date;">
               <menupopup>
                 <menuitem id="suggestion-date-now" label="&emic.common.today;"/>
                 <!--<menuitem id="suggestion-date-never" label="&never;"/>-->
               </menupopup>
             </menulist>
-            <menulist id="emic-suggestion-list-time" command="emic-cmd-custumdialog-select-suggestion" label="&emic.common.time;">
+            <menulist id="emic-suggestion-list-time" command="emic-cmd-dialog-customdate-select-suggestion" label="&emic.common.time;">
               <menupopup>
                 <menuitem id="suggestion-time-now" label="&emic.common.now;"/>
                 <!--<menuitem id="suggestion-time-never" label="&never;"/>-->

@@ -71,7 +71,7 @@ var emicComposeObj = {
 //        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
         //call Dialog:
         var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: null}, out:null};
-        window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+        window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             if(params.out.datestr == this.global_strBundle.getString("global.identifier.expirationdate.never"))
@@ -114,7 +114,7 @@ var emicComposeObj = {
 
             if(result == 0) {
                 var params = {inn:{customdate:null, suggestions:null}, out:null};
-                window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+                window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
                     this.expdatestr = params.out.datestr;
                 }

@@ -9,7 +9,7 @@ Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
 
-var emicObj = {
+var emicMessageWindowObj = {
 
     consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
     global_strBundle: null,
@@ -49,10 +49,10 @@ var emicObj = {
     },
 
     setExpirationDateCustom: function() {
-//        this.consoleService.logStringMessage("emicObj.setExpirationDateCustom() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateCustom() called");
         //call Dialog
         var params = {inn:{customdate:(new Date(this.getExpirationDateStr())), suggestions: null}, out:null};
-        window.openDialog("chrome://emic/content/customdialog.xul","","chrome, dialog, modal, resizable=no", params).focus();
+        window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             this.setExpirationDateStr(params.out.datestr);
@@ -63,12 +63,12 @@ var emicObj = {
     },
 
     setExpirationDateNever: function() {
-//        this.consoleService.logStringMessage("emicObj.setExpirationDateNever() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateNever() called");
         this.setExpirationDateStr(this.global_strBundle.getString("global.identifier.expirationdate.never"));
     },
 
     setExpirationDateNow: function() {
-//        this.consoleService.logStringMessage("emicObj.setExpirationDateNow() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateNow() called");
         this.setExpirationDateStr((new Date).toString());
     },
 
@@ -77,7 +77,7 @@ var emicObj = {
     },
 
     setExpirationDateStr: function(expdatestr) {
-//        this.consoleService.logStringMessage("emicObj.setExpirationDateStr() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateStr() called");
         var msgArraylength = gFolderDisplay.selectedCount;
         var msgArray = gFolderDisplay.selectedMessages;
 
@@ -89,7 +89,7 @@ var emicObj = {
     },
 
     selectChanged: function(e) {
-//        this.consoleService.logStringMessage("emicObj.selectChanged() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.selectChanged() called");
 //        var msgHdr = gFolderDisplay.selectedMessage;
         var expdatestr = this.getExpirationDateStr();//msgHdr.getStringProperty("Expiration-Date");
 //        this.consoleService.logStringMessage("expdatestr: " + expdatestr);
@@ -105,7 +105,7 @@ var emicObj = {
     },
 
     init: function() {
-//        this.consoleService.logStringMessage("emicObj.init() called");
+//        this.consoleService.logStringMessage("emicMessageWindowObj.init() called");
         this.global_strBundle   = document.getElementById("emic-strings-global");
         
         this.menu_message_never     = document.getElementById("emic-menu-message-never");
@@ -119,5 +119,5 @@ var emicObj = {
     }
 }
 
-window.addEventListener("load", function() {emicObj.init()}, false);
-document.getElementById('threadTree').addEventListener('select', function(e){emicObj.selectChanged(e);}, false);
+window.addEventListener("load", function() {emicMessageWindowObj.init()}, false);
+document.getElementById('threadTree').addEventListener('select', function(e){emicMessageWindowObj.selectChanged(e);}, false);

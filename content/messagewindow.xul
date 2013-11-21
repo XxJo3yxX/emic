@@ -16,9 +16,9 @@
   </stringbundleset>
   
   <commandset id="mailCommands">
-    <command observes="button_reply" id="emic-cmd-mail-never"   oncommand="emicObj.setExpirationDateNever();" />
-    <command observes="button_reply" id="emic-cmd-mail-now"     oncommand="emicObj.setExpirationDateNow();" />
-    <command observes="button_reply" id="emic-cmd-mail-custom"  oncommand="emicObj.setExpirationDateCustom();" />
+    <command observes="button_reply" id="emic-cmd-mail-never"   oncommand="emicMessageWindowObj.setExpirationDateNever();" />
+    <command observes="button_reply" id="emic-cmd-mail-now"     oncommand="emicMessageWindowObj.setExpirationDateNow();" />
+    <command observes="button_reply" id="emic-cmd-mail-custom"  oncommand="emicMessageWindowObj.setExpirationDateCustom();" />
   </commandset>
   
   <menupopup id="messageMenuPopup">

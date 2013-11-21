@@ -8,14 +8,14 @@ let Cr = Components.results;
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
 
-var emicCustomDialogObj = {
+var emicDialogCustomDateObj = {
 
     consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
     global_strBundle: null,
 
     // Called once when the dialog displays
-    onLoad: function() {
-        this.consoleService.logStringMessage("customdialog.onLoad() called");
+    init: function() {
+        this.consoleService.logStringMessage("emicDialogCustomDateObj.onLoad() called");
         this.global_strBundle = document.getElementById("emic-strings-global");
 
         window.sizeToContent();
@@ -58,7 +58,7 @@ var emicCustomDialogObj = {
     },
 
     // Called once if and only if the user clicks OK
-    onOK: function() {
+    ondialogaccept: function() {
         // Return the changed arguments.
         // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
         var outdate;
