@@ -63,22 +63,35 @@ var emicDialogCustomDateObj = {
         // Return the changed arguments.
         // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
         var outdate;
+        var now = new Date;
+        var d = new SimpleDateFormat("dd.MM.yyyy");
+        var t = new SimpleDateFormat("HH:mm");
 
         switch(document.getElementById("emic-custom-radiogroup").selectedItem) {
             case document.getElementById("emic-radio-now"):
-                outdate = new Date;
+                outdate = now;
             break;
             case document.getElementById("emic-radio-custom-date"):
                 var datepicker = document.getElementById("emic-custom-picker-date");
                 var timepicker = document.getElementById("emic-custom-picker-time");
-                var d = new SimpleDateFormat("dd.MM.yyyy");
-                var t = new SimpleDateFormat("HH:mm");
                 outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue));
             break;
             case document.getElementById("emic-radio-suggestion-date"):
                 var datelist = document.getElementById("emic-suggestion-list-date");
                 var timelist = document.getElementById("emic-suggestion-list-time");
-                outdate = parseDate(datelist.selectedItem.label + " " + timelist.selectedItem.label);
+                var datelistvalue = "";
+                if(datelist.selectedIndex <= 0)
+                    datelistvalue = d.format(now);
+                else
+                    datelistvalue = datelist.selectedItem.label;
+
+                var timelistvalue = "";
+                if(timelist.selectedIndex <= 0)
+                    timelistvalue = t.format(now);
+                else
+                    timelistvalue = timelist.selectedItem.label;
+
+                outdate = parseDate(datelistvalue + " " + timelistvalue);
             break;
             default:
             case document.getElementById("emic-radio-never"):
