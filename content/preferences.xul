@@ -6,9 +6,24 @@
 
   <prefpane id="emic-pref-pane" label="&emic.preferences.window.title;">
     <preferences>
-      <preference id="destfoldername" name="extensions.emic.destfoldername" type="string"/>
+      <preference id="compatiblewithoutlook"      name="extensions.emic.compatiblewithoutlook"      type="bool"/>
+      <preference id="addkeywordstoexpiredmails"  name="extensions.emic.addkeywordstoexpiredmails"  type="bool"/>
+      <preference id="moveexpiredmails"           name="extensions.emic.moveexpiredmails"           type="bool"/>
+      <preference id="destfoldername"             name="extensions.emic.destfoldername"             type="string"/>
     </preferences>
 
+    <hbox align="center">
+      <label control="compatiblewithoutlook" value="&emic.preferences.label.compatiblewithoutlook;"/>
+      <checkbox preference="compatiblewithoutlook" />
+    </hbox>
+    <hbox align="center">
+      <label control="addkeywordstoexpiredmails" value="&emic.preferences.label.addkeywordstoexpiredmails;"/>
+      <checkbox preference="addkeywordstoexpiredmails" />
+    </hbox>
+    <hbox align="center">
+      <label control="moveexpiredmails" value="&emic.preferences.label.moveexpiredmails;"/>
+      <checkbox preference="moveexpiredmails" />
+    </hbox>
     <hbox align="center">
       <label control="destfoldername" value="&emic.preferences.label.destfoldername;"/>
       <textbox preference="destfoldername" />

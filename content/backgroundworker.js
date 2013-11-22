@@ -54,6 +54,7 @@ var emicBackgroundWorkerObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     notificationService: Cc["@mozilla.org/messenger/msgnotificationservice;1"].getService(Ci.nsIMsgFolderNotificationService),
+    tagService: Cc["@mozilla.org/messenger/tagservice;1"].getService(Ci.nsIMsgTagService),
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     global_strBundle: null,
@@ -64,7 +65,7 @@ var emicBackgroundWorkerObj = {
     startup: function() {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.startup() called");
         this.setExpirationDate();
-        this.moveExpiredMails();
+        this.processExpiredMails();
     },
 
     setExpirationDate: function() {
@@ -108,8 +109,8 @@ var emicBackgroundWorkerObj = {
         }
     },
 
-    moveExpiredMails: function() {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails() called");
+    processExpiredMails: function() {
+        this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails() called");
 //        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);
 
         if(!this.srcFolder)
@@ -131,24 +132,33 @@ var emicBackgroundWorkerObj = {
                 }
             }
         }
-        //move expired mails to folder:
-        if(expired_mails.length > 0) {
-            var destfolder = null;
 
-            try {
-                destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+        if(expired_mails.length > 0) {
+            //add keywords to messages:
+            if(this.prefs.getBoolPref("addkeywordstoexpiredmails")) {
+                this.consoleService.logStringMessage("addKeywordstoMessages, expired_mails.length: " + expired_mails.length);
+                this.srcFolder.addKeywordsToMessages(expired_mails, "wichtig");
             }
-            catch(e) {
-                this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails(): destfolder not exists, try to create it: " + e);
-                if(!destfolder) {
-                    var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
-                    gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
+
+            //move expired mails to folder:
+            if(this.prefs.getBoolPref("moveexpiredmails")) {
+                var destfolder = null;
+
+                try {
                     destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                 }
+                catch(e) {
+                    this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails(): destfolder not exists, try to create it: " + e);
+                    if(!destfolder) {
+                        var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
+                        gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
+                        destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+                    }
+                }
+                this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
+                if(this.srcFolder && destfolder)
+                    this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
             }
-            this.consoleService.logStringMessage("emicBackgroundWorkerObj.moveExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
-            if(this.srcFolder && destfolder)
-                this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
         }
     },
 

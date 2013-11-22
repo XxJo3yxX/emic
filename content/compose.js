@@ -28,6 +28,7 @@ var emicComposeObj = {
 
     consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
     promptService: Cc["@mozilla.org/embedcomp/prompt-service;1"].getService(Ci.nsIPromptService),
+    prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     global_strBundle: null,
     compose_strBundle: null,
     expdatestr: "",
@@ -126,9 +127,14 @@ var emicComposeObj = {
             }
         }
 
-        var headeridentifier = this.global_strBundle.getString("global.expirationdateidentifier.mailheader");
-        if(!gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifier))
-            gMsgCompose.compFields.otherRandomHeaders += headeridentifier + this.expdatestr + "\r\n";
+        if(this.expdatestr.length > 0 && this.expdatestr != this.global_strBundle.getString("global.identifier.expirationdate.never")) {
+            var headeridentifieroutlook = this.global_strBundle.getString("global.expirationdateidentifier.mailheader.outlook");
+            if(this.prefs.getBoolPref("compatiblewithoutlook") && !gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifieroutlook))
+                gMsgCompose.compFields.otherRandomHeaders += headeridentifieroutlook + this.expdatestr + "\r\n";
+            var headeridentifier = this.global_strBundle.getString("global.expirationdateidentifier.mailheader");
+            if(!gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifier))
+                gMsgCompose.compFields.otherRandomHeaders += headeridentifier + this.expdatestr + "\r\n";
+        }
     },
 
     init: function() {
