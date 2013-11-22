@@ -58,6 +58,7 @@ var emicBackgroundWorkerObj = {
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     global_strBundle: null,
+    backgroundworker_strBundle: null,
 
     srcFolder: gLocalInboxFolder,
     destFolderName: null,
@@ -137,7 +138,7 @@ var emicBackgroundWorkerObj = {
             //add keywords to messages:
             if(this.prefs.getBoolPref("addkeywordstoexpiredmails")) {
                 this.consoleService.logStringMessage("addKeywordstoMessages, expired_mails.length: " + expired_mails.length);
-                this.srcFolder.addKeywordsToMessages(expired_mails, "wichtig");
+                this.srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
             }
 
             //move expired mails to folder:
@@ -198,18 +199,28 @@ var emicBackgroundWorkerObj = {
         case "destfoldername":
             this.setDestFolder(this.prefs.getCharPref("destfoldername"));
             break;
+        case "colorcode":
+            this.tagService.setColorForKey(this.global_strBundle.getString("global.tag.expired.key"), this.prefs.getCharPref("colorcode"));
+            break;
         }
     },
 
     init: function() {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
-        this.global_strBundle = document.getElementById("emic-strings-global");
+        this.global_strBundle           = document.getElementById("emic-strings-global");
+        this.backgroundworker_strBundle = document.getElementById("emic-strings-backgroundworker");
 
         this.prefs.QueryInterface(Ci.nsIPrefBranch);
         this.prefs.addObserver("", this, false);
         this.setDestFolder(this.prefs.getCharPref("destfoldername"));
 
         this.notificationService.addListener(MailListener, this.notificationService.msgAdded);
+
+        //set up a Tag
+        if(!this.tagService.isValidKey(this.global_strBundle.getString("global.tag.expired.key"))) {
+            this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("colorcode"), "");
+        }
+
         this.startup();
     }
 }

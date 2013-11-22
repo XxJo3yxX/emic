@@ -31,6 +31,7 @@ var emicComposeObj = {
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     global_strBundle: null,
     compose_strBundle: null,
+
     expdatestr: "",
 
     menu_insert_never: null,

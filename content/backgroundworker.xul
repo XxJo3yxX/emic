@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 
-<!DOCTYPE window SYSTEM "chrome://emic/locale/common.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://emic/locale/common.dtd">
 
 <overlay id="emic-background"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="chrome://emic/content/backgroundworker.js"/>
 
   <stringbundleset id="stringbundleset">
-    <stringbundle id="emic-global-strings" src="chrome://emic/locale/global.properties" />
+    <stringbundle id="emic-strings-global" src="chrome://emic/locale/global.properties" />
+    <stringbundle id="emic-strings-backgroundworker" src="chrome://emic/locale/backgroundworker.properties" />
   </stringbundleset>
   
   <statusbar id="status-bar">

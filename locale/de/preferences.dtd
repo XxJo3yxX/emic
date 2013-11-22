@@ -1,5 +1,6 @@
 <!ENTITY emic.preferences.window.title                    "EMIC Einstellungen">
 <!ENTITY emic.preferences.label.compatiblewithoutlook     "Kompatibel mit Outlook:">
 <!ENTITY emic.preferences.label.addkeywordstoexpiredmails "Füge Schlagwort zu abgelaufenen E-Mails hinzu:">
+<!ENTITY emic.preferences.label.colorcode                 "Farbcode:">
 <!ENTITY emic.preferences.label.moveexpiredmails          "Verschiebe abgelaufene E-Mails:">
 <!ENTITY emic.preferences.label.destfoldername            "Zielordnername:">
