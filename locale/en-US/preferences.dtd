@@ -1,6 +1,6 @@
-<!ENTITY emic.preferences.window.title                    "EMIC Settings">
-<!ENTITY emic.preferences.label.compatiblewithoutlook     "Compatible with Outlook:">
-<!ENTITY emic.preferences.label.addkeywordstoexpiredmails "Add Keyword to expired Emails:">
-<!ENTITY emic.preferences.label.colorcode                 "Color-code:">
-<!ENTITY emic.preferences.label.moveexpiredmails          "Move expired Emails:">
-<!ENTITY emic.preferences.label.destfoldername            "Destination foldername:">
+<!ENTITY emic.preferences.window.title                            "EMIC Settings">
+<!ENTITY emic.preferences.label.compatiblewithoutlook             "Compatible with Outlook:">
+<!ENTITY emic.preferences.label.expiredmails.addtag               "Add Keyword to expired Emails:">
+<!ENTITY emic.preferences.label.expiredmails.addtag.colorcode     "Color-code:">
+<!ENTITY emic.preferences.label.expiredmails.move                 "Move expired Emails:">
+<!ENTITY emic.preferences.label.expiredmails.move.destfoldername  "Destination foldername:">

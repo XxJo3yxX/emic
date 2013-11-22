@@ -136,13 +136,13 @@ var emicBackgroundWorkerObj = {
 
         if(expired_mails.length > 0) {
             //add keywords to messages:
-            if(this.prefs.getBoolPref("addkeywordstoexpiredmails")) {
+            if(this.prefs.getBoolPref("expiredmails.addtag")) {
                 this.consoleService.logStringMessage("addKeywordstoMessages, expired_mails.length: " + expired_mails.length);
                 this.srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
             }
 
             //move expired mails to folder:
-            if(this.prefs.getBoolPref("moveexpiredmails")) {
+            if(this.prefs.getBoolPref("expiredmails.move")) {
                 var destfolder = null;
 
                 try {
@@ -196,11 +196,11 @@ var emicBackgroundWorkerObj = {
             return;
  
         switch(aData) {
-        case "destfoldername":
-            this.setDestFolder(this.prefs.getCharPref("destfoldername"));
+        case "expiredmails.move.destfoldername":
+            this.setDestFolder(this.prefs.getCharPref("expiredmails.move.destfoldername"));
             break;
-        case "colorcode":
-            this.tagService.setColorForKey(this.global_strBundle.getString("global.tag.expired.key"), this.prefs.getCharPref("colorcode"));
+        case "expiredmails.addtag.colorcode":
+            this.tagService.setColorForKey(this.global_strBundle.getString("global.tag.expired.key"), this.prefs.getCharPref("expiredmails.addtag.colorcode"));
             break;
         }
     },
@@ -212,13 +212,13 @@ var emicBackgroundWorkerObj = {
 
         this.prefs.QueryInterface(Ci.nsIPrefBranch);
         this.prefs.addObserver("", this, false);
-        this.setDestFolder(this.prefs.getCharPref("destfoldername"));
+        this.setDestFolder(this.prefs.getCharPref("expiredmails.move.destfoldername"));
 
         this.notificationService.addListener(MailListener, this.notificationService.msgAdded);
 
         //set up a Tag
         if(!this.tagService.isValidKey(this.global_strBundle.getString("global.tag.expired.key"))) {
-            this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("colorcode"), "");
+            this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("expiredmails.addtag.colorcode"), "");
         }
 
         this.startup();

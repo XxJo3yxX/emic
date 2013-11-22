@@ -6,32 +6,32 @@
 
   <prefpane id="emic-pref-pane" label="&emic.preferences.window.title;">
     <preferences>
-      <preference id="compatiblewithoutlook"      name="extensions.emic.compatiblewithoutlook"      type="bool"/>
-      <preference id="addkeywordstoexpiredmails"  name="extensions.emic.addkeywordstoexpiredmails"  type="bool"/>
-      <preference id="colorcode"                  name="extensions.emic.colorcode"                  type="string"/>
-      <preference id="moveexpiredmails"           name="extensions.emic.moveexpiredmails"           type="bool"/>
-      <preference id="destfoldername"             name="extensions.emic.destfoldername"             type="string"/>
+      <preference id="compatiblewithoutlook"            name="extensions.emic.compatiblewithoutlook"            type="bool"/>
+      <preference id="expiredmails-addtag"              name="extensions.emic.expiredmails.addtag"              type="bool"/>
+      <preference id="expiredmails-addtag-colorcode"    name="extensions.emic.expiredmails.addtag.colorcode"    type="string"/>
+      <preference id="expiredmails-move"                name="extensions.emic.expiredmails.move"                type="bool"/>
+      <preference id="expiredmails-move-destfoldername" name="extensions.emic.expiredmails.move.destfoldername" type="string"/>
     </preferences>
 
     <hbox align="center">
-      <label control="compatiblewithoutlook" value="&emic.preferences.label.compatiblewithoutlook;"/>
+      <label       control="compatiblewithoutlook"            value="&emic.preferences.label.compatiblewithoutlook;"/>
       <checkbox preference="compatiblewithoutlook" />
     </hbox>
     <hbox align="center">
-      <label control="addkeywordstoexpiredmails" value="&emic.preferences.label.addkeywordstoexpiredmails;"/>
-      <checkbox preference="addkeywordstoexpiredmails" />
+      <label       control="expiredmails-addtag"              value="&emic.preferences.label.expiredmails.addtag;"/>
+      <checkbox preference="expiredmails-addtag" />
     </hbox>
     <hbox align="center">
-      <label control="colorcode" value="&emic.preferences.label.colorcode;"/>
-      <textbox preference="colorcode" />
+      <label      control="expiredmails-addtag-colorcode"     value="&emic.preferences.label.expiredmails.addtag.colorcode;"/>
+      <textbox preference="expiredmails-addtag-colorcode" />
     </hbox>
     <hbox align="center">
-      <label control="moveexpiredmails" value="&emic.preferences.label.moveexpiredmails;"/>
-      <checkbox preference="moveexpiredmails" />
+      <label       control="expiredmails-move"                value="&emic.preferences.label.expiredmails.move;"/>
+      <checkbox preference="expiredmails-move" />
     </hbox>
     <hbox align="center">
-      <label control="destfoldername" value="&emic.preferences.label.destfoldername;"/>
-      <textbox preference="destfoldername" />
+      <label      control="expiredmails-move-destfoldername"  value="&emic.preferences.label.expiredmails.move.destfoldername;"/>
+      <textbox preference="expiredmails-move-destfoldername" />
     </hbox>
   </prefpane>
 
