@@ -15,7 +15,7 @@ var MailListener = {
             emicBackgroundWorkerObj.setInbox(aMsgHdr.folder);
 //            alert("Got new mail. Look at aMsgHdr's properties for more details.");
 //            alert("aMsgHdr.folder.prettiestName: " + aMsgHdr.folder.prettiestName);
-            emicBackgroundWorkerObj.startup();
+            emicBackgroundWorkerObj.setExpirationDate(aMsgHdr);
         }
     }
 };
@@ -63,50 +63,37 @@ var emicBackgroundWorkerObj = {
     srcFolder: gLocalInboxFolder,
     destFolderName: null,
 
-    startup: function() {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.startup() called");
-        this.setExpirationDate();
-        this.processExpiredMails();
-    },
+    setExpirationDate: function(msgHdr) {
+        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setExpirationDate() called");
 
-    setExpirationDate: function() {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setExpirationDate() called");
-//        this.consoleService.logStringMessage("srcFolder.prettiestName: " + this.srcFolder.prettiestName);
-        if(!this.srcFolder)
-            return null;
-
-        var msgArray = this.srcFolder.messages;
         var stringpropertyidentifier = this.global_strBundle.getString("global.identifier.expirationdate.stringproperty");
 //        this.consoleService.logStringMessage("stringpropertyidentifier: " + stringpropertyidentifier);
 
-        while( msgArray.hasMoreElements() ) {  
-            var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
-            if(msgHdr.getStringProperty(stringpropertyidentifier).length <= 0) {
-            // extract expiration-date from Mime-Hdr:
-                msgHdrGetHeaders(msgHdr, function (aHeaders) {
+        if(msgHdr.getStringProperty(stringpropertyidentifier).length <= 0) {
+        // extract expiration-date from Mime-Hdr:
+            msgHdrGetHeaders(msgHdr, function (aHeaders) {
 //                    emicBackgroundWorkerObj.consoleService.logStringMessage("   msgHdrGetHeaders called for Subject: '" + aHeaders.get("subject") + "'");
-                    var hasgetidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget");
-                    var stringpropertyidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty");
+                var hasgetidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.mailheader.hasget");
+                var stringpropertyidentifier = emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.stringproperty");
 //                    emicBackgroundWorkerObj.consoleService.logStringMessage("hasgetidentifier: " + hasgetidentifier);
 //                    emicBackgroundWorkerObj.consoleService.logStringMessage("stringpropertyidentifier: " + stringpropertyidentifier);
 
-                    if(aHeaders.has(hasgetidentifier)) {
+                if(aHeaders.has(hasgetidentifier)) {
 //                        emicBackgroundWorkerObj.consoleService.logStringMessage("   ^ has expiration date, set it to: " + aHeaders.get(hasgetidentifier));
-                        msgHdr.setStringProperty(
-                            stringpropertyidentifier, 
-                            aHeaders.get(hasgetidentifier)
-                        );
-                    }
-                    else {
+                    msgHdr.setStringProperty(
+                        stringpropertyidentifier, 
+                        aHeaders.get(hasgetidentifier)
+                    );
+                }
+                else {
 //                        emicBackgroundWorkerObj.consoleService.logStringMessage("   ^ has no expiration date; set it to never");
-                        msgHdr.setStringProperty(
-                            stringpropertyidentifier,
-                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.never")
-                        );
-                    }
+                    msgHdr.setStringProperty(
+                        stringpropertyidentifier,
+                        emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.never")
+                    );
+                }
 
-                });
-            }
+            });
         }
     },
 
@@ -221,11 +208,11 @@ var emicBackgroundWorkerObj = {
             this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("expiredmails.addtag.colorcode"), "");
         }
 
-        this.startup();
+        this.processExpiredMails();
     }
 }
 
 window.addEventListener("load", function() {emicBackgroundWorkerObj.init()}, false);
-window.setInterval(function(){emicBackgroundWorkerObj.startup();}, 60000); //update every minute
+window.setInterval(function(){emicBackgroundWorkerObj.processExpiredMails();}, 60000); //update every minute
 document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundWorkerObj.selectChanged(e);}, false);
 window.addEventListener("unload", function(e) { emicBackgroundWorkerObj.shutdown(); }, false);
