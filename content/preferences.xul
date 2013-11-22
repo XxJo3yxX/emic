@@ -13,26 +13,28 @@
       <preference id="expiredmails-move-destfoldername" name="extensions.emic.expiredmails.move.destfoldername" type="string"/>
     </preferences>
 
-    <hbox align="center">
-      <label       control="compatiblewithoutlook"            value="&emic.preferences.label.compatiblewithoutlook;"/>
-      <checkbox preference="compatiblewithoutlook" />
-    </hbox>
-    <hbox align="center">
-      <label       control="expiredmails-addtag"              value="&emic.preferences.label.expiredmails.addtag;"/>
-      <checkbox preference="expiredmails-addtag" />
-    </hbox>
-    <hbox align="center">
-      <label      control="expiredmails-addtag-colorcode"     value="&emic.preferences.label.expiredmails.addtag.colorcode;"/>
-      <textbox preference="expiredmails-addtag-colorcode" />
-    </hbox>
-    <hbox align="center">
-      <label       control="expiredmails-move"                value="&emic.preferences.label.expiredmails.move;"/>
-      <checkbox preference="expiredmails-move" />
-    </hbox>
-    <hbox align="center">
-      <label      control="expiredmails-move-destfoldername"  value="&emic.preferences.label.expiredmails.move.destfoldername;"/>
-      <textbox preference="expiredmails-move-destfoldername" />
-    </hbox>
+    <checkbox preference="compatiblewithoutlook" label="&emic.preferences.label.compatiblewithoutlook;"/>
+    <groupbox flex="1">
+    <caption label="&emic.preferences.label.expiredmails.groupbox;"/>
+      <groupbox flex="1">
+        <caption>
+          <checkbox preference="expiredmails-addtag" label="&emic.preferences.label.expiredmails.addtag;"/>
+        </caption>
+        <hbox>
+          <label      control="expiredmails-addtag-colorcode"     value="&emic.preferences.label.expiredmails.addtag.colorcode;"/>
+          <textbox preference="expiredmails-addtag-colorcode" maxlength="7"/>
+        </hbox>
+      </groupbox>
+      <groupbox flex="1">
+        <caption>
+          <checkbox preference="expiredmails-move" label="&emic.preferences.label.expiredmails.move;"/>
+        </caption>
+        <hbox>
+          <label      control="expiredmails-move-destfoldername"  value="&emic.preferences.label.expiredmails.move.destfoldername;"/>
+          <textbox preference="expiredmails-move-destfoldername"/>
+        </hbox>
+      </groupbox>
+    </groupbox>
   </prefpane>
 
 </prefwindow>

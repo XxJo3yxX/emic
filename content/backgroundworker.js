@@ -137,7 +137,7 @@ var emicBackgroundWorkerObj = {
         if(expired_mails.length > 0) {
             //add keywords to messages:
             if(this.prefs.getBoolPref("expiredmails.addtag")) {
-                this.consoleService.logStringMessage("addKeywordstoMessages, expired_mails.length: " + expired_mails.length);
+                this.consoleService.logStringMessage(" Try to tag " + expired_mails.length + " mails.");
                 this.srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
             }
 
@@ -149,14 +149,14 @@ var emicBackgroundWorkerObj = {
                     destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                 }
                 catch(e) {
-                    this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails(): destfolder not exists, try to create it: " + e);
+                    this.consoleService.logStringMessage(" Destination folder not exists, try to create it (" + e + ").");
                     if(!destfolder) {
                         var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
                         gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
                         destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                     }
                 }
-                this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails(): try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName);
+                this.consoleService.logStringMessage(" Try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName + ".");
                 if(this.srcFolder && destfolder)
                     this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
             }
