@@ -97,7 +97,7 @@ var emicDialogCustomDateObj = {
             case document.getElementById("emic-radio-never"):
                 window.arguments[0].out = {
                     date: null,
-                    datestr: this.global_strBundle.getString("global.identifier.expirationdate.never")
+                    datestr: this.global_strBundle.getString("global.identifier.never")
                 };
                 return true;
             break;

@@ -76,7 +76,7 @@ var emicComposeObj = {
         window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
-            if(params.out.datestr == this.global_strBundle.getString("global.identifier.expirationdate.never"))
+            if(params.out.datestr == this.global_strBundle.getString("global.identifier.never"))
                 this.menu_select_never();
             else if(params.out.date < (new Date))
                 this.menu_select_now();
@@ -94,7 +94,7 @@ var emicComposeObj = {
     setExpirationDateNever: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateNever() called");
         this.menu_select_never();
-        this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
+        this.expdatestr = this.global_strBundle.getString("global.identifier.never");
     },
 
     setExpirationDateNow: function() {
@@ -121,18 +121,18 @@ var emicComposeObj = {
                     this.expdatestr = params.out.datestr;
                 }
                 else {
-                  this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
+                  this.expdatestr = this.global_strBundle.getString("global.identifier.never");
                 }
             } else {
-              this.expdatestr = this.global_strBundle.getString("global.identifier.expirationdate.never");
+              this.expdatestr = this.global_strBundle.getString("global.identifier.never");
             }
         }
 
-        if(this.expdatestr.length > 0 && this.expdatestr != this.global_strBundle.getString("global.identifier.expirationdate.never")) {
-            var headeridentifieroutlook = this.global_strBundle.getString("global.expirationdateidentifier.mailheader.outlook");
+        if(this.expdatestr.length > 0 && this.expdatestr != this.global_strBundle.getString("global.identifier.never")) {
+            var headeridentifieroutlook = this.global_strBundle.getString("global.identifier.expirationdate.mailheader.outlook");
             if(this.prefs.getBoolPref("compatiblewithoutlook") && !gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifieroutlook))
                 gMsgCompose.compFields.otherRandomHeaders += headeridentifieroutlook + this.expdatestr + "\r\n";
-            var headeridentifier = this.global_strBundle.getString("global.expirationdateidentifier.mailheader");
+            var headeridentifier = this.global_strBundle.getString("global.identifier.expirationdate.mailheader");
             if(!gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifier))
                 gMsgCompose.compFields.otherRandomHeaders += headeridentifier + this.expdatestr + "\r\n";
         }

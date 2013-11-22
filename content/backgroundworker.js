@@ -101,7 +101,7 @@ var emicBackgroundWorkerObj = {
 //                        emicBackgroundWorkerObj.consoleService.logStringMessage("   ^ has no expiration date; set it to never");
                         msgHdr.setStringProperty(
                             stringpropertyidentifier,
-                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.expirationdate.never")
+                            emicBackgroundWorkerObj.global_strBundle.getString("global.identifier.never")
                         );
                     }
 
@@ -125,7 +125,7 @@ var emicBackgroundWorkerObj = {
             var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
             var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
 
-            if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.expirationdate.never"))) {
+            if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.never"))) {
                 var expiration_date = new Date(expdatestr);
                 //search for expired mails:
                 if(expiration_date < now) {
