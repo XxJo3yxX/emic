@@ -12,9 +12,11 @@
   </stringbundleset>
   
   <statusbar id="status-bar">
-    <deck selectedIndex="1" id="emic-deck" insertafter="statusTextBox" insertbefore="unreadMessageCount" style="width:120px" hidden="false">
-      <progressmeter id="emic-progress" mode="determined" value="50" />
-      <label id="emic-status" value="EMIC" style="width:100%;text-align:center;margin:4px" />
-    </deck>
+    <statusbarpanel id="emic-statusbarpanel" hidden="true">
+      <hbox>
+        <label id="emic-statpanelLabel" class="statusbarpanel-text" value="EMIC:" control="emic-progress" />
+        <progressmeter id="emic-progress" mode="determined" />
+      </hbox>
+    </statusbarpanel>
   </statusbar>
 </overlay>

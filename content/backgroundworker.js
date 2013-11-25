@@ -22,10 +22,13 @@ var MailListener = {
 
 var copyListener = {
     OnStartCopy: function() {
-        //alert("OnStartCopy()");
+        document.getElementById("emic-progress").value = 0;
+        document.getElementById("emic-statusbarpanel").hidden = false;
+//        alert("OnStartCopy()");
     },
     OnProgress: function(aProgress, aProgressMax) {
-        //alert("OnProgress("+aProgress+", "+aProgressMax+")");
+        document.getElementById("emic-progress").value = 100*aProgress/aProgressMax;
+//        alert("OnProgress("+aProgress+", "+aProgressMax+")");
     },
     SetMessageKey: function(aKey) {
         //alert("SetMessageKey("+aKey+")");
@@ -40,6 +43,8 @@ var copyListener = {
 //            alert("End OK");
 //        else
 //            alert("End Error");
+        document.getElementById("emic-progress").value = 100;
+        document.getElementById("emic-statusbarpanel").hidden = true;
     }
 };
     
@@ -193,7 +198,7 @@ var emicBackgroundWorkerObj = {
     },
 
     init: function() {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
+        this.consoleService.logStringMessage("emicBackgroundWorkerObj.init() called");
         this.global_strBundle           = document.getElementById("emic-strings-global");
         this.backgroundworker_strBundle = document.getElementById("emic-strings-backgroundworker");
 
@@ -207,6 +212,10 @@ var emicBackgroundWorkerObj = {
         if(!this.tagService.isValidKey(this.global_strBundle.getString("global.tag.expired.key"))) {
             this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("expiredmails.addtag.colorcode"), "");
         }
+
+        var statBar = document.getElementById("status-bar");
+	    var statPanel = document.getElementById("emic-statusbarpanel");
+        statBar.insertBefore(statPanel, null);
 
         this.processExpiredMails();
     }

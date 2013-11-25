@@ -66,6 +66,10 @@ XPCOMUtils.defineLazyServiceGetter(MailServices, "i18nDateFormatter",
                                    "@mozilla.org/intl/scriptabledateformat;1",
                                    "nsIScriptableDateFormat");
 
+XPCOMUtils.importRelative(this, "../log.js");
+
+let Log = setupLogging(logRoot+".Stdlib");
+
 /**
  * Low-level XPCOM-style macro. You might need this for the composition and
  *  sending listeners which will pass you some status codes.
@@ -134,11 +138,14 @@ let gIdentities = {};
  *  list?
  */
 function fillIdentities(aSkipNntp) {
+  Log.debug("Filling identities with skipnntp = ", aSkipNntp);
   let firstNonNull = null;
   for each (let account in fixIterator(MailServices.accounts.accounts, Ci.nsIMsgAccount)) {
     let server = account.incomingServer;
-    if (aSkipNntp && (!server || server.type != "pop3" && server.type != "imap"))
+    if (aSkipNntp && (!server || server.type != "pop3" && server.type != "imap")) {
+      Log.debug("Skipping: ", server.prettyName);
       continue;
+    }
     for each (let id in fixIterator(account.identities, Ci.nsIMsgIdentity)) {
       // We're only interested in identities that have a real email.
       if (id.email) {
@@ -161,8 +168,13 @@ function fillIdentities(aSkipNntp) {
  * @return {String} a string containing the formatted date
  */
 function dateAsInMessageList(aDate) {
-  // Is it today? (Less stupid tests are welcome!)
-  let format = aDate.toLocaleDateString("%x") == (new Date()).toLocaleDateString("%x")
+  let now = new Date();
+  // Is it today?
+  let isToday =
+    now.getFullYear() == aDate.getFullYear() &&
+    now.getMonth() == aDate.getMonth() &&
+    now.getDate() == aDate.getDate();
+  let format = isToday
     ? Ci.nsIScriptableDateFormat.dateFormatNone
     : Ci.nsIScriptableDateFormat.dateFormatShort;
   // That is an ugly XPCOM call!
