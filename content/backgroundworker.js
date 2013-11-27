@@ -12,7 +12,7 @@ Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 var MailListener = {  
     msgAdded: function(aMsgHdr) {  
         if( !aMsgHdr.isRead )  {
-            emicBackgroundWorkerObj.setInbox(aMsgHdr.folder);
+//            emicBackgroundWorkerObj.setInbox(aMsgHdr.folder);
 //            alert("Got new mail. Look at aMsgHdr's properties for more details.");
 //            alert("aMsgHdr.folder.prettiestName: " + aMsgHdr.folder.prettiestName);
             emicBackgroundWorkerObj.setExpirationDate(aMsgHdr);
@@ -47,13 +47,6 @@ var copyListener = {
         document.getElementById("emic-statusbarpanel").hidden = true;
     }
 };
-    
-var gLocalIncomingServer = MailServices.accounts.localFoldersServer;
-var gLocalMsgAccount = MailServices.accounts.defaultAccount; //FindAccountForServer(gLocalIncomingServer);
-
-var gLocalRootFolder = gLocalIncomingServer.rootMsgFolder.rootFolder; //.QueryInterface(Ci.nsIMsgLocalMailFolder);
-
-var gLocalInboxFolder = gLocalRootFolder.getFoldersWithFlags(Ci.nsMsgFolderFlags.Inbox); 
 
 var emicBackgroundWorkerObj = {
 
@@ -62,10 +55,10 @@ var emicBackgroundWorkerObj = {
     tagService: Cc["@mozilla.org/messenger/tagservice;1"].getService(Ci.nsIMsgTagService),
     copyService: Cc["@mozilla.org/messenger/messagecopyservice;1"].getService(Ci.nsIMsgCopyService),
     prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
+    accountManager: Cc["@mozilla.org/messenger/account-manager;1"].getService(Ci.nsIMsgAccountManager),
     global_strBundle: null,
     backgroundworker_strBundle: null,
 
-    srcFolder: gLocalInboxFolder,
     destFolderName: null,
 
     setExpirationDate: function(msgHdr) {
@@ -104,71 +97,83 @@ var emicBackgroundWorkerObj = {
 
     processExpiredMails: function() {
         this.consoleService.logStringMessage("emicBackgroundWorkerObj.processExpiredMails() called");
-//        this.consoleService.logStringMessage("this.destFolderName: " + this.destFolderName);
 
-        if(!this.srcFolder)
-            return null;
-
-        var now = new Date();
-        var msgArray = this.srcFolder.messages;
-        var expired_mails = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
-
-        while( msgArray.hasMoreElements() ) {  
-            var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
-            var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
-
-            if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.never"))) {
-                var expiration_date = new Date(expdatestr);
-                //search for expired mails:
-                if(expiration_date < now) {
-                    expired_mails.appendElement(msgHdr, false);
-                }
+        var srcFolders = new Array;
+        var servers = this.accountManager.allServers;
+        for(var i=0; i<servers.length; ++i) {
+            var folders = servers.queryElementAt(i, Ci.nsIMsgIncomingServer).rootFolder.getFoldersWithFlags(Ci.nsMsgFolderFlags.Inbox);
+            for (var j=0; j<folders.length; ++j) {
+                srcFolders.push(folders.queryElementAt(j, Ci.nsIMsgFolder));
             }
         }
 
-        if(expired_mails.length > 0) {
-            //add keywords to messages:
-            if(this.prefs.getBoolPref("expiredmails.addtag")) {
-                this.consoleService.logStringMessage(" Try to tag " + expired_mails.length + " mails.");
-                this.srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
-            }
+        for(var i=0; i<srcFolders.length; ++i) {
+            var srcFolder = srcFolders[i];
+            this.consoleService.logStringMessage("srcFolder: " + srcFolder.prettiestName);
 
-            //move expired mails to folder:
-            if(this.prefs.getBoolPref("expiredmails.move")) {
-                var destfolder = null;
+            var now = new Date();
+            var msgArray = srcFolder.messages;
+            var expired_mails = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
 
-                try {
-                    destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
-                }
-                catch(e) {
-                    this.consoleService.logStringMessage(" Destination folder not exists, try to create it (" + e + ").");
-                    if(!destfolder) {
-                        var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
-                        gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
-                        destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+            while( msgArray.hasMoreElements() ) {  
+                var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
+                var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
+
+                if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.never"))) {
+                    var expiration_date = new Date(expdatestr);
+                    //search for expired mails:
+                    if(expiration_date < now) {
+                        expired_mails.appendElement(msgHdr, false);
                     }
                 }
-                this.consoleService.logStringMessage(" Try to move " + expired_mails.length + " mails from Src: " + this.srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName + ".");
-                if(this.srcFolder && destfolder)
-                    this.copyService.CopyMessages(this.srcFolder, expired_mails, destfolder, true, copyListener, null, false);
+            }
+
+            if(expired_mails.length > 0) {
+                //add keywords to messages:
+                if(this.prefs.getBoolPref("expiredmails.addtag")) {
+                    this.consoleService.logStringMessage(" Try to tag " + expired_mails.length + " mails.");
+                    srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
+                }
+
+                //move expired mails to folder:
+                if(this.prefs.getBoolPref("expiredmails.move")) {
+                    var gLocalIncomingServer = MailServices.accounts.localFoldersServer;
+                    var gLocalRootFolder = gLocalIncomingServer.rootFolder;
+                    var destfolder = null;
+
+                    try {
+                        destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+                    }
+                    catch(e) {
+                        this.consoleService.logStringMessage(" Destination folder not exists, try to create it (" + e + ").");
+                        if(!destfolder) {
+                            var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
+                            gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
+                            destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+                        }
+                    }
+                    this.consoleService.logStringMessage(" Try to move " + expired_mails.length + " mails from Src: " + srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName + ".");
+                    if(srcFolder && destfolder)
+                        this.copyService.CopyMessages(srcFolder, expired_mails, destfolder, true, copyListener, null, false);
+                }
             }
         }
     },
 
-    selectChanged: function(e) {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.selectChanged() called");
-        var folder = gFolderDisplay.selectedMessage.folder;
-        this.setInbox(folder);
-    },
+//    selectChanged: function(e) {
+////        this.consoleService.logStringMessage("emicBackgroundWorkerObj.selectChanged() called");
+//        var folder = gFolderDisplay.selectedMessage.folder;
+//        this.setInbox(folder);
+//    },
 
-    setInbox: function(inboxfolder) {
-//        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox() called");
-//        this.consoleService.logStringMessage("inboxfolder.prettiestName: " + inboxfolder.prettiestName);
-        if(inboxfolder.flags & Ci.nsMsgFolderFlags.Inbox) {
-//            this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
-            this.srcFolder = inboxfolder;
-        }
-    },
+//    setInbox: function(inboxfolder) {
+////        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox() called");
+////        this.consoleService.logStringMessage("inboxfolder.prettiestName: " + inboxfolder.prettiestName);
+//        if(inboxfolder.flags & Ci.nsMsgFolderFlags.Inbox) {
+////            this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
+//            srcFolder = inboxfolder;
+//        }
+//    },
 
     setDestFolder: function(destfoldername) {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setDestFolder() called");
@@ -208,11 +213,12 @@ var emicBackgroundWorkerObj = {
 
         this.notificationService.addListener(MailListener, this.notificationService.msgAdded);
 
-        //set up a Tag
+        //set up a Tag:
         if(!this.tagService.isValidKey(this.global_strBundle.getString("global.tag.expired.key"))) {
             this.tagService.addTagForKey(this.global_strBundle.getString("global.tag.expired.key"), this.backgroundworker_strBundle.getString("backgroundworker.tag.expired.label"), this.prefs.getCharPref("expiredmails.addtag.colorcode"), "");
         }
 
+        //set up status-bar:
         var statBar = document.getElementById("status-bar");
 	    var statPanel = document.getElementById("emic-statusbarpanel");
         statBar.insertBefore(statPanel, null);
@@ -223,5 +229,5 @@ var emicBackgroundWorkerObj = {
 
 window.addEventListener("load", function() {emicBackgroundWorkerObj.init()}, false);
 window.setInterval(function(){emicBackgroundWorkerObj.processExpiredMails();}, 60000); //update every minute
-document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundWorkerObj.selectChanged(e);}, false);
+//document.getElementById('threadTree').addEventListener('select', function(e){emicBackgroundWorkerObj.selectChanged(e);}, false);
 window.addEventListener("unload", function(e) { emicBackgroundWorkerObj.shutdown(); }, false);
