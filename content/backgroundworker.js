@@ -12,7 +12,6 @@ Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 var MailListener = {  
     msgAdded: function(aMsgHdr) {  
         if( !aMsgHdr.isRead )  {
-//            emicBackgroundWorkerObj.setInbox(aMsgHdr.folder);
 //            alert("Got new mail. Look at aMsgHdr's properties for more details.");
 //            alert("aMsgHdr.folder.prettiestName: " + aMsgHdr.folder.prettiestName);
             emicBackgroundWorkerObj.setExpirationDate(aMsgHdr);
@@ -159,21 +158,6 @@ var emicBackgroundWorkerObj = {
             }
         }
     },
-
-//    selectChanged: function(e) {
-////        this.consoleService.logStringMessage("emicBackgroundWorkerObj.selectChanged() called");
-//        var folder = gFolderDisplay.selectedMessage.folder;
-//        this.setInbox(folder);
-//    },
-
-//    setInbox: function(inboxfolder) {
-////        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox() called");
-////        this.consoleService.logStringMessage("inboxfolder.prettiestName: " + inboxfolder.prettiestName);
-//        if(inboxfolder.flags & Ci.nsMsgFolderFlags.Inbox) {
-////            this.consoleService.logStringMessage("emicBackgroundWorkerObj.setInbox(): " + inboxfolder.prettiestName + " is of type inbox");
-//            srcFolder = inboxfolder;
-//        }
-//    },
 
     setDestFolder: function(destfoldername) {
 //        this.consoleService.logStringMessage("emicBackgroundWorkerObj.setDestFolder() called");

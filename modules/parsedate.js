@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["parseDate", "isValidDate"];
+var EXPORTED_SYMBOLS = ["parseDate"];
 
 // parse a date in "dd.mm.yyyy hh:mm:ss" format
 function parseDate(input) {

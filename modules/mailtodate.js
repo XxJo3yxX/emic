@@ -1,6 +1,17 @@
-var EXPORTED_SYMBOLS = ["MailtoDate"];
+"use strict";
 
-var MailtoDate;
+var EXPORTED_SYMBOLS = ["MailToDate"];
+
+let Ci = Components.interfaces;
+let Cc = Components.classes;
+let Cu = Components.utils;
+let Cr = Components.results;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm");
+XPCOMUtils.importRelative(this, "simpledateformat.js");
+XPCOMUtils.importRelative(this, "parsedate.js");
+
+var MailToDate;
 
 (function() {
     function isUndefined(obj) {
@@ -8,8 +19,8 @@ var MailtoDate;
     }
 
     var n = new Array();
-    var b = new Array( "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf",
-                                        "zwanzig", "dreißig", "zig", "sech", "sieb", "hundert", "ein", "tausend", "ers", "zwo", "drit", "ach"); 
+    var b = new Array(  "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf",
+                        "zwanzig", "dreißig", "zig", "sech", "sieb", "hundert", "ein", "tausend", "ers", "zwo", "drit", "ach"); 
     //  de
     n["eins"] =     "+1";
     n["zwei"] =     "+2";
@@ -66,81 +77,104 @@ var MailtoDate;
     //n["fif"] =      n["five"];
     //n["nin"] =      n["nine"];
 
-    mger = new Array("januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember");
-    men = new Array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
-    mshort = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    var mger = new Array("januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember");
+    var men = new Array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
+    var mshort = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
 
-    wger = new Array("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag");
-    wen = new Array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
-    wshort = new Array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
+    var wger = new Array("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag");
+    var wen = new Array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
+    var wshort = new Array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
 
-    dates = new Array();
+    var consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
 
-    function splitintolines(subject, body) {
-        subjectlines = subject.replace(". ", "! ").split("! ");
-        bodylines = body.replace(". ", "! ").split("! ");
-    }
+    MailToDate = function(subject, body) {
+//        consoleService.logStringMessage("MailToDate: CTor called");
+        this.subject = subject;
+        this.body = body;
+        this.dates = new Array();
+    };
 
-    function replacewordstonumbers(line) {
-    //    neuntausendzweihundertsiebenundvierzig
-        workon = line.toLowerCase();
-        for (var i = 0; i < b.length; ++i) {
-            workon = workon.replace(b[i],n[b[i]]);
-        }
-        workon = workon.replace("und", "");
-        numbers = line.split(/\D/);
-        //jetzt auswerten:
-        for each(var number in numbers) {
-            if {number.length > 0) {
-            //+9*1000+2*100+7+4*10
-                
+    MailToDate.prototype.extractDates = function() {
+//        consoleService.logStringMessage("MailToDate: extractDates called");
+        this.dates.length = 0;
+        var regex = new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-](\\d{4}|\\d{2})\\s*(([0-1]?\\d|[2][0-3]):([0-5]\\d))?","g");
+        var match = this.subject.match(regex);
+        if(match) {
+            for(var i=0; i<match.length; ++i) {
+                this.dates.push(parseDate(match[i]));
             }
         }
-    }
-
-    function stupidparse(input) {
-    
-    }
-
-    function stupidparse(input) {
-        var year = new Array();
-        var month = new Array();
-        var day = new Array();
-        var weekday = new Array();
-        var hour = new Array();
-        var minute = new Array();
-        var now = new Date();
-
-        var workon = input.toLowerCase();
-
-        year.push(now.getFullYear());
-        for(var i = now.getFullYear(); i<=now.getFullYear()+7; ++i) {
-            if(workon.contains(i.toString()) {
-                year.push(i);
-
+        match = this.body.match(regex);
+        if(match) {
+            for(var i=0; i<match.length; ++i) {
+                this.dates.push(parseDate(match[i]));
             }
+        }
+
+        sortdates(this.dates);
         
-        }
+//        consoleService.logStringMessage("MailToDate: extractDates end");
+        return this.dates;
+    };
 
-        workon = workon.replace("jänner","Jan");
-        for (var i = 0; i < mshort.length; ++i) {
-            workon = workon.replace(mger[i], mshort[i]);
-            workon = workon.replace(men[i], mshort[i]);
-            if(workon.contains(mshort[i])
-                month.push(1+i);
-        }
+//    function splitintolines(subject, body) {
+//        subjectlines = subject.replace(". ", "! ").split("! ");
+//        bodylines = body.replace(". ", "! ").split("! ");
+//    }
 
-        for (var i = 0; i < wshort.length; ++i) {
-            workon = workon.replace(wger[i], wshort[i]);
-            workon = workon.replace(wen[i], wshort[i]);
-            if(workon.contains(wshort[i])
-                weekday.push(wshort[i]);
-        }
-    }
+//    function replacewordstonumbers(line) {
+//    //    neuntausendzweihundertsiebenundvierzig
+//        workon = line.toLowerCase();
+//        for (var i=0; i<b.length; ++i) {
+//            workon = workon.replace(b[i],n[b[i]]);
+//        }
+//        workon = workon.replace("und", "");
+//        numbers = line.split(/\D/);
+//        //jetzt auswerten:
+//        for (var i=0; i<numbers.length; ++i) {
+//            var number = numbers[i];
+//            if (number.length > 0) {
+//            //+9*1000+2*100+7+4*10
+//                null;
+//            }
+//        }
+//    }
+
+//    function stupidparse(input) {
+//        var year = new Array();
+//        var month = new Array();
+//        var day = new Array();
+//        var weekday = new Array();
+//        var hour = new Array();
+//        var minute = new Array();
+//        var now = new Date();
+
+//        var workon = input.toLowerCase();
+
+//        year.push(now.getFullYear());
+//        for(var i = now.getFullYear(); i<=now.getFullYear()+7; ++i) {
+//            if(workon.contains(i.toString()))
+//                year.push(i);
+//        }
+
+//        workon = workon.replace("jänner","Jan");
+//        for (var i = 0; i < mshort.length; ++i) {
+//            workon = workon.replace(mger[i], mshort[i]);
+//            workon = workon.replace(men[i], mshort[i]);
+//            if(workon.contains(mshort[i]))
+//                month.push(1+i);
+//        }
+
+//        for (var i = 0; i < wshort.length; ++i) {
+//            workon = workon.replace(wger[i], wshort[i]);
+//            workon = workon.replace(wen[i], wshort[i]);
+//            if(workon.contains(wshort[i]))
+//                weekday.push(wshort[i]);
+//        }
+//    }
 
     function sortdates(arrayofdates) {
         //returns only valid dates in future
-        //sorts a given array of dates descending (newest to oldest)
         var i = 0;
         var now = new Date();
         while(i < arrayofdates.length) {
@@ -149,6 +183,7 @@ var MailtoDate;
             else
                 ++i;
         }
+        //sorts a given array of dates descending (newest to oldest)
         arrayofdates.sort(date_sort_desc);
     }
 

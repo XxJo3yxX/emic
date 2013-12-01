@@ -31,6 +31,8 @@ var emicDialogCustomDateObj = {
         var timepicker = document.getElementById("emic-custom-picker-time");
         var datelist = document.getElementById("emic-suggestion-list-date");
         var timelist = document.getElementById("emic-suggestion-list-time");
+        var datelisthelper = new Array();
+        var timelisthelper = new Array();
 
         if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
 //            this.consoleService.logStringMessage("customdate: " + customdate.toString());
@@ -46,13 +48,24 @@ var emicDialogCustomDateObj = {
 
     //    this.consoleService.logStringMessage("(Object.prototype.toString.call(suggestions): " + (Object.prototype.toString.call(suggestions)));
         if(Object.prototype.toString.call(suggestions) === '[object Array]') {
-            for (var i = 0; i < suggestions.length; ++i) {
+            for(var i=0; i<suggestions.length; ++i) {
                 var suggestion = suggestions[i];
     //            this.consoleService.logStringMessage("(Object.prototype.toString.call(suggestion): " + (Object.prototype.toString.call(suggestion)));
                 if((Object.prototype.toString.call(suggestion) === '[object Date]') && isFinite(suggestion)) {
-                    datelist.appendItem(d.format(suggestion));
-                    timelist.appendItem(t.format(suggestion));
+                    var sugdate = d.format(suggestion);
+                    var sugtime = t.format(suggestion);
+                    if(datelisthelper.indexOf(sugdate)<0)
+                        datelisthelper.push(sugdate);
+                    if(timelisthelper.indexOf(sugtime)<0)
+                        timelisthelper.push(sugtime);
                 }
+            }
+            for(var i=0; i<datelisthelper.length; ++i) {
+                datelist.appendItem(datelisthelper[i]);
+            }
+            timelisthelper.sort();
+            for(var i=0; i<timelisthelper.length; ++i) {
+                timelist.appendItem(timelisthelper[i]);
             }
         }
     },

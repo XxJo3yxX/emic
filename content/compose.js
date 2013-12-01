@@ -8,6 +8,7 @@ let Cr = Components.results;
 //Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
+Cu.import("resource://emic/mailtodate.js");
 
 var myStateListener = {
    init: function(e){
@@ -71,8 +72,11 @@ var emicComposeObj = {
     setExpirationDateCustom: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateCustom() called");
 //        this.consoleService.logStringMessage("new Date(this.expdatestr): " + new Date(this.expdatestr).toString());
+//        this.consoleService.logStringMessage("subject: " + document.getElementById("msgSubject").value);
+//        this.consoleService.logStringMessage("body: " + GetCurrentEditor().outputToString('text/plain',4));
+        var mailtodate = new MailToDate(document.getElementById("msgSubject").value, GetCurrentEditor().outputToString('text/plain',4));
         //call Dialog:
-        var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: null}, out:null};
+        var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: mailtodate.extractDates()}, out:null};
         window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
@@ -104,7 +108,7 @@ var emicComposeObj = {
     },
 
     send_event_listener: function(e) {
-//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
+        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
         if(this.expdatestr.length <= 0){
             var result = this.promptService.confirmEx(
                 window,
@@ -115,7 +119,10 @@ var emicComposeObj = {
             );
 
             if(result == 0) {
-                var params = {inn:{customdate:null, suggestions:null}, out:null};
+//                this.consoleService.logStringMessage("subject: " + gMsgCompose.compFields.subject);
+//                this.consoleService.logStringMessage("body: " + GetCurrentEditor().outputToString('text/plain',4));
+                var mailtodate = new MailToDate(gMsgCompose.compFields.subject, GetCurrentEditor().outputToString('text/plain',4));
+                var params = {inn:{customdate:null, suggestions:mailtodate.extractDates()}, out:null};
                 window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
                     this.expdatestr = params.out.datestr;
