@@ -87,7 +87,7 @@ var emicDialogCustomDateObj = {
             case document.getElementById("emic-radio-custom-date"):
                 var datepicker = document.getElementById("emic-custom-picker-date");
                 var timepicker = document.getElementById("emic-custom-picker-time");
-                outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue));
+                outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue), 2);
             break;
             case document.getElementById("emic-radio-suggestion-date"):
                 var datelist = document.getElementById("emic-suggestion-list-date");
@@ -104,7 +104,7 @@ var emicDialogCustomDateObj = {
                 else
                     timelistvalue = timelist.selectedItem.label;
 
-                outdate = parseDate(datelistvalue + " " + timelistvalue);
+                outdate = parseDate(datelistvalue + " " + timelistvalue, 2);
             break;
             default:
             case document.getElementById("emic-radio-never"):

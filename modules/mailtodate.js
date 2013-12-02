@@ -162,7 +162,10 @@ var MailToDate;
         this.doWork(this.subject);
         this.doWork(this.body);
 
+        consoleService.logStringMessage("this.dates.length: " + this.dates.length);
+
         sortdates(this.dates);
+        
         return this.dates;
     };
 
@@ -178,17 +181,23 @@ var MailToDate;
         //parse Dates in format: "yyyy/mm/dd[ hh:mm]"
         this.parseDates(text, new RegExp("\\d{4}\\D+([0]?[1-9]|[1][0-2])\\D+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
         //parse Dates in format: "dd.mm.yyyy[ hh:mm]"
-        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])\\D+([0]?[1-9]|[1][0-2])\\D+\\d{4}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])\\D+([0]?[1-9]|[1][0-2])\\D+\\d{4}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), 2);
+        //parse Dates in format: "yy/mm/dd[ hh:mm]"
+        this.parseDates(text, new RegExp("\\d{2}[.-/ ]+([0]?[1-9]|[1][0-2])[.-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
+        //parse Dates in format: "dd.mm.yy[ hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[.-/ ]+([0]?[1-9]|[1][0-2])[.-/ ]+\\d{2}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), 2);
+        //parse Dates in format: "mm.dd[ hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1][0-2])[.-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), -1);
+        //parse Dates in format: "dd.mm[ hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[.-/ ]+([0]?[1-9]|[1][0-2])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), -2);
     }
 
-    MailToDate.prototype.parseDates = function(text, regex) {
+    MailToDate.prototype.parseDates = function(text, regex, yearpos = 0) {
 //        consoleService.logStringMessage("MailToDate: parsedates called");
         var match = text.match(regex);
-        if(match) {
-            for(var i=0; i<match.length; ++i) {
-                this.dates.push(parseDate(match[i]));
-            }
-        }
+        if(match)
+            for(var i=0; i<match.length; ++i)
+                this.dates.push(parseDate(match[i], yearpos));
     }
 
     function parsenumbers(text, b, n) {
@@ -230,51 +239,18 @@ var MailToDate;
     function replacewordstonumbers(text, b, n) {
 //        consoleService.logStringMessage("MailToDate: replacewordstonumbers called");
         var workon = text;//.toLowerCase();
-        for (var i=0; i<b.length; ++i) {
+        for (var i=0; i<b.length; ++i)
             workon = workon.replace(b[i], n[b[i]], "gi");
-        }
         return workon;
     }
 
-//    function stupidparse(input) {
-//        var year = new Array();
-//        var month = new Array();
-//        var day = new Array();
-//        var weekday = new Array();
-//        var hour = new Array();
-//        var minute = new Array();
-//        var now = new Date();
-
-//        var workon = input.toLowerCase();
-
-//        year.push(now.getFullYear());
-//        for(var i = now.getFullYear(); i<=now.getFullYear()+7; ++i) {
-//            if(workon.contains(i.toString()))
-//                year.push(i);
-//        }
-
-//        workon = workon.replace("jänner","Jan");
-//        for (var i = 0; i < mshort.length; ++i) {
-//            workon = workon.replace(mger[i], mshort[i]);
-//            workon = workon.replace(men[i], mshort[i]);
-//            if(workon.contains(mshort[i]))
-//                month.push(1+i);
-//        }
-
-//        for (var i = 0; i < wshort.length; ++i) {
-//            workon = workon.replace(wger[i], wshort[i]);
-//            workon = workon.replace(wen[i], wshort[i]);
-//            if(workon.contains(wshort[i]))
-//                weekday.push(wshort[i]);
-//        }
-//    }
-
     function sortdates(arrayofdates) {
+//        consoleService.logStringMessage("MailToDate: sortdates called");
         //returns only valid dates in future
         var i = 0;
         var now = new Date();
         while(i < arrayofdates.length) {
-            if(!arrayofdates[i] || arrayofdates[i]<now)
+            if(!arrayofdates[i] || arrayofdates[i]<now || arrayofdates[i].getFullYear()>(now.getFullYear()+10))
                 arrayofdates.splice(i,1);
             else
                 ++i;
