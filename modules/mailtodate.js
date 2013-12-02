@@ -18,68 +18,129 @@ var MailToDate;
         return typeof obj == "undefined";
     }
 
-    var n = new Array();
-    var b = new Array(  "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf",
-                        "zwanzig", "dreißig", "zig", "sech", "sieb", "hundert", "ein", "tausend", "ers", "zwo", "drit", "ach"); 
     //  de
-    n["eins"] =     "+1";
-    n["zwei"] =     "+2";
-    n["drei"] =     "+3";
-    n["vier"] =     "+4";
-    n["fünf"] =     "+5";
-    n["sechs"] =    "+6";
-    n["sieben"] =   "+7";
-    n["acht"] =     "+8";
-    n["neun"] =     "+9";
-    n["zehn"] =     "+10";
-    n["elf"] =      "+11";
-    n["zwölf"] =    "+12";
-    n["zwan"] =     "+2";
-    n["dreißig"] =  "+30";
-    n["zig"] =      "*10";
-    n["sech"] =     "+6";
-    n["sieb"] =     "+7";
-    n["hundert"] =  "*100";
-    n["ein"] =      "+1";
-    n["tausend"] =  "*1000";
-    n["ers"] =      "+1";
-    n["zwo"] =      "+2";
-    n["drit"] =     "+3";
-    n["ach"] =      "+8";
+    var bger = new Array(   "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf",
+                            "zwanzig", "ßig", "zig", "sech", "sieb", "hundert", "ein", "tausend", "ers", "zwo", "drit", "ach",
+                            "und", "ster", "sten", "ter", "ten"); 
+    var nger = new Array();
+    nger["eins"] =     "+1";
+    nger["zwei"] =     "+2";
+    nger["drei"] =     "+3";
+    nger["vier"] =     "+4";
+    nger["fünf"] =     "+5";
+    nger["sechs"] =    "+6";
+    nger["sieben"] =   "+7";
+    nger["acht"] =     "+8";
+    nger["neun"] =     "+9";
+    nger["zehn"] =     "+10";
+    nger["elf"] =      "+11";
+    nger["zwölf"] =    "+12";
+    nger["zwan"] =     "+2";
+    nger["ßig"] =      "*10";
+    nger["zig"] =      "*10";
+    nger["sech"] =     "+6";
+    nger["sieb"] =     "+7";
+    nger["hundert"] =  "*100";
+    nger["ein"] =      "+1";
+    nger["tausend"] =  "*1000";
+    nger["ers"] =      "+1";
+    nger["zwo"] =      "+2";
+    nger["drit"] =     "+3";
+    nger["ach"] =      "+8";
+    nger["und"] =      "";
+    nger["ster"] =     ".";
+    nger["sten"] =     ".";
+    nger["ter"] =      ".";
+    nger["ten"] =      ".";
 
-    //var n = new Array(); b = new Array( "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve",
-    //                                    "twenty", "thirty", "ty", "fiv", "eigh", "hundret", "thousand", "first", "second", "third", "fif", "nin");
-    ////  en           base      multiplier
-    //n["zero"] =     {base:  0,  mult:   0};
-    //n["one"] =      {base:  1,  mult:   1};
-    //n["two"] =      {base:  2,  mult:   1};
-    //n["three"] =    {base:  3,  mult:   1};
-    //n["four"] =     {base:  4,  mult:   1};
-    //n["five"] =     {base:  5,  mult:   1};
-    //n["six"] =      {base:  6,  mult:   1};
-    //n["seven"] =    {base:  7,  mult:   1};
-    //n["eight"] =    {base:  8,  mult:   1};
-    //n["nine"] =     {base:  9,  mult:   1};
-    //n["ten"] =      {base:  10, mult:   1};
-    //n["teen"] =     n["ten"];
-    //n["eleven"] =   {base:  11, mult:   1};
-    //n["twelve"] =   {base:  12, mult:   1};
-    //n["twenty"] =   {base:  20, mult:   1};
-    //n["thirty"] =   {base:  30, mult:   1};
-    //n["ty"] =       {base:  1,  mult:   10};
-    //n["fiv"] =      n["five"];
-    //n["eigh"] =     n["eight"];
-    //n["hundret"] =  {base:  1,  mult:   100};
-    //n["thousand"] = {base:  1,  mult:   1000};
-    //n["first"] =    n["one"];
-    //n["second"] =   n["two"];
-    //n["third"] =    n["three"];
-    //n["fif"] =      n["five"];
-    //n["nin"] =      n["nine"];
+    //  en
+    var ben = new Array(    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "teen", "eleven", "twelve",
+                            "twenty", "thirty", "ty", "fiv", "eigh", "hundret", "thousand", "first", "second", "third", "fif", "nin",
+                            "and", "th");
+    var nen = new Array();
+    nen["one"] =      "+1";
+    nen["two"] =      "+2";
+    nen["three"] =    "+3";
+    nen["four"] =     "+4";
+    nen["five"] =     "+5";
+    nen["six"] =      "+6";
+    nen["seven"] =    "+7";
+    nen["eight"] =    "+8";
+    nen["nine"] =     "+9";
+    nen["ten"] =      "+10";
+    nen["teen"] =     "+10";
+    nen["eleven"] =   "+11";
+    nen["twelve"] =   "+12";
+    nen["twenty"] =   "+20";
+    nen["thirty"] =   "+30";
+    nen["ty"] =       "*10";
+    nen["fiv"] =      "+5";
+    nen["eigh"] =     "+8";
+    nen["hundret"] =  "*100";
+    nen["thousand"] = "*1000";
+    nen["first"] =    "+1";
+    nen["second"] =   "+2";
+    nen["third"] =    "+3";
+    nen["fif"] =      "+5";
+    nen["nin"] =      "+9";
+    nen["and"] =      "";
+    nen["th"] =       ".";
 
-    var mger = new Array("januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember");
-    var men = new Array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
-    var mshort = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    var mger = new Array(   "januar", "februar", "märz", "april", "mai", "juni", "juli", "august", "september", "oktober", "november", "dezember",
+                            "jan", "feb", "mär", "apr", "jun", "jul", "aug", "sep", "okt", "nov", "dez",
+                            "jänner");
+    var mnger = new Array();
+    mnger["januar"] =       "1.";
+    mnger["februar"] =      "2.";
+    mnger["märz"] =         "3.";
+    mnger["april"] =        "4.";
+    mnger["mai"] =          "5.";
+    mnger["juni"] =         "6.";
+    mnger["juli"] =         "7.";
+    mnger["august"] =       "8.";
+    mnger["september"] =    "9.";
+    mnger["oktober"] =      "10.";
+    mnger["november"] =     "11.";
+    mnger["dezember"] =     "12.";
+    mnger["jan"] =          "1.";
+    mnger["feb"] =          "2.";
+    mnger["mär"] =          "3.";
+    mnger["apr"] =          "4.";
+    mnger["jun"] =          "6.";
+    mnger["jul"] =          "7.";
+    mnger["aug"] =          "8.";
+    mnger["sep"] =          "9.";
+    mnger["okt"] =          "10.";
+    mnger["nov"] =          "11.";
+    mnger["dez"] =          "12.";
+    mnger["jänner"] =       "1.";
+
+    var men = new Array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december",
+                        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "oct", "nov", "dec");
+    var mnen = new Array();
+    mnen["january"] =   "1.";
+    mnen["february"] =  "2.";
+    mnen["march"] =     "3.";
+    mnen["april"] =     "4.";
+    mnen["may"] =       "5.";
+    mnen["june"] =      "6.";
+    mnen["july"] =      "7.";
+    mnen["august"] =    "8.";
+    mnen["september"] = "9.";
+    mnen["october"] =   "10.";
+    mnen["november"] =  "11.";
+    mnen["december"] =  "12.";
+    mnen["jan"] =       "1.";
+    mnen["feb"] =       "2.";
+    mnen["mar"] =       "3.";
+    mnen["apr"] =       "4.";
+    mnen["jun"] =       "6.";
+    mnen["jul"] =       "7.";
+    mnen["aug"] =       "8.";
+    mnen["sep"] =       "9.";
+    mnen["oct"] =       "10.";
+    mnen["nov"] =       "11.";
+    mnen["dec"] =       "12.";
 
     var wger = new Array("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag");
     var wen = new Array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
@@ -97,48 +158,83 @@ var MailToDate;
     MailToDate.prototype.extractDates = function() {
 //        consoleService.logStringMessage("MailToDate: extractDates called");
         this.dates.length = 0;
-        var regex = new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-](\\d{4}|\\d{2})\\s*(([0-1]?\\d|[2][0-3]):([0-5]\\d))?","g");
-        var match = this.subject.match(regex);
-        if(match) {
-            for(var i=0; i<match.length; ++i) {
-                this.dates.push(parseDate(match[i]));
-            }
-        }
-        match = this.body.match(regex);
-        if(match) {
-            for(var i=0; i<match.length; ++i) {
-                this.dates.push(parseDate(match[i]));
-            }
-        }
+
+        this.doWork(this.subject);
+        this.doWork(this.body);
 
         sortdates(this.dates);
-        
-//        consoleService.logStringMessage("MailToDate: extractDates end");
         return this.dates;
     };
 
-//    function splitintolines(subject, body) {
-//        subjectlines = subject.replace(". ", "! ").split("! ");
-//        bodylines = body.replace(". ", "! ").split("! ");
-//    }
+    MailToDate.prototype.doWork = function(text) {
+//        consoleService.logStringMessage("MailToDate: doWork called");
+        text =  parsenumbers(text, bger, nger);
+        text =  parsenumbers(text, ben, nen);
+        
+        //replace monthnames:
+        text =  replacewordstonumbers(text, mger, mnger);
+        text =  replacewordstonumbers(text, men, mnen);
 
-//    function replacewordstonumbers(line) {
-//    //    neuntausendzweihundertsiebenundvierzig
-//        workon = line.toLowerCase();
-//        for (var i=0; i<b.length; ++i) {
-//            workon = workon.replace(b[i],n[b[i]]);
-//        }
-//        workon = workon.replace("und", "");
-//        numbers = line.split(/\D/);
-//        //jetzt auswerten:
-//        for (var i=0; i<numbers.length; ++i) {
-//            var number = numbers[i];
-//            if (number.length > 0) {
-//            //+9*1000+2*100+7+4*10
-//                null;
-//            }
-//        }
-//    }
+        //parse Dates in format: "yyyy/mm/dd[ hh:mm]"
+        this.parseDates(text, new RegExp("\\d{4}\\D+([0]?[1-9]|[1][0-2])\\D+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
+        //parse Dates in format: "dd.mm.yyyy[ hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])\\D+([0]?[1-9]|[1][0-2])\\D+\\d{4}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
+    }
+
+    MailToDate.prototype.parseDates = function(text, regex) {
+//        consoleService.logStringMessage("MailToDate: parsedates called");
+        var match = text.match(regex);
+        if(match) {
+            for(var i=0; i<match.length; ++i) {
+                this.dates.push(parseDate(match[i]));
+            }
+        }
+    }
+
+    function parsenumbers(text, b, n) {
+//        consoleService.logStringMessage("MailToDate: parsenumbers called");
+        //neuntausendzweihundertsiebenundvierzig
+        var workon = replacewordstonumbers(text, b, n);
+        var numberstrs = workon.match(/([+|*]\d+)+/g);
+        //jetzt auswerten:
+        if(numberstrs) {
+            for(var i=0; i<numberstrs.length; ++i) {
+                //+9*1000+2*100+7+4*10
+                var numberstr = numberstrs[i];
+                var prodstrs = numberstr.match(/\d+([*]\d+)+/g);
+                if(prodstrs) {
+                    for(var j=0; j<prodstrs.length; ++j) {
+                        //9*1000
+                        var factors = prodstrs[j].split("*");
+                        var product = 1;
+                        for(var k=0; k<factors.length; ++k) {
+                            if(factors[k].length>0)
+                                product *= parseInt(factors[k]);
+                        }
+                        numberstr = numberstr.replace(prodstrs[j], product.toString(), "gi");
+                    }
+                }
+                //+9000+200+7+40
+                var summand = numberstr.split("+");
+                var sum = 0;
+                for(var k=0; k<summand.length; ++k) {
+                    if(summand[k].length>0)
+                        sum += parseInt(summand[k]);
+                }
+                workon = workon.replace(numberstrs[i], sum.toString());//, "gi");
+            }
+        }
+        return workon;
+    }
+
+    function replacewordstonumbers(text, b, n) {
+//        consoleService.logStringMessage("MailToDate: replacewordstonumbers called");
+        var workon = text;//.toLowerCase();
+        for (var i=0; i<b.length; ++i) {
+            workon = workon.replace(b[i], n[b[i]], "gi");
+        }
+        return workon;
+    }
 
 //    function stupidparse(input) {
 //        var year = new Array();

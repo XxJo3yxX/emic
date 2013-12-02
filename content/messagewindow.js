@@ -8,6 +8,8 @@ let Cr = Components.results;
 //Cu.import("resource:///modules/errUtils.js");
 Cu.import("resource://emic/simpledateformat.js");
 Cu.import("resource://emic/parsedate.js");
+Cu.import("resource://emic/mailtodate.js");
+Cu.import("resource://emic/stdlib/msgHdrUtils.js");
 
 var emicMessageWindowObj = {
 
@@ -50,8 +52,9 @@ var emicMessageWindowObj = {
 
     setExpirationDateCustom: function() {
 //        this.consoleService.logStringMessage("emicMessageWindowObj.setExpirationDateCustom() called");
+        var mailtodate = new MailToDate(gFolderDisplay.selectedMessage.subject, msgHdrToMessageBody(gFolderDisplay.selectedMessage, false, -1));
         //call Dialog
-        var params = {inn:{customdate:(new Date(this.getExpirationDateStr())), suggestions: null}, out:null};
+        var params = {inn:{customdate:(new Date(this.getExpirationDateStr())), suggestions:mailtodate.extractDates()}, out:null};
         window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
