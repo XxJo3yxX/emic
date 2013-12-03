@@ -15,33 +15,41 @@ function parseDate(input, yearpos = 0) {
     consoleService.logStringMessage("yearpos: " + yearpos);
 
     var parts = input.split(/\D+/); //RegExp => anything but number
-    for (var i = 0; i < 6; ++i)
-        if (!parts[i])
+    for(var i=0; i<6; ++i)
+        if(!parts[i])
             parts[i] = "";
 
     var now = new Date;
-    if(yearpos < 0)
-        parts[yearpos] = now.getFullYear().toString();
-        
-    if(parts[yearpos].length < 4) {
-        parts[yearpos] = now.getFullYear().toString().substring(0, (4-parts[yearpos].length)) + parts[yearpos];
-        consoleService.logStringMessage("parts[yearpos]: " + parts[yearpos]);
+    if(yearpos < 0) {
+        parts.splice(0, 0, now.getFullYear().toString());
+        if(yearpos == -2) {
+            //swap day and month
+            var temp = parts[1];
+            parts[1] = parts[2];
+            parts[2] = temp;
+        }
+        if((new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]))<now)
+            parts[0] = (now.getFullYear()+1).toString();
     }
 
-    // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]]) // months are 0-based
-    switch(yearpos) {
-        case -2:
-            consoleService.logStringMessage("new Date(parts[-2], parts[1]-1, parts[0], parts[2], parts[3], parts[4]): " + new Date(parts[-2], parts[1]-1, parts[0], parts[2], parts[3], parts[4]));
-            return new Date(parts[-2], parts[1]-1, parts[0], parts[2], parts[3], parts[4]); break;
-        case -1:
-            consoleService.logStringMessage("new Date(parts[-1], parts[0]-1, parts[1], parts[2], parts[3], parts[4]): " + new Date(parts[-1], parts[0]-1, parts[1], parts[2], parts[3], parts[4]));
-            return new Date(parts[-1], parts[0]-1, parts[1], parts[2], parts[3], parts[4]); break;
-        case 2:
-            consoleService.logStringMessage("new Date(parts[2], parts[1]-1, parts[0], parts[3], parts[4], parts[5]): " + new Date(parts[2], parts[1]-1, parts[0], parts[3], parts[4], parts[5]));
-            return new Date(parts[2], parts[1]-1, parts[0], parts[3], parts[4], parts[5]); break;
-        default:
-            consoleService.logStringMessage("new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]): " + new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]));
-            return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]); break;
+    if(yearpos > 0) {
+        //swap year to pos 0
+        var temp = parts[yearpos];
+        parts[yearpos] = parts[0];
+        parts[0] = temp;
     }
-    return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
+
+    if(parts[0].length < 4)
+        parts[0] = now.getFullYear().toString().substring(0, (4-parts[0].length)) + parts[0];
+
+    if(parts[3].length <= 0)
+        parts[3] = "23";
+    if(parts[4].length <= 0)
+        parts[4] = "59";
+
+    consoleService.logStringMessage("parts: " + parts);
+
+    // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]]) // months are 0-based
+    consoleService.logStringMessage("new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]): " + new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]));
+    return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]);
 }

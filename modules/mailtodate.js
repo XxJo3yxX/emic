@@ -179,17 +179,17 @@ var MailToDate;
         text =  replacewordstonumbers(text, men, mnen);
 
         //parse Dates in format: "yyyy/mm/dd[ hh:mm]"
-        this.parseDates(text, new RegExp("\\d{4}\\D+([0]?[1-9]|[1][0-2])\\D+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
+        this.parseDates(text, new RegExp("\\d{4}\\D+([0]?[1-9]|[1][0-2])\\D+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"));
         //parse Dates in format: "dd.mm.yyyy[ hh:mm]"
-        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])\\D+([0]?[1-9]|[1][0-2])\\D+\\d{4}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), 2);
-        //parse Dates in format: "yy/mm/dd[ hh:mm]"
-        this.parseDates(text, new RegExp("\\d{2}[.-/ ]+([0]?[1-9]|[1][0-2])[.-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"));
-        //parse Dates in format: "dd.mm.yy[ hh:mm]"
-        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[.-/ ]+([0]?[1-9]|[1][0-2])[.-/ ]+\\d{2}(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), 2);
-        //parse Dates in format: "mm.dd[ hh:mm]"
-        this.parseDates(text, new RegExp("([0]?[1-9]|[1][0-2])[.-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), -1);
-        //parse Dates in format: "dd.mm[ hh:mm]"
-        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[.-/ ]+([0]?[1-9]|[1][0-2])(\\D+([0-1]?\\d|[2][0-3])\\D+([0-5]\\d))?","g"), -2);
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])\\D+([0]?[1-9]|[1][0-2])\\D+\\d{4}(\\D+([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"), 2);
+        //parse Dates in format: "yy/mm/dd [hh:mm]"
+        this.parseDates(text, new RegExp("\\d{2}[-/ ]+([0]?[1-9]|[1][0-2])[-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])[ ](\\D*([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"));
+        //parse Dates in format: "dd.mm.yy [hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[. ]+([0]?[1-9]|[1][0-2])[. ]+\\d{2}[ ](\\D*([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"), 2);
+        //parse Dates in format: "mm/dd [hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1][0-2])[-/ ]+([0]?[1-9]|[1|2]\\d|[3][0|1])[ ](\\D*([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"), -1);
+        //parse Dates in format: "dd.mm. [hh:mm]"
+        this.parseDates(text, new RegExp("([0]?[1-9]|[1|2]\\d|[3][0|1])[. ]+([0]?[1-9]|[1][0-2])[. ](\\D*([0-1]?\\d|[2][0-3])[:]([0-5]\\d))?","g"), -2);
     }
 
     MailToDate.prototype.parseDates = function(text, regex, yearpos = 0) {
