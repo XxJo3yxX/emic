@@ -10,7 +10,8 @@ Cu.import("resource://emic/parsedate.js");
 
 var emicDialogCustomDateObj = {
 
-    consoleService: Components.classes["@mozilla.org/consoleservice;1"].getService(Components.interfaces.nsIConsoleService),
+    consoleService: Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService),
+    prefs: Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService).getBranch("extensions.emic."),
     global_strBundle: null,
 
     // Called once when the dialog displays
@@ -24,7 +25,7 @@ var emicDialogCustomDateObj = {
         var suggestions = window.arguments[0].inn.suggestions;
 
         var den = new SimpleDateFormat("yyyy-MM-dd");
-        var d = new SimpleDateFormat("dd.MM.yyyy");
+        var d = new SimpleDateFormat(this.prefs.getCharPref("dialog.suggestion.date.format"));
         var t = new SimpleDateFormat("HH:mm");
 
         var datepicker = document.getElementById("emic-custom-picker-date");
@@ -77,7 +78,8 @@ var emicDialogCustomDateObj = {
         // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
         var outdate;
         var now = new Date;
-        var d = new SimpleDateFormat("dd.MM.yyyy");
+        var den = new SimpleDateFormat("yyyy-MM-dd");
+        var d = new SimpleDateFormat(this.prefs.getCharPref("dialog.suggestion.date.format"));
         var t = new SimpleDateFormat("HH:mm");
 
         switch(document.getElementById("emic-custom-radiogroup").selectedItem) {
@@ -87,27 +89,27 @@ var emicDialogCustomDateObj = {
             case document.getElementById("emic-radio-custom-date"):
                 var datepicker = document.getElementById("emic-custom-picker-date");
                 var timepicker = document.getElementById("emic-custom-picker-time");
-                outdate = parseDate(d.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue), 2);
+                outdate = parseDate(den.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue), 0);
             break;
             case document.getElementById("emic-radio-suggestion-date"):
                 var datelist = document.getElementById("emic-suggestion-list-date");
                 var timelist = document.getElementById("emic-suggestion-list-time");
-                var datelistvalue = "";
-                if(datelist.selectedIndex <= 0)
-                    datelistvalue = d.format(now);
-                else
-                    datelistvalue = datelist.selectedItem.label;
-
                 var timelistvalue = "";
                 if(timelist.selectedIndex <= 0)
                     timelistvalue = t.format(now);
                 else
                     timelistvalue = timelist.selectedItem.label;
 
-                outdate = parseDate(datelistvalue + " " + timelistvalue, 2);
+                if(datelist.selectedIndex <= 0)
+                    outdate = parseDate(den.format(now) + " " + timelistvalue, 0);
+                else {
+                    var yearpos = (d.formatString.indexOf("yyyy")<=0) ? 0 : 2;
+                    outdate = parseDate(datelist.selectedItem.label + " " + timelistvalue, yearpos);
+                }
+
             break;
-            default:
             case document.getElementById("emic-radio-never"):
+            default:
                 window.arguments[0].out = {
                     date: null,
                     datestr: this.global_strBundle.getString("global.identifier.never")
@@ -134,8 +136,4 @@ var emicDialogCustomDateObj = {
     select_suggestion_date: function() {
         document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-suggestion-date");
     }
-
-    //timelist_changed: function() {
-    //    document.getElementById("emic-custom-radiogroup").selectedItem = document.getElementById("emic-radio-suggestion-date");
-    //}
 }

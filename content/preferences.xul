@@ -11,6 +11,7 @@
       <preference id="expiredmails-addtag-colorcode"    name="extensions.emic.expiredmails.addtag.colorcode"    type="string"/>
       <preference id="expiredmails-move"                name="extensions.emic.expiredmails.move"                type="bool"/>
       <preference id="expiredmails-move-destfoldername" name="extensions.emic.expiredmails.move.destfoldername" type="string"/>
+      <preference id="dialog-suggestion-date-format"    name="extensions.emic.dialog.suggestion.date.format"    type="string"/>
     </preferences>
 
     <checkbox preference="compatiblewithoutlook" label="&emic.preferences.label.compatiblewithoutlook;"/>
@@ -34,6 +35,18 @@
           <textbox preference="expiredmails-move-destfoldername"/>
         </hbox>
       </groupbox>
+    </groupbox>
+    <groupbox flex="1">
+      <caption label="&emic.preferences.label.dialog.groupbox;"/>
+      <hbox>
+        <label      control="dialog-suggestion-date-format"     value="&emic.preferences.label.dialog.suggestion.date.format;"/>
+        <menulist preference="dialog-suggestion-date-format">
+          <menupopup>
+            <menuitem label="yyyy-MM-dd" value="yyyy-MM-dd"/>
+            <menuitem label="dd.MM.yyyy" value="dd.MM.yyyy"/>
+          </menupopup>
+        </menulist>
+      </hbox>
     </groupbox>
   </prefpane>
 

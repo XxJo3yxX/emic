@@ -5,3 +5,5 @@
 <!ENTITY emic.preferences.label.expiredmails.addtag.colorcode     "Farbcode:">
 <!ENTITY emic.preferences.label.expiredmails.move                 "Verschiebe in Zielordner">
 <!ENTITY emic.preferences.label.expiredmails.move.destfoldername  "Zielordnername:">
+<!ENTITY emic.preferences.label.dialog.groupbox                   "Dialog Benutzerdefiniertes Ablaufdatum">
+<!ENTITY emic.preferences.label.dialog.suggestion.date.format     "Vorschläge Datumsformat:">
