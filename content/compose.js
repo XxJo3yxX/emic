@@ -97,7 +97,7 @@ var emicComposeObj = {
                 this.menu_select_custom();
 
             this.expdatestr = params.out.datestr;
-            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
+//            this.consoleService.logStringMessage("this.expdatestr: " + this.expdatestr);
         }
         else {
             // User clicked cancel. Typically, nothing is done here.
@@ -117,7 +117,7 @@ var emicComposeObj = {
     },
 
     send_event_listener: function(e) {
-        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
+//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
         if(this.expdatestr.length <= 0){
             var result = this.promptService.confirmEx(
                 window,

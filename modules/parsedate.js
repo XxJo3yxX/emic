@@ -9,10 +9,10 @@ let Cr = Components.results;
 
 // parse a date in "yyyy/mm/dd hh:mm:ss" format
 function parseDate(input, yearpos = 0) {
-    var consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
-    consoleService.logStringMessage("parseDate called");
-    consoleService.logStringMessage("input: " + input);
-    consoleService.logStringMessage("yearpos: " + yearpos);
+//    var consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
+//    consoleService.logStringMessage("parseDate called");
+//    consoleService.logStringMessage("input: " + input);
+//    consoleService.logStringMessage("yearpos: " + yearpos);
 
     var parts = input.split(/\D+/); //RegExp => anything but number
     for(var i=0; i<6; ++i)
@@ -47,9 +47,9 @@ function parseDate(input, yearpos = 0) {
     if(parts[4].length <= 0)
         parts[4] = "59";
 
-    consoleService.logStringMessage("parts: " + parts);
+//    consoleService.logStringMessage("parts: " + parts);
 
     // new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]]) // months are 0-based
-    consoleService.logStringMessage("new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]): " + new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]));
+//    consoleService.logStringMessage("new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]): " + new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]));
     return new Date(parts[0], parts[1]-1, parts[2], parts[3], parts[4], parts[5]);
 }

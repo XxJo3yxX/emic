@@ -108,7 +108,7 @@ var emicBackgroundWorkerObj = {
 
         for(var i=0; i<srcFolders.length; ++i) {
             var srcFolder = srcFolders[i];
-            this.consoleService.logStringMessage("srcFolder: " + srcFolder.prettiestName);
+//            this.consoleService.logStringMessage("srcFolder: " + srcFolder.prettiestName);
 
             var now = new Date();
             var msgArray = srcFolder.messages;
