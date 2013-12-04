@@ -42,6 +42,15 @@ var emicComposeObj = {
     menu_context_now: null,
     menu_context_custom: null,
 
+    menu_select_nothing: function(){
+        this.menu_insert_never   .setAttribute("checked", "false");
+        this.menu_context_never  .setAttribute("checked", "false");
+        this.menu_insert_now     .setAttribute("checked", "false");
+        this.menu_context_now    .setAttribute("checked", "false");
+        this.menu_insert_custom  .setAttribute("checked", "false");
+        this.menu_context_custom .setAttribute("checked", "false");
+    },
+
     menu_select_custom: function(){
         this.menu_insert_never   .setAttribute("checked", "false");
         this.menu_context_never  .setAttribute("checked", "false");
@@ -159,6 +168,8 @@ var emicComposeObj = {
         this.menu_context_never   = document.getElementById("emic-menu-compose-context-never");
         this.menu_context_now     = document.getElementById("emic-menu-compose-context-now");
         this.menu_context_custom  = document.getElementById("emic-menu-compose-context-custom");
+
+        this.menu_select_nothing();
     }
 }
 

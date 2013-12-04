@@ -45,11 +45,12 @@ var MailToDate;
 
     MailToDate.prototype.doWork = function(text) {
 //        consoleService.logStringMessage("MailToDate: doWork called");
-        text =  parsenumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
-        
+        //replace holiday names:
+        text =  replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
         //replace monthnames:
         text =  replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.months.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.months.replaceto").split(","));
-
+        //parse numbers:
+        text =  parsenumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
         //parse dates:
         var regexps = this.strBundle.GetStringFromName("mailtodate.parsedates.regexp").split(";");
         var yearpos = this.strBundle.GetStringFromName("mailtodate.parsedates.yearpos").split(",");
