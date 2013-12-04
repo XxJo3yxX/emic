@@ -1,9 +1,11 @@
 <!ENTITY emic.preferences.window.title                            "EMIC Einstellungen">
-<!ENTITY emic.preferences.label.compatiblewithoutlook             "Kompatibel mit Outlook (obsoletes Header-Feld 'Expiry-Date')">
+<!ENTITY emic.preferences.label.compose.groupbox                  "Verfassen">
+<!ENTITY emic.preferences.label.compose.compatiblewithoutlook     "Kompatibel mit Outlook (obsoletes Header-Feld 'Expiry-Date')">
 <!ENTITY emic.preferences.label.expiredmails.groupbox             "Was soll mit abgelaufenen E-Mails passieren?">
 <!ENTITY emic.preferences.label.expiredmails.addtag               "Füge Schlagwort hinzu">
 <!ENTITY emic.preferences.label.expiredmails.addtag.colorcode     "Farbcode:">
 <!ENTITY emic.preferences.label.expiredmails.move                 "Verschiebe in Zielordner">
+<!ENTITY emic.preferences.label.expiredmails.move.onlyifread      "nur wenn gelesen">
 <!ENTITY emic.preferences.label.expiredmails.move.destfoldername  "Zielordnername:">
 <!ENTITY emic.preferences.label.dialog.groupbox                   "Dialog Benutzerdefiniertes Ablaufdatum">
 <!ENTITY emic.preferences.label.dialog.suggestion.date.format     "Vorschläge Datumsformat:">

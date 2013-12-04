@@ -6,15 +6,19 @@
 
   <prefpane id="emic-pref-pane" label="&emic.preferences.window.title;">
     <preferences>
-      <preference id="compatiblewithoutlook"            name="extensions.emic.compatiblewithoutlook"            type="bool"/>
+      <preference id="compose-compatiblewithoutlook"    name="extensions.emic.compose.compatiblewithoutlook"    type="bool"/>
       <preference id="expiredmails-addtag"              name="extensions.emic.expiredmails.addtag"              type="bool"/>
       <preference id="expiredmails-addtag-colorcode"    name="extensions.emic.expiredmails.addtag.colorcode"    type="string"/>
       <preference id="expiredmails-move"                name="extensions.emic.expiredmails.move"                type="bool"/>
+      <preference id="expiredmails-move-onlyifread"     name="extensions.emic.expiredmails.move.onlyifread"     type="bool"/>
       <preference id="expiredmails-move-destfoldername" name="extensions.emic.expiredmails.move.destfoldername" type="string"/>
       <preference id="dialog-suggestion-date-format"    name="extensions.emic.dialog.suggestion.date.format"    type="string"/>
     </preferences>
 
-    <checkbox preference="compatiblewithoutlook" label="&emic.preferences.label.compatiblewithoutlook;"/>
+    <groupbox flex="1">
+      <caption label="&emic.preferences.label.compose.groupbox;"/>
+      <checkbox preference="compose-compatiblewithoutlook" label="&emic.preferences.label.compose.compatiblewithoutlook;"/>
+    </groupbox>
     <groupbox flex="1">
     <caption label="&emic.preferences.label.expiredmails.groupbox;"/>
       <groupbox flex="1">
@@ -30,6 +34,7 @@
         <caption>
           <checkbox preference="expiredmails-move" label="&emic.preferences.label.expiredmails.move;"/>
         </caption>
+        <checkbox preference="expiredmails-move-onlyifread" label="&emic.preferences.label.expiredmails.move.onlyifread;"/>
         <hbox>
           <label      control="expiredmails-move-destfoldername"  value="&emic.preferences.label.expiredmails.move.destfoldername;"/>
           <textbox preference="expiredmails-move-destfoldername"/>

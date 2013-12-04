@@ -137,7 +137,7 @@ var emicComposeObj = {
 
         if(this.expdatestr.length > 0 && this.expdatestr != this.global_strBundle.getString("global.identifier.never")) {
             var headeridentifieroutlook = this.global_strBundle.getString("global.identifier.expirationdate.mailheader.outlook");
-            if(this.prefs.getBoolPref("compatiblewithoutlook") && !gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifieroutlook))
+            if(this.prefs.getBoolPref("compose.compatiblewithoutlook") && !gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifieroutlook))
                 gMsgCompose.compFields.otherRandomHeaders += headeridentifieroutlook + this.expdatestr + "\r\n";
             var headeridentifier = this.global_strBundle.getString("global.identifier.expirationdate.mailheader");
             if(!gMsgCompose.compFields.otherRandomHeaders.contains(headeridentifier))

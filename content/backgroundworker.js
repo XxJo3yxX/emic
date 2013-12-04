@@ -112,49 +112,48 @@ var emicBackgroundWorkerObj = {
 
             var now = new Date();
             var msgArray = srcFolder.messages;
-            var expired_mails = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
+            var tag_mails = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
+            var move_mails = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
 
             while( msgArray.hasMoreElements() ) {  
                 var msgHdr = msgArray.getNext().QueryInterface(Ci.nsIMsgDBHdr);
                 var expdatestr = msgHdr.getStringProperty(this.global_strBundle.getString("global.identifier.expirationdate.stringproperty"));
-
                 if(expdatestr != 0 && expdatestr.length > 0 && !(expdatestr == this.global_strBundle.getString("global.identifier.never"))) {
-                    var expiration_date = new Date(expdatestr);
-                    //search for expired mails:
-                    if(expiration_date < now) {
-                        expired_mails.appendElement(msgHdr, false);
+                    if((new Date(expdatestr)) < now) {
+                        //mail is expired
+                        tag_mails.appendElement(msgHdr, false);
+                        if(!this.prefs.getBoolPref("expiredmails.move.onlyifread") || msgHdr.isRead)
+                            move_mails.appendElement(msgHdr, false);
                     }
                 }
             }
 
-            if(expired_mails.length > 0) {
-                //add keywords to messages:
-                if(this.prefs.getBoolPref("expiredmails.addtag")) {
-                    this.consoleService.logStringMessage(" Try to tag " + expired_mails.length + " mails.");
-                    srcFolder.addKeywordsToMessages(expired_mails, this.global_strBundle.getString("global.tag.expired.key"));
-                }
+            if(tag_mails.length > 0 && this.prefs.getBoolPref("expiredmails.addtag")) {
+                //add keyword to expired mails:
+                this.consoleService.logStringMessage(" Try to tag " + tag_mails.length + " mails.");
+                srcFolder.addKeywordsToMessages(tag_mails, this.global_strBundle.getString("global.tag.expired.key"));
+            }
 
+            if(move_mails.length > 0 && this.prefs.getBoolPref("expiredmails.move")) {
                 //move expired mails to folder:
-                if(this.prefs.getBoolPref("expiredmails.move")) {
-                    var gLocalIncomingServer = MailServices.accounts.localFoldersServer;
-                    var gLocalRootFolder = gLocalIncomingServer.rootFolder;
-                    var destfolder = null;
+                var gLocalIncomingServer = MailServices.accounts.localFoldersServer;
+                var gLocalRootFolder = gLocalIncomingServer.rootFolder;
+                var destfolder = null;
 
-                    try {
+                try {
+                    destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
+                }
+                catch(e) {
+                    this.consoleService.logStringMessage(" Destination folder not exists, try to create it (" + e + ").");
+                    if(!destfolder) {
+                        var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
+                        gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
                         destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
                     }
-                    catch(e) {
-                        this.consoleService.logStringMessage(" Destination folder not exists, try to create it (" + e + ").");
-                        if(!destfolder) {
-                            var msgWindow = Cc["@mozilla.org/messenger/msgwindow;1"].createInstance().QueryInterface(Ci.nsIMsgWindow);
-                            gLocalRootFolder.createSubfolder(this.destFolderName,msgWindow);
-                            destfolder = gLocalRootFolder.getChildNamed(this.destFolderName);
-                        }
-                    }
-                    this.consoleService.logStringMessage(" Try to move " + expired_mails.length + " mails from Src: " + srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName + ".");
-                    if(srcFolder && destfolder)
-                        this.copyService.CopyMessages(srcFolder, expired_mails, destfolder, true, copyListener, null, false);
                 }
+                this.consoleService.logStringMessage(" Try to move " + move_mails.length + " mails from Src: " + srcFolder.prettiestName + " --> Dest: " + destfolder.prettiestName + ".");
+                if(srcFolder && destfolder)
+                    this.copyService.CopyMessages(srcFolder, move_mails, destfolder, true, copyListener, null, false);
             }
         }
     },
