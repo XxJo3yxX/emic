@@ -10,6 +10,7 @@ let Cr = Components.results;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 XPCOMUtils.importRelative(this, "simpledateformat.js");
 XPCOMUtils.importRelative(this, "parsedate.js");
+XPCOMUtils.importRelative(this, "easterdate.js");
 
 var MailToDate;
 
@@ -46,11 +47,12 @@ var MailToDate;
     MailToDate.prototype.doWork = function(text) {
 //        consoleService.logStringMessage("MailToDate: doWork called");
         //replace holiday names:
-        text =  replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
+        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
+        text = this.replaceeasterdays(text);
         //replace monthnames:
-        text =  replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.months.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.months.replaceto").split(","));
+        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.months.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.months.replaceto").split(","));
         //parse numbers:
-        text =  parsenumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
+        text = parsenumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
         //parse dates:
         var regexps = this.strBundle.GetStringFromName("mailtodate.parsedates.regexp").split(";");
         var yearpos = this.strBundle.GetStringFromName("mailtodate.parsedates.yearpos").split(",");
@@ -111,6 +113,15 @@ var MailToDate;
         var workon = text;
         for (var i=0; i<lookfor.length; ++i)
             workon = workon.replace(lookfor[i], replaceto[i], "gi");
+        return workon;
+    }
+
+    MailToDate.prototype.replaceeasterdays = function(text) {
+        var easterdate = new EasterDate();
+        var d = new SimpleDateFormat("dd.MM.yyyy");
+        var workon = text;
+        for (var i=0; i<easterdate.identifiers.length; ++i)
+            workon = workon.replace(easterdate.identifiers[i], d.format(easterdate.GetNext(easterdate.identifiers[i])), "gi");
         return workon;
     }
 
