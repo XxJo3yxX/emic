@@ -47,8 +47,8 @@
         <label      control="dialog-suggestion-date-format"     value="&emic.preferences.label.dialog.suggestion.date.format;"/>
         <menulist preference="dialog-suggestion-date-format">
           <menupopup>
-            <menuitem label="yyyy-MM-dd" value="yyyy-MM-dd"/>
-            <menuitem label="dd.MM.yyyy" value="dd.MM.yyyy"/>
+            <menuitem label="{yyyy}-{MM}-{dd}" value="{yyyy}-{MM}-{dd}"/>
+            <menuitem label="{dd}.{MM}.{yyyy}" value="{dd}.{MM}.{yyyy}"/>
           </menupopup>
         </menulist>
       </hbox>

@@ -7,9 +7,8 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-XPCOMUtils.importRelative(this, "simpledateformat.js");
-XPCOMUtils.importRelative(this, "parsedate.js");
+var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader); 
+loader.loadSubScript("resource://emic/sugar.js");
 
 var EasterDate;
 
@@ -64,18 +63,18 @@ var EasterDate;
 //        consoleService.logStringMessage("EasterDate: GetDateFor called");
         var easterdate = this.calceasterdate(year);
         switch(identifier) {
-            case "shrove monday":           easterdate.setDate(easterdate.getDate() -48);   break;  //rosenmontag
-            case "shrove tuesday":          easterdate.setDate(easterdate.getDate() -47);   break;  //fastnachtsdienstag
-            case "ash wednesday":           easterdate.setDate(easterdate.getDate() -46);   break;  //aschermittwoch
-            case "holy thursday":           easterdate.setDate(easterdate.getDate() -3);    break;  //gründonnerstag
-            case "good friday":             easterdate.setDate(easterdate.getDate() -2);    break;  //karfreitag
-            case "holy saturday":           easterdate.setDate(easterdate.getDate() -1);    break;  //karsamstag
-            case "easter monday":           easterdate.setDate(easterdate.getDate() +1);    break;  //ostermontag
-            case "ascension day":           easterdate.setDate(easterdate.getDate() +39);   break;  //christi himmelfahrt
-            case "whit sunday":             easterdate.setDate(easterdate.getDate() +49);   break;  //pfingstsonntag
-            case "whit monday":             easterdate.setDate(easterdate.getDate() +50);   break;  //pfingstmontag
-//            case "trinity sunday":          easterdate.setDate(easterdate.getDate() );      break;  //dreifaltigkeitssonntag
-            case "feast of corpus christi": easterdate.setDate(easterdate.getDate() +60);   break;  //fronleichnam
+            case "shrove monday":           easterdate.addDays(-48);   break;  //rosenmontag
+            case "shrove tuesday":          easterdate.addDays(-47);   break;  //fastnachtsdienstag
+            case "ash wednesday":           easterdate.addDays(-46);   break;  //aschermittwoch
+            case "holy thursday":           easterdate.addDays(-3);    break;  //gründonnerstag
+            case "good friday":             easterdate.addDays(-2);    break;  //karfreitag
+            case "holy saturday":           easterdate.addDays(-1);    break;  //karsamstag
+            case "easter monday":           easterdate.addDays(+1);    break;  //ostermontag
+            case "ascension day":           easterdate.addDays(+39);   break;  //christi himmelfahrt
+            case "whit sunday":             easterdate.addDays(+49);   break;  //pfingstsonntag
+            case "whit monday":             easterdate.addDays(+50);   break;  //pfingstmontag
+//            case "trinity sunday":          easterdate.addDays();      break;  //dreifaltigkeitssonntag
+            case "feast of corpus christi": easterdate.addDays(+60);   break;  //fronleichnam
             //case "easter": case "easter day": case "easter sunday":
             default: break;
         }
@@ -84,9 +83,9 @@ var EasterDate;
 
     EasterDate.prototype.GetNext = function(identifier) {
 //        consoleService.logStringMessage("EasterDate: GetNext called");
-        var now = new Date();
+        var now = Date.create();
         var next = this.GetDateFor(identifier, now.getFullYear());
-        if(next < now)
+        if(next.isPast())
             next = this.GetDateFor(identifier, now.getFullYear()+1);
         return next;
     }

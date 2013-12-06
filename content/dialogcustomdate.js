@@ -5,8 +5,8 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
-Cu.import("resource://emic/simpledateformat.js");
-Cu.import("resource://emic/parsedate.js");
+var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader); 
+loader.loadSubScript("resource://emic/sugar.js");
 
 var emicDialogCustomDateObj = {
 
@@ -16,7 +16,7 @@ var emicDialogCustomDateObj = {
 
     // Called once when the dialog displays
     init: function() {
-//        this.consoleService.logStringMessage("emicDialogCustomDateObj.init() called");
+        this.consoleService.logStringMessage("emicDialogCustomDateObj.init() called");
         this.global_strBundle = document.getElementById("emic-strings-global");
 
         window.sizeToContent();
@@ -24,9 +24,8 @@ var emicDialogCustomDateObj = {
         var customdate = window.arguments[0].inn.customdate;
         var suggestions = window.arguments[0].inn.suggestions;
 
-        var den = new SimpleDateFormat("yyyy-MM-dd");
-        var d = new SimpleDateFormat(this.prefs.getCharPref("dialog.suggestion.date.format"));
-        var t = new SimpleDateFormat("HH:mm");
+        var d = this.prefs.getCharPref("dialog.suggestion.date.format");
+        var t = "{HH}:{mm}";
 
         var datepicker = document.getElementById("emic-custom-picker-date");
         var timepicker = document.getElementById("emic-custom-picker-time");
@@ -35,26 +34,35 @@ var emicDialogCustomDateObj = {
         var datelisthelper = new Array();
         var timelisthelper = new Array();
 
-        if((Object.prototype.toString.call(customdate) === '[object Date]') && isFinite(customdate)) {
+        
+//        this.consoleService.logStringMessage("Object.isDate(customdate): " + Object.isDate(customdate));
+//        this.consoleService.logStringMessage("isFinite(customdate): " + isFinite(customdate));
+//        this.consoleService.logStringMessage("customdate.isValid(): " + customdate.isValid());
+//        this.consoleService.logStringMessage("customdate: " + customdate);
+        if(Object.isDate(customdate) && isFinite(customdate)) {
 //            this.consoleService.logStringMessage("customdate: " + customdate.toString());
-            if(customdate < (new Date)) {
+            if(customdate.isPast()) {
                 this.select_now();
             }
             else {
-                datepicker.value = den.format(customdate);
-                timepicker.value = t.format(customdate);
+                datepicker.value = customdate.format('{yyyy}-{MM}-{dd}');
+                timepicker.value = customdate.format(t);
                 this.select_custom_date();
             }
         }
 
-    //    this.consoleService.logStringMessage("(Object.prototype.toString.call(suggestions): " + (Object.prototype.toString.call(suggestions)));
-        if(Object.prototype.toString.call(suggestions) === '[object Array]') {
+//        this.consoleService.logStringMessage("Object.isArray(suggestions): " + Object.isArray(suggestions));
+        if(Object.isArray(suggestions)) {
             for(var i=0; i<suggestions.length; ++i) {
                 var suggestion = suggestions[i];
-    //            this.consoleService.logStringMessage("(Object.prototype.toString.call(suggestion): " + (Object.prototype.toString.call(suggestion)));
-                if((Object.prototype.toString.call(suggestion) === '[object Date]') && isFinite(suggestion)) {
-                    var sugdate = d.format(suggestion);
-                    var sugtime = t.format(suggestion);
+//                this.consoleService.logStringMessage("Object.isDate(suggestion): " + Object.isDate(suggestion));
+                if(Object.isDate(suggestion) && isFinite(suggestion)) {
+//                    this.consoleService.logStringMessage("suggestion: " + suggestion);
+//                    this.consoleService.logStringMessage("d: " + d);
+                    var sugdate = suggestion.format(d);
+//                    this.consoleService.logStringMessage("sugdate: " + sugdate);
+                    var sugtime = suggestion.format(t);
+//                    this.consoleService.logStringMessage("sugtime: " + sugtime);
                     if(datelisthelper.indexOf(sugdate)<0)
                         datelisthelper.push(sugdate);
                     if(timelisthelper.indexOf(sugtime)<0)
@@ -77,10 +85,10 @@ var emicDialogCustomDateObj = {
         // Return the changed arguments.
         // Notice if user clicks cancel, window.arguments[0].out remains null because this function is never called
         var outdate;
-        var now = new Date;
-        var den = new SimpleDateFormat("yyyy-MM-dd");
-        var d = new SimpleDateFormat(this.prefs.getCharPref("dialog.suggestion.date.format"));
-        var t = new SimpleDateFormat("HH:mm");
+        var now = Date.create();
+        var den = "{yyyy}-{MM}-{dd}";
+        var d = this.prefs.getCharPref("dialog.suggestion.date.format");
+        var t = "{HH}:{mm}";
 
         switch(document.getElementById("emic-custom-radiogroup").selectedItem) {
             case document.getElementById("emic-radio-now"):
@@ -89,23 +97,21 @@ var emicDialogCustomDateObj = {
             case document.getElementById("emic-radio-custom-date"):
                 var datepicker = document.getElementById("emic-custom-picker-date");
                 var timepicker = document.getElementById("emic-custom-picker-time");
-                outdate = parseDate(den.format(datepicker.dateValue) + " " + t.format(timepicker.dateValue), 0);
+                outdate = Date.create(datepicker.dateValue.format(den) + " " + timepicker.dateValue.format(t));
             break;
             case document.getElementById("emic-radio-suggestion-date"):
                 var datelist = document.getElementById("emic-suggestion-list-date");
                 var timelist = document.getElementById("emic-suggestion-list-time");
                 var timelistvalue = "";
                 if(timelist.selectedIndex <= 0)
-                    timelistvalue = t.format(now);
+                    timelistvalue = now.format(t);
                 else
                     timelistvalue = timelist.selectedItem.label;
 
                 if(datelist.selectedIndex <= 0)
-                    outdate = parseDate(den.format(now) + " " + timelistvalue, 0);
-                else {
-                    var yearpos = (d.formatString.indexOf("yyyy")<=0) ? 0 : 2;
-                    outdate = parseDate(datelist.selectedItem.label + " " + timelistvalue, yearpos);
-                }
+                    outdate = Date.create(now.format(den) + " " + timelistvalue);
+                else
+                    outdate = Date.create(datelist.selectedItem.label + " " + timelistvalue);
 
             break;
             case document.getElementById("emic-radio-never"):

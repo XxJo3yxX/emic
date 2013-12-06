@@ -5,9 +5,9 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
-//Cu.import("resource:///modules/errUtils.js");
-Cu.import("resource://emic/simpledateformat.js");
-Cu.import("resource://emic/parsedate.js");
+var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader); 
+loader.loadSubScript("resource://emic/sugar.js");
+
 Cu.import("resource://emic/mailtodate.js");
 
 var myStateListener = {
@@ -85,13 +85,13 @@ var emicComposeObj = {
 //        this.consoleService.logStringMessage("body: " + GetCurrentEditor().outputToString('text/plain',4));
         var mailtodate = new MailToDate(document.getElementById("msgSubject").value, GetCurrentEditor().outputToString('text/plain',4));
         //call Dialog:
-        var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: mailtodate.extractDates()}, out:null};
+        var params = {inn:{customdate:(new Date(this.expdatestr)), suggestions: mailtodate.extractDates(window.navigator.language)}, out:null};
         window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
         if(params.out) {
             // User clicked ok. Process changed arguments; e.g. write them to disk or whatever
             if(params.out.datestr == this.global_strBundle.getString("global.identifier.never"))
                 this.menu_select_never();
-            else if(params.out.date < (new Date))
+            else if(params.out.date.isPast())
                 this.menu_select_now();
             else
                 this.menu_select_custom();
@@ -113,7 +113,7 @@ var emicComposeObj = {
     setExpirationDateNow: function() {
 //        this.consoleService.logStringMessage("emicComposeObj.setExpirationDateNow() called");
         this.menu_select_now();
-        this.expdatestr = (new Date).toString();
+        this.expdatestr = Date.create().toString();
     },
 
     send_event_listener: function(e) {
@@ -131,7 +131,7 @@ var emicComposeObj = {
 //                this.consoleService.logStringMessage("subject: " + gMsgCompose.compFields.subject);
 //                this.consoleService.logStringMessage("body: " + GetCurrentEditor().outputToString('text/plain',4));
                 var mailtodate = new MailToDate(gMsgCompose.compFields.subject, GetCurrentEditor().outputToString('text/plain',4));
-                var params = {inn:{customdate:null, suggestions:mailtodate.extractDates()}, out:null};
+                var params = {inn:{customdate:null, suggestions:mailtodate.extractDates(window.navigator.language)}, out:null};
                 window.openDialog("chrome://emic/content/dialogcustomdate.xul","","chrome, dialog, modal, resizable=no", params).focus();
                 if (params.out) {
                     this.expdatestr = params.out.datestr;

@@ -7,9 +7,10 @@ let Cc = Components.classes;
 let Cu = Components.utils;
 let Cr = Components.results;
 
+var loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader); 
+loader.loadSubScript("resource://emic/sugar.js");
+
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
-XPCOMUtils.importRelative(this, "simpledateformat.js");
-XPCOMUtils.importRelative(this, "parsedate.js");
 XPCOMUtils.importRelative(this, "easterdate.js");
 
 var MailToDate;
@@ -33,14 +34,15 @@ var MailToDate;
         this.dates = new Array();
     };
 
-    MailToDate.prototype.extractDates = function() {
+    MailToDate.prototype.extractDates = function(locale) {
 //        consoleService.logStringMessage("MailToDate: extractDates called");
         this.dates.length = 0;
+        Date.setLocale(locale);
 
         this.doWork(this.subject);
         this.doWork(this.body);
 
-        sortdates(this.dates);
+        this.sortDates();
         return this.dates;
     };
 
@@ -48,32 +50,41 @@ var MailToDate;
 //        consoleService.logStringMessage("MailToDate: doWork called");
         //replace holiday names:
         text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
-        text = this.replaceeasterdays(text);
+        text = this.replaceEasterDays(text);
         //replace monthnames:
         text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.months.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.months.replaceto").split(","));
         //parse numbers:
-        text = parsenumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
+        text = this.parseNumbers(text);
         //parse dates:
         var regexps = this.strBundle.GetStringFromName("mailtodate.parsedates.regexp").split(";");
-        var yearpos = this.strBundle.GetStringFromName("mailtodate.parsedates.yearpos").split(",");
-        if(regexps.length != yearpos.length)
-            throw "MailToDate: doWork: regexps and yearpos: different lengths!";
         for(var i=0; i<regexps.length; ++i)
-            this.parseDates(text, new RegExp(regexps[i], "g"), yearpos[i]);
+            this.parseDates(text, new RegExp(regexps[i], "gi"));
     }
 
-    MailToDate.prototype.parseDates = function(text, regex, yearpos = 0) {
-//        consoleService.logStringMessage("MailToDate: parsedates called");
-        var match = text.match(regex);
-        if(match)
-            for(var i=0; i<match.length; ++i)
-                this.dates.push(parseDate(match[i], yearpos));
+    function replacewordstonumbers(text, lookfor, replaceto) {
+//        consoleService.logStringMessage("MailToDate: replacewordstonumbers called");
+        if(replaceto.length != lookfor.length)
+            throw "MailToDate: replacewordstonumbers: lookfor and replaceto: different lengths!";
+        var workon = text;
+        for (var i=0; i<lookfor.length; ++i)
+            workon = workon.replace(lookfor[i], replaceto[i], "gi");
+        return workon;
     }
 
-    function parsenumbers(text, b, n) {
-//        consoleService.logStringMessage("MailToDate: parsenumbers called");
+    MailToDate.prototype.replaceEasterDays = function(text) {
+//        consoleService.logStringMessage("MailToDate: replaceEasterDays called");
+        var easterdate = new EasterDate();
+        var d = "{dd}.{MM}.{yyyy}";
+        var workon = text;
+        for (var i=0; i<easterdate.identifiers.length; ++i)
+            workon = workon.replace(easterdate.identifiers[i], easterdate.GetNext(easterdate.identifiers[i]).format(d), "gi");
+        return workon;
+    }
+
+    MailToDate.prototype.parseNumbers = function(text) {
+//        consoleService.logStringMessage("MailToDate: parseNumbers called");
         //neuntausendzweihundertsiebenundvierzig
-        var workon = replacewordstonumbers(text, b, n);
+        var workon = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.numbers.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.numbers.replaceto").split(","));
         var numberstrs = workon.match(/([+|*]\d+)+/g);
         //jetzt auswerten:
         if(numberstrs) {
@@ -106,38 +117,23 @@ var MailToDate;
         return workon;
     }
 
-    function replacewordstonumbers(text, lookfor, replaceto) {
-//        consoleService.logStringMessage("MailToDate: replacewordstonumbers called");
-        if(replaceto.length != lookfor.length)
-            throw "MailToDate: replacewordstonumbers: lookfor and replaceto: different lengths!";
-        var workon = text;
-        for (var i=0; i<lookfor.length; ++i)
-            workon = workon.replace(lookfor[i], replaceto[i], "gi");
-        return workon;
+    MailToDate.prototype.parseDates = function(text, regexp) {
+//        consoleService.logStringMessage("MailToDate: parseDates called");
+        var match = text.match(regexp);
+        if(match)
+            for(var i=0; i<match.length; ++i)
+                this.dates.push(Date.future(match[i]));
     }
 
-    MailToDate.prototype.replaceeasterdays = function(text) {
-        var easterdate = new EasterDate();
-        var d = new SimpleDateFormat("dd.MM.yyyy");
-        var workon = text;
-        for (var i=0; i<easterdate.identifiers.length; ++i)
-            workon = workon.replace(easterdate.identifiers[i], d.format(easterdate.GetNext(easterdate.identifiers[i])), "gi");
-        return workon;
-    }
-
-    function sortdates(arrayofdates) {
-//        consoleService.logStringMessage("MailToDate: sortdates called");
+    MailToDate.prototype.sortDates = function() {
+//        consoleService.logStringMessage("MailToDate: sortDates called");
         //returns only valid dates in future
-        var i = 0;
-        var now = new Date();
-        while(i < arrayofdates.length) {
-            if(!arrayofdates[i] || arrayofdates[i]<now || arrayofdates[i].getFullYear()>(now.getFullYear()+10))
-                arrayofdates.splice(i,1);
-            else
-                ++i;
-        }
+        this.dates = this.dates.compact();
+        this.dates.remove(function(date) {
+            return !date.isBetween(Date.create('now','en'), Date.create('in 10 years','en'));
+        });
         //sorts a given array of dates descending (newest to oldest)
-        arrayofdates.sort(date_sort_desc);
+        this.dates.sort(date_sort_desc);
     }
 
     var date_sort_desc = function (date1, date2) {
