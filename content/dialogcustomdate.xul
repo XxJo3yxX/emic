@@ -56,7 +56,7 @@
             <menulist id="emic-suggestion-list-time" command="emic-cmd-dialog-customdate-select-suggestion" label="&emic.common.time;">
               <menupopup>
                 <menuitem id="suggestion-time-now" label="&emic.common.now;"/>
-                <!--<menuitem id="suggestion-time-never" label="&never;"/>-->
+                <menuitem label="23:59"/>
               </menupopup>
             </menulist>
           </row>

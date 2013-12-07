@@ -20,10 +20,6 @@ var MailToDate;
         return typeof obj == "undefined";
     }
 
-//    var wger = new Array("montag", "dienstag", "mittwoch", "donnerstag", "freitag", "samstag", "sonntag");
-//    var wen = new Array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
-//    var wshort = new Array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
-
     var consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
 
     MailToDate = function(subject, body) {
@@ -51,14 +47,11 @@ var MailToDate;
         //replace holiday names:
         text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
         text = this.replaceEasterDays(text);
-        //replace monthnames:
-        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.months.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.months.replaceto").split(","));
         //parse numbers:
         text = this.parseNumbers(text);
-        //parse dates:
-        var regexps = this.strBundle.GetStringFromName("mailtodate.parsedates.regexp").split(";");
-        for(var i=0; i<regexps.length; ++i)
-            this.parseDates(text, new RegExp(regexps[i], "gi"));
+        //parse dates in numeric format (work in any locale):
+        this.parseDatesNumericFormat(text);
+        this.parseDatesTextFormat(text);
     }
 
     function replacewordstonumbers(text, lookfor, replaceto) {
@@ -74,7 +67,7 @@ var MailToDate;
     MailToDate.prototype.replaceEasterDays = function(text) {
 //        consoleService.logStringMessage("MailToDate: replaceEasterDays called");
         var easterdate = new EasterDate();
-        var d = "{dd}.{MM}.{yyyy}";
+        var d = "{yyyy}-{MM}-{dd}";
         var workon = text;
         for (var i=0; i<easterdate.identifiers.length; ++i)
             workon = workon.replace(easterdate.identifiers[i], easterdate.GetNext(easterdate.identifiers[i]).format(d), "gi");
@@ -121,8 +114,79 @@ var MailToDate;
 //        consoleService.logStringMessage("MailToDate: parseDates called");
         var match = text.match(regexp);
         if(match)
-            for(var i=0; i<match.length; ++i)
+            for(var i=0; i<match.length; ++i) {
+                consoleService.logStringMessage("match[i]: " + match[i]);
                 this.dates.push(Date.future(match[i]));
+            }
+    }
+
+    MailToDate.prototype.parseDatesNumericFormat = function(text) {
+//        consoleService.logStringMessage("MailToDate: parseDatesNumericFormat called");
+        var yyyy = "(\\d{4})";
+        var yy = "(\\d{4}|\\d{2})";
+        var mm = "([0]?[1-9]|[1][0-2])";
+        var dd = "([0]?[1-9]|[1|2]\\d|[3][0|1])";
+        var time = "((([0]?[1-9]|1[0-2])(:[0-5]\\d){0,2}([.]\\d+)?(\\s*[aApP][mM]))|(([01]\\d|2[0-3])(:[0-5]\\d){0,2}([.]\\d+)?))";
+        var offset = "([-+]((0\\d|1[0-3])(:)?([03]0|45)|14(:)?00))";
+        var opttime = "(\\s+" + time + offset + "?)?";
+        var regexps = new Array();
+        regexps.push(yyyy + "[-.]" + mm + "[-.]" + dd + opttime);
+        regexps.push(dd + "[-./]" + mm + "[-./]" + yy + opttime);
+        regexps.push("\\s+" + mm + "[-.]" + yyyy);
+        for(var i=0; i<regexps.length; ++i)
+            this.parseDates(text, new RegExp(regexps[i], "gi"));
+    }
+
+    MailToDate.prototype.parseDatesTextFormat = function(text) {
+        consoleService.logStringMessage("MailToDate: parseDatesTextFormat called");
+        var year = "(\\d{4})";
+        var month = "(" + this.strBundle.GetStringFromName("mailtodate.months").split(",").join("|") + ")";
+        var weekday = "(" + this.strBundle.GetStringFromName("mailtodate.weekdays").split(",").join("|") + ")";
+        var unit = "(" + this.strBundle.GetStringFromName("mailtodate.units").split(",").join("|") + ")";
+        var tokens = this.strBundle.GetStringFromName("mailtodate.tokens").split(",");
+        var sign = "(" + this.strBundle.GetStringFromName("mailtodate.signs").split(",").join("|") + ")";
+        var shift = "(" + this.strBundle.GetStringFromName("mailtodate.shifts").split(",").join("|") + ")";
+        var edge = "(" + this.strBundle.GetStringFromName("mailtodate.edges").split(",").join("|") + ")";
+        var num = "\\d+";
+        var date = "([0]?[1-9]|[1|2]\\d|[3][0|1])";
+        var time = "((([0]?[1-9]|1[0-2])(:[0-5]\\d){0,2}([.]\\d+)?(\\s*[aApP][mM]))|(([01]\\d|2[0-3])(:[0-5]\\d){0,2}([.]\\d+)?))";
+        var offset = "([-+]((0\\d|1[0-3])(:)?([03]0|45)|14(:)?00))";
+        var opttime = "(\\s+" + time + offset + "?)?";
+        var d = "[ ,]*";
+        var regexps = new Array();
+        consoleService.logStringMessage("Date.getLocale().code: " + Date.getLocale().code);
+        switch(Date.getLocale().code) {
+            case 'en':
+                regexps.push(month + d + year);
+                regexps.push(shift + d + unit);
+                regexps.push("(" + tokens[0] + ")?" + d + date + "(" + tokens[1] + ")");
+                regexps.push("(" + tokens[0] + ")?" + d + edge + d + "of" + shift + "?" + d + unit + "?" + month + "?" + year + "?");
+                regexps.push(num + d + unit + d + sign + opttime);
+                regexps.push(sign + d + num + d + unit + opttime);
+                regexps.push("(" + tokens[0] + ")" + d + num + "(" + tokens[1] + ")" + d + weekday + d + "of" + d + month + d + year + "?" + opttime);
+                regexps.push(weekday + "?" + d + month + d + date + "(" + tokens[1] + ")?" + d + year + "?" + opttime);
+                regexps.push(date + d + month + d + year + opttime);
+                regexps.push(date + d + month + opttime);
+                regexps.push(shift + d + weekday + opttime);
+                regexps.push(shift + d + "week" + d + weekday + opttime);
+                regexps.push(weekday + d + "(" + tokens[2] + ")?" + d + shift + d + "week" + opttime);
+                regexps.push(num + d + unit + d + sign + d + weekday + opttime);
+                regexps.push("(" + tokens[0] + ")?" + d + date + "(" + tokens[1] + ")" + d + "of" + d + month + opttime);
+                regexps.push("(" + tokens[0] + ")?" + month + "?" + d + date + "?" + "(" + tokens[1] + ")?" + d + "of" + d + shift + d + unit + opttime);
+                regexps.push(edge + d + "of" + d + weekday + opttime);
+                break;
+            case 'de':
+            case 'de-DE':
+                regexps.push(sign + d + num + d + unit);
+                regexps.push(num + d + unit + d + sign);
+                regexps.push(shift + d + unit);
+                regexps.push(weekday + "?" + d + date + "?" + d + month + d + year + "?" + opttime);
+                regexps.push(shift + d + weekday + opttime);
+                break;
+            default: break;
+        }
+        for(var i=0; i<regexps.length; ++i)
+            this.parseDates(text, new RegExp(regexps[i], "gi"));
     }
 
     MailToDate.prototype.sortDates = function() {

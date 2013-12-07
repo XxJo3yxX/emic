@@ -117,7 +117,9 @@ var emicComposeObj = {
     },
 
     send_event_listener: function(e) {
-//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler() called");
+//        this.consoleService.logStringMessage("emicComposeObj.send_event_handler(e) called, e: " + e);
+//        this.consoleService.logStringMessage("e.detail: " + e.detail);
+//        this.consoleService.logStringMessage("e.view: " + e.view);
         if(this.expdatestr.length <= 0){
             var result = this.promptService.confirmEx(
                 window,

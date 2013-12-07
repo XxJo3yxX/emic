@@ -16,7 +16,7 @@ var emicDialogCustomDateObj = {
 
     // Called once when the dialog displays
     init: function() {
-        this.consoleService.logStringMessage("emicDialogCustomDateObj.init() called");
+//        this.consoleService.logStringMessage("emicDialogCustomDateObj.init() called");
         this.global_strBundle = document.getElementById("emic-strings-global");
 
         window.sizeToContent();
