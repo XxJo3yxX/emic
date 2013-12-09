@@ -26,6 +26,7 @@ var MailToDate;
 //        consoleService.logStringMessage("MailToDate: CTor called");
         this.strBundle = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService).createBundle("chrome://emic/locale/mailtodate.properties");
         this.subject = subject;
+        consoleService.logStringMessage("Date.future(" + subject + ",'de'): " + Date.future(subject,'de'));
         this.body = body;
         this.dates = new Array();
     };
@@ -49,6 +50,8 @@ var MailToDate;
         text = this.replaceEasterDays(text);
         //parse numbers:
         text = this.parseNumbers(text);
+        //replace localespecific:
+        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.localespecific.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.localespecific.replaceto").split(","));
         //parse dates in numeric format (work in any locale):
         this.parseDatesNumericFormat(text);
         this.parseDatesTextFormat(text);
@@ -112,10 +115,11 @@ var MailToDate;
 
     MailToDate.prototype.parseDates = function(text, regexp) {
 //        consoleService.logStringMessage("MailToDate: parseDates called");
+//        consoleService.logStringMessage("regexp: " + regexp);
         var match = text.match(regexp);
         if(match)
             for(var i=0; i<match.length; ++i) {
-                consoleService.logStringMessage("match[i]: " + match[i]);
+                consoleService.logStringMessage("Date.future(" + match[i] + "): " + Date.future(match[i]));
                 this.dates.push(Date.future(match[i]));
             }
     }
@@ -138,7 +142,7 @@ var MailToDate;
     }
 
     MailToDate.prototype.parseDatesTextFormat = function(text) {
-        consoleService.logStringMessage("MailToDate: parseDatesTextFormat called");
+//        consoleService.logStringMessage("MailToDate: parseDatesTextFormat called");
         var year = "(\\d{4})";
         var month = "(" + this.strBundle.GetStringFromName("mailtodate.months").split(",").join("|") + ")";
         var weekday = "(" + this.strBundle.GetStringFromName("mailtodate.weekdays").split(",").join("|") + ")";
@@ -152,9 +156,9 @@ var MailToDate;
         var time = "((([0]?[1-9]|1[0-2])(:[0-5]\\d){0,2}([.]\\d+)?(\\s*[aApP][mM]))|(([01]\\d|2[0-3])(:[0-5]\\d){0,2}([.]\\d+)?))";
         var offset = "([-+]((0\\d|1[0-3])(:)?([03]0|45)|14(:)?00))";
         var opttime = "(\\s+" + time + offset + "?)?";
-        var d = "[ ,]*";
+        var d = "[ ,.]*";
         var regexps = new Array();
-        consoleService.logStringMessage("Date.getLocale().code: " + Date.getLocale().code);
+//        consoleService.logStringMessage("Date.getLocale().code: " + Date.getLocale().code);
         switch(Date.getLocale().code) {
             case 'en':
                 regexps.push(month + d + year);
@@ -181,7 +185,7 @@ var MailToDate;
                 regexps.push(num + d + unit + d + sign);
                 regexps.push(shift + d + unit);
                 regexps.push(weekday + "?" + d + date + "?" + d + month + d + year + "?" + opttime);
-                regexps.push(shift + d + weekday + opttime);
+                regexps.push(shift + "?" + d + weekday + opttime);
                 break;
             default: break;
         }
