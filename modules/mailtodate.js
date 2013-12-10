@@ -45,13 +45,13 @@ var MailToDate;
 
     MailToDate.prototype.doWork = function(text) {
 //        consoleService.logStringMessage("MailToDate: doWork called");
+        //replace localespecific:
+        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.localespecific.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.localespecific.replaceto").split(","));
         //replace holiday names:
         text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.holidays.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.holidays.replaceto").split(","));
         text = this.replaceEasterDays(text);
         //parse numbers:
         text = this.parseNumbers(text);
-        //replace localespecific:
-        text = replacewordstonumbers(text, this.strBundle.GetStringFromName("mailtodate.localespecific.lookfor").split(","), this.strBundle.GetStringFromName("mailtodate.localespecific.replaceto").split(","));
         //parse dates in numeric format (work in any locale):
         this.parseDatesNumericFormat(text);
         this.parseDatesTextFormat(text);
@@ -144,13 +144,14 @@ var MailToDate;
     MailToDate.prototype.parseDatesTextFormat = function(text) {
 //        consoleService.logStringMessage("MailToDate: parseDatesTextFormat called");
         var year = "(\\d{4})";
-        var month = "(" + this.strBundle.GetStringFromName("mailtodate.months").split(",").join("|") + ")";
-        var weekday = "(" + this.strBundle.GetStringFromName("mailtodate.weekdays").split(",").join("|") + ")";
-        var unit = "(" + this.strBundle.GetStringFromName("mailtodate.units").split(",").join("|") + ")";
-        var tokens = this.strBundle.GetStringFromName("mailtodate.tokens").split(",");
-        var sign = "(" + this.strBundle.GetStringFromName("mailtodate.signs").split(",").join("|") + ")";
-        var shift = "(" + this.strBundle.GetStringFromName("mailtodate.shifts").split(",").join("|") + ")";
-        var edge = "(" + this.strBundle.GetStringFromName("mailtodate.edges").split(",").join("|") + ")";
+        var month = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.months").split(",").join("|") + ")";
+        var weekday = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.weekdays").split(",").join("|") + ")";
+        var unit = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.units").split(",").join("|") + ")";
+        var tokens = this.strBundle.GetStringFromName("mailtodate.sugar.tokens").split(",");
+        var edge = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.modifiers.edges").split(",").join("|") + ")";
+        var day = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.modifiers.days").split(",").join("|") + ")";
+        var sign = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.modifiers.signs").split(",").join("|") + ")";
+        var shift = "(" + this.strBundle.GetStringFromName("mailtodate.sugar.modifiers.shifts").split(",").join("|") + ")";
         var num = "\\d+";
         var date = "([0]?[1-9]|[1|2]\\d|[3][0|1])";
         var time = "((([0]?[1-9]|1[0-2])(:[0-5]\\d){0,2}([.]\\d+)?(\\s*[aApP][mM]))|(([01]\\d|2[0-3])(:[0-5]\\d){0,2}([.]\\d+)?))";
@@ -178,6 +179,7 @@ var MailToDate;
                 regexps.push("(" + tokens[0] + ")?" + d + date + "(" + tokens[1] + ")" + d + "of" + d + month + opttime);
                 regexps.push("(" + tokens[0] + ")?" + month + "?" + d + date + "?" + "(" + tokens[1] + ")?" + d + "of" + d + shift + d + unit + opttime);
                 regexps.push(edge + d + "of" + d + weekday + opttime);
+                regexps.push(day + opttime);
                 break;
             case 'de':
             case 'de-DE':
@@ -186,6 +188,7 @@ var MailToDate;
                 regexps.push(shift + d + unit);
                 regexps.push(weekday + "?" + d + date + "?" + d + month + d + year + "?" + opttime);
                 regexps.push(shift + "?" + d + weekday + opttime);
+                regexps.push(day + opttime);
                 break;
             default: break;
         }
